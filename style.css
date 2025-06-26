@@ -1372,3 +1372,46 @@ header {
 		height: 180px;
 	}
 }
+
+/* =================================
+   CUSTOM ANIMATED CURSOR
+   ================================= */
+.cursor-dot,
+.cursor-outline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference; /* Creates a cool color-inverting effect */
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+  transition: transform 0.1s ease-out;
+}
+
+.cursor-outline {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #fff;
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: width 0.3s, height 0.3s, transform 0.2s ease-out, background-color 0.3s;
+}
+
+/* This class will be added to the body via JS */
+body.cursor-hover .cursor-outline {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-width: 3px;
+}
+
+/* Hide the default cursor on the body and interactive elements */
+body, a, button {
+  cursor: none;
+}

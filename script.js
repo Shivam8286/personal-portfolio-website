@@ -33,6 +33,54 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Set footer year automatically
 	const yearSpan = document.getElementById("footer-year");
 	if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+	// Custom animated cursor
+	const cursorDot = document.createElement("div");
+	cursorDot.className = "cursor-dot";
+	document.body.appendChild(cursorDot);
+
+	const cursorOutline = document.createElement("div");
+	cursorOutline.className = "cursor-outline";
+	document.body.appendChild(cursorOutline);
+
+	let mouseX = 0, mouseY = 0;
+	let dotX = 0, dotY = 0;
+	let outlineX = 0, outlineY = 0;
+
+	// Track mouse movement
+	window.addEventListener("mousemove", (e) => {
+		mouseX = e.clientX;
+		mouseY = e.clientY;
+	});
+
+	// Animate the cursor with a slight delay for the outline
+	const animateCursor = () => {
+		// Dot follows the mouse directly
+		dotX = mouseX;
+		dotY = mouseY;
+		cursorDot.style.transform = `translate(${dotX}px, ${dotY}px)`;
+
+		// Outline has a easing/delay effect
+		const outlineDelay = 0.1;
+		outlineX += (mouseX - outlineX) * outlineDelay;
+		outlineY += (mouseY - outlineY) * outlineDelay;
+		cursorOutline.style.transform = `translate(${outlineX}px, ${outlineY}px)`;
+
+		requestAnimationFrame(animateCursor);
+	};
+	
+	animateCursor();
+
+	// Add hover effect for interactive elements
+	const interactiveElements = document.querySelectorAll('a, button');
+	interactiveElements.forEach((el) => {
+		el.addEventListener('mouseenter', () => {
+			document.body.classList.add('cursor-hover');
+		});
+		el.addEventListener('mouseleave', () => {
+			document.body.classList.remove('cursor-hover');
+		});
+	});
 });
 
 // Smooth scrolling function
