@@ -29,6 +29,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	if (heroText) {
 		typeWriter(heroText, 0);
 	}
+
+	// Set footer year automatically
+	const yearSpan = document.getElementById("footer-year");
+	if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 });
 
 // Smooth scrolling function
