@@ -64,7 +64,12 @@
   <h1 class="projects-title">Projects</h1>
   <div class="projects-grid">
     <!-- Project Card Example -->
-    <div class="project-card-glass">
+    <div class="project-card-glass" 
+         data-title="Project Alpha (Coming Soon)"
+         data-description="This is a conceptual overview of an exciting project currently in development. It will feature a modern tech stack to create a seamless and interactive user experience. Stay tuned for updates and the official launch!"
+         data-image-src="img.avif"
+         data-tags="HTML,CSS,JavaScript,React"
+         data-status="coming-soon">
       <div class="project-image-container">
         <img src="img.avif" alt="Project 1" />
         <div class="project-overlay">
@@ -77,12 +82,17 @@
           </div>
         </div>
       </div>
-      <button class="project-live-btn" disabled>
-        <i class="fas fa-hourglass-half"></i> Live
+      <button class="project-live-btn">
+        <i class="fas fa-eye"></i> View Details
       </button>
     </div>
     <!-- Repeat for more projects -->
-    <div class="project-card-glass">
+    <div class="project-card-glass"
+         data-title="Project Beta (Coming Soon)"
+         data-description="Another awesome project is on the horizon, focusing on API integration and dynamic data handling. It aims to solve a real-world problem with a clean and efficient design."
+         data-image-src="img.avif"
+         data-tags="React,API,Node.js"
+         data-status="coming-soon">
       <div class="project-image-container">
         <img src="img.avif" alt="Project 2" />
         <div class="project-overlay">
@@ -94,11 +104,16 @@
           </div>
         </div>
       </div>
-      <button class="project-live-btn" disabled>
-        <i class="fas fa-hourglass-half"></i> Live
+      <button class="project-live-btn">
+        <i class="fas fa-eye"></i> View Details
       </button>
     </div>
-    <div class="project-card-glass">
+    <div class="project-card-glass"
+         data-title="Project Gamma (Coming Soon)"
+         data-description="This project will explore the power of full-stack development, combining a fast backend with a responsive frontend. More details will be revealed as development progresses."
+         data-image-src="img.avif"
+         data-tags="MongoDB,Express,React,Node.js"
+         data-status="coming-soon">
       <div class="project-image-container">
         <img src="img.avif" alt="Project 3" />
         <div class="project-overlay">
@@ -110,8 +125,8 @@
           </div>
         </div>
       </div>
-      <button class="project-live-btn" disabled>
-        <i class="fas fa-hourglass-half"></i> Live
+      <button class="project-live-btn">
+        <i class="fas fa-eye"></i> View Details
       </button>
     </div>
   </div>
@@ -237,15 +252,19 @@
             <label for="name"><i class="fas fa-user"></i></label>
             <input type="text" id="name" name="name" placeholder="Your Name" required>
           </div>
+           <small class="validation-message"></small>
           <div class="form-group">
             <label for="email"><i class="fas fa-envelope"></i></label>
             <input type="email" id="email" name="email" placeholder="Your Email" required>
           </div>
+           <small class="validation-message"></small>
           <div class="form-group">
             <label for="message"><i class="fas fa-comment-dots"></i></label>
             <textarea id="message" name="message" rows="4" placeholder="Your Message" required></textarea>
           </div>
+           <small class="validation-message"></small>
           <button type="submit" class="submit-btn pulse"><i class="fas fa-paper-plane"></i> Send Message</button>
+          <div id="form-status-message"></div>
         </form>
       </div>
     </section>
@@ -284,6 +303,22 @@
         </button>
       </div>
     </footer>
+
+    <div class="modal-overlay" id="project-modal-overlay">
+      <div class="modal-content" id="project-modal-content">
+        <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+        <img src="" alt="Project Image" class="modal-img">
+        <div class="modal-text-content">
+            <h2 class="modal-title"></h2>
+            <div class="modal-tags"></div>
+            <p class="modal-description"></p>
+            <div class="modal-links">
+                <a href="#" class="modal-link-btn" id="modal-live-link" target="_blank"><i class="fas fa-link"></i> Live Site</a>
+                <a href="#" class="modal-link-btn" id="modal-code-link" target="_blank"><i class="fab fa-github"></i> View Code</a>
+            </div>
+        </div>
+      </div>
+    </div>
 
 	<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="script.js"></script>

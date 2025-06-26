@@ -177,6 +177,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			document.body.classList.remove('cursor-hover');
 		});
 	});
+
+	lazyLoadImages();
+	themeToggle();
+	initProjectModals();
 });
 
 // Smooth scrolling function
@@ -445,6 +449,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   lazyLoadImages();
   themeToggle();
+  initProjectModals();
 });
 
 // Navbar shadow and background on scroll
@@ -456,3 +461,82 @@ window.addEventListener('scroll', function() {
     navbar.classList.remove('scrolled');
   }
 });
+
+// Initialize project modals
+function initProjectModals() {
+  const modalOverlay = document.getElementById('project-modal-overlay');
+  if (!modalOverlay) return;
+
+  const modalContent = document.getElementById('project-modal-content');
+  const modalCloseBtn = document.getElementById('modal-close-btn');
+  const projectCards = document.querySelectorAll('.project-card-glass');
+
+  // Modal content elements
+  const modalImg = modalContent.querySelector('.modal-img');
+  const modalTitle = modalContent.querySelector('.modal-title');
+  const modalTagsContainer = modalContent.querySelector('.modal-tags');
+  const modalDescription = modalContent.querySelector('.modal-description');
+  const modalLiveLink = document.getElementById('modal-live-link');
+  const modalCodeLink = document.getElementById('modal-code-link');
+
+  projectCards.forEach(card => {
+    card.addEventListener('click', () => {
+      // 1. Get data from the clicked card's data attributes
+      const title = card.dataset.title;
+      const description = card.dataset.description;
+      const imgSrc = card.dataset.imageSrc;
+      const tags = card.dataset.tags.split(',');
+      const status = card.dataset.status;
+      const liveLink = card.dataset.liveLink || '#';
+      const codeLink = card.dataset.codeLink || '#';
+
+      // 2. Populate the modal with the data
+      modalTitle.textContent = title;
+      modalDescription.textContent = description;
+      modalImg.src = imgSrc;
+
+      // Create tag elements
+      modalTagsContainer.innerHTML = '';
+      tags.forEach(tag => {
+        const tagElement = document.createElement('span');
+        tagElement.textContent = tag.trim();
+        modalTagsContainer.appendChild(tagElement);
+      });
+      
+      // 3. Handle link states (live, coming-soon, etc.)
+      modalLiveLink.href = liveLink;
+      modalCodeLink.href = codeLink;
+
+      if (status === 'coming-soon') {
+        modalLiveLink.classList.add('disabled');
+        modalCodeLink.classList.add('disabled');
+      } else {
+        modalLiveLink.classList.remove('disabled');
+        modalCodeLink.classList.remove('disabled');
+      }
+
+      // 4. Show the modal
+      modalOverlay.classList.add('visible');
+    });
+  });
+
+  // Function to close the modal
+  const closeModal = () => {
+    modalOverlay.classList.remove('visible');
+  };
+
+  // Close modal when clicking the close button or the overlay
+  modalCloseBtn.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) {
+      closeModal();
+    }
+  });
+
+  // Close modal with the Escape key
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
+      closeModal();
+    }
+  });
+}
