@@ -110,7 +110,16 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Form submission handling
 	const contactForm = document.querySelector(".contact-form");
 	if (contactForm) {
-		contactForm.addEventListener("submit", handleFormSubmit);
+		contactForm.addEventListener("submit", handleAdvancedFormSubmit);
+
+		// Add live validation
+		const nameInput = document.getElementById('name');
+		const emailInput = document.getElementById('email');
+		const messageInput = document.getElementById('message');
+
+		nameInput.addEventListener('blur', () => validateField(nameInput, 'Name cannot be empty.'));
+		emailInput.addEventListener('blur', () => validateEmail(emailInput));
+		messageInput.addEventListener('blur', () => validateField(messageInput, 'Message cannot be empty.'));
 	}
 
 	// Project cards hover effect
@@ -219,12 +228,29 @@ function highlightActiveNavLink() {
 // Handle form submission
 function handleFormSubmit(e) {
 	e.preventDefault();
-	// Here you would typically send the form data to a server
-	// For now, we'll just log it to the console
+	// For now, we'll just log it to the console and show a success message.
+	// In a real app, you'd use a service like Formspree or a backend.
 	const formData = new FormData(e.target);
-	console.log("Form submitted with data:", Object.fromEntries(formData));
-	alert("Thank you for your message! We will get back to you soon.");
-	e.target.reset();
+	const statusMessage = document.getElementById('form-status-message');
+
+	// Simulate a network request
+	statusMessage.textContent = 'Sending...';
+	statusMessage.className = 'visible success'; // Use 'success' for styling pending state too
+
+	setTimeout(() => {
+		console.log("Form submitted with data:", Object.fromEntries(formData));
+		
+		statusMessage.textContent = 'Thank you! Your message has been sent.';
+		statusMessage.className = 'visible success';
+
+		e.target.reset(); // Clear the form
+		
+		// Hide the message after a few seconds
+		setTimeout(() => {
+			statusMessage.className = '';
+		}, 5000);
+
+	}, 1500);
 }
 
 // Project card hover effect
@@ -436,7 +462,7 @@ document.addEventListener("DOMContentLoaded", function () {
   navLinks.forEach((link) => link.addEventListener("click", smoothScroll));
 
   const contactForm = document.querySelector(".contact-form");
-  if (contactForm) contactForm.addEventListener("submit", handleFormSubmit);
+  if (contactForm) contactForm.addEventListener("submit", handleAdvancedFormSubmit);
 
   const projectCards = document.querySelectorAll(".project-card");
   projectCards.forEach((card) => {
@@ -539,4 +565,89 @@ function initProjectModals() {
       closeModal();
     }
   });
+}
+
+// --- Advanced Form Validation and Submission ---
+
+// Generic field validation
+function validateField(field, emptyMessage) {
+  const validationMessage = field.parentElement.nextElementSibling;
+  if (field.value.trim() === '') {
+    showError(field, validationMessage, emptyMessage);
+    return false;
+  }
+  hideError(field, validationMessage);
+  return true;
+}
+
+// Specific email validation
+function validateEmail(field) {
+  const validationMessage = field.parentElement.nextElementSibling;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (field.value.trim() === '') {
+    showError(field, validationMessage, 'Email cannot be empty.');
+    return false;
+  }
+  if (!emailRegex.test(field.value)) {
+    showError(field, validationMessage, 'Please enter a valid email address.');
+    return false;
+  }
+  hideError(field, validationMessage);
+  return true;
+}
+
+function showError(field, messageElement, message) {
+  field.parentElement.classList.add('error');
+  messageElement.textContent = message;
+  messageElement.classList.add('visible');
+}
+
+function hideError(field, messageElement) {
+  field.parentElement.classList.remove('error');
+  messageElement.classList.remove('visible');
+}
+
+// Handle advanced form submission
+function handleAdvancedFormSubmit(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const nameInput = document.getElementById('name');
+  const emailInput = document.getElementById('email');
+  const messageInput = document.getElementById('message');
+  const statusMessage = document.getElementById('form-status-message');
+
+  // Perform final validation check on all fields
+  const isNameValid = validateField(nameInput, 'Name cannot be empty.');
+  const isEmailValid = validateEmail(emailInput);
+  const isMessageValid = validateField(messageInput, 'Message cannot be empty.');
+
+  if (!isNameValid || !isEmailValid || !isMessageValid) {
+    statusMessage.textContent = 'Please fix the errors above and try again.';
+    statusMessage.className = 'visible error';
+    return; // Stop submission if validation fails
+  }
+
+  // If all valid, proceed with submission
+  statusMessage.textContent = 'Sending...';
+  statusMessage.className = 'visible success'; // Style as success while sending
+
+  // Simulate a network request with setTimeout
+  // In a real application, you would replace this with a `fetch` call to a service like Formspree
+  setTimeout(() => {
+    console.log("Form submitted successfully:", Object.fromEntries(new FormData(form)));
+    statusMessage.textContent = 'Thank you! Your message has been sent successfully.';
+    statusMessage.className = 'visible success';
+
+    form.reset(); // Clear the form fields
+    // Remove all error states
+    hideError(nameInput, nameInput.parentElement.nextElementSibling);
+    hideError(emailInput, emailInput.parentElement.nextElementSibling);
+    hideError(messageInput, messageInput.parentElement.nextElementSibling);
+
+    // Hide the status message after a few seconds
+    setTimeout(() => {
+      statusMessage.className = '';
+    }, 5000);
+  }, 1500);
 }
