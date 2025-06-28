@@ -188,8 +188,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	initAdvancedThemeToggle();
 	initProjectModals();
 	init3DCardEffects();
-	initParallaxEffects();
-	initMicroInteractions();
 	initScrollAnimations();
 	initPerformanceOptimizations();
 });
@@ -855,88 +853,6 @@ function init3DCardEffects() {
 			card.style.setProperty('--tilt-y', '0deg');
 		});
 	});
-}
-
-// =================================
-// PARALLAX SCROLLING EFFECTS
-// =================================
-function initParallaxEffects() {
-	const parallaxElements = document.querySelectorAll('[data-parallax]');
-	let ticking = false;
-	
-	function updateParallax() {
-		const scrolled = window.pageYOffset;
-		const rate = scrolled * -0.5;
-		
-		parallaxElements.forEach(element => {
-			const speed = parseFloat(element.dataset.parallax) || 0.5;
-			const yPos = -(scrolled * speed);
-			
-			// Apply parallax transform
-			element.style.transform = `translateY(${yPos}px)`;
-		});
-		
-		ticking = false;
-	}
-	
-	function requestTick() {
-		if (!ticking) {
-			requestAnimationFrame(updateParallax);
-			ticking = true;
-		}
-	}
-	
-	window.addEventListener('scroll', requestTick);
-	window.addEventListener('resize', requestTick);
-	
-	// Initial call
-	updateParallax();
-}
-
-// =================================
-// MICRO-INTERACTIONS & ANIMATIONS
-// =================================
-function initMicroInteractions() {
-	// Staggered animation for skills cards
-	const skillCards = document.querySelectorAll('.glass-card');
-	skillCards.forEach((card, index) => {
-		card.style.animationDelay = `${index * 0.1}s`;
-	});
-	
-	// Typing effect for hero text
-	const typewriterElement = document.querySelector('.typewriter');
-	if (typewriterElement) {
-		const text = typewriterElement.textContent;
-		typewriterElement.textContent = '';
-		
-		let i = 0;
-		const typeInterval = setInterval(() => {
-			if (i < text.length) {
-				typewriterElement.textContent += text.charAt(i);
-				i++;
-			} else {
-				clearInterval(typeInterval);
-			}
-		}, 100);
-	}
-	
-	// Progress bar animations
-	const progressBars = document.querySelectorAll('.progress');
-	progressBars.forEach(bar => {
-		const width = bar.style.width;
-		bar.style.width = '0%';
-		
-		setTimeout(() => {
-			bar.style.transition = 'width 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
-			bar.style.width = width;
-		}, 500);
-	});
-	
-	// Floating animation for hero image
-	const heroImage = document.querySelector('.hero-image');
-	if (heroImage) {
-		heroImage.style.animation = 'float 6s ease-in-out infinite';
-	}
 }
 
 // =================================
