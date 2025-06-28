@@ -36,8 +36,35 @@
 					<li><a href="#about-me">#about-me</a></li>
 					<li><a href="#contact">#contacts</a></li>
 				</ul>
-				<div class="language">
-					<a href="#">EN ▼</a>
+				<div class="language-selector">
+					<button class="language-btn" id="language-btn" aria-label="Language Settings">
+						<i class="fas fa-globe"></i>
+						<span class="current-lang">EN</span>
+						<i class="fas fa-chevron-down dropdown-arrow"></i>
+					</button>
+					<div class="language-dropdown" id="language-dropdown">
+						<div class="dropdown-item" data-lang="en">
+							<i class="fas fa-flag"></i>
+							<span>English</span>
+							<i class="fas fa-check selected-indicator"></i>
+						</div>
+						<div class="dropdown-item" data-lang="es">
+							<i class="fas fa-flag"></i>
+							<span>Español</span>
+						</div>
+						<div class="dropdown-item" data-lang="fr">
+							<i class="fas fa-flag"></i>
+							<span>Français</span>
+						</div>
+						<div class="dropdown-item" data-lang="de">
+							<i class="fas fa-flag"></i>
+							<span>Deutsch</span>
+						</div>
+						<div class="dropdown-item" data-lang="hi">
+							<i class="fas fa-flag"></i>
+							<span>हिंदी</span>
+						</div>
+					</div>
 				</div>
 				<div class="theme-toggle-container">
 					<button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle dark/light mode">

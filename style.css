@@ -2437,3 +2437,212 @@ body.light-mode .loading-text {
 		margin-top: 20px;
 	}
 }
+
+/* =================================
+   ENHANCED LANGUAGE SELECTOR
+   ================================= */
+.language-selector {
+	position: relative;
+	margin-left: 20px;
+}
+
+.language-btn {
+	background: rgba(171, 137, 255, 0.12);
+	border: 1.5px solid rgba(171, 137, 255, 0.18);
+	color: #fff;
+	padding: 12px 18px;
+	border-radius: 12px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 1.1em;
+	font-weight: 600;
+	letter-spacing: 1px;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	box-shadow: 0 2px 8px rgba(171, 137, 255, 0.2);
+	position: relative;
+	overflow: hidden;
+}
+
+.language-btn::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 0;
+	height: 0;
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	transition: width 0.6s, height 0.6s;
+}
+
+.language-btn:hover::before {
+	width: 300px;
+	height: 300px;
+}
+
+.language-btn:hover {
+	background: rgba(171, 137, 255, 0.25);
+	border-color: rgba(171, 137, 255, 0.4);
+	box-shadow: 0 4px 16px rgba(171, 137, 255, 0.4);
+	transform: translateY(-2px) scale(1.02);
+}
+
+.language-btn:active {
+	transform: translateY(0) scale(0.98);
+}
+
+.language-btn i {
+	transition: transform 0.3s ease;
+}
+
+.language-btn .dropdown-arrow {
+	font-size: 0.8em;
+	transition: transform 0.3s ease;
+}
+
+.language-btn.active .dropdown-arrow {
+	transform: rotate(180deg);
+}
+
+.current-lang {
+	font-weight: 700;
+	position: relative;
+}
+
+.current-lang::after {
+	content: '';
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background: linear-gradient(90deg, #ab89ff, #cc65ff);
+	border-radius: 1px;
+	transform: scaleX(0);
+	transition: transform 0.3s ease;
+}
+
+.language-btn:hover .current-lang::after {
+	transform: scaleX(1);
+}
+
+/* Dropdown Menu */
+.language-dropdown {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	margin-top: 8px;
+	background: rgba(44, 47, 56, 0.95);
+	border: 1.5px solid rgba(171, 137, 255, 0.18);
+	border-radius: 12px;
+	backdrop-filter: blur(15px);
+	-webkit-backdrop-filter: blur(15px);
+	box-shadow: 0 8px 32px rgba(171, 137, 255, 0.2);
+	min-width: 180px;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-10px) scale(0.95);
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	z-index: 1000;
+	overflow: hidden;
+}
+
+.language-dropdown.visible {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0) scale(1);
+}
+
+.dropdown-item {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 16px;
+	color: #e0e0e0;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	position: relative;
+	border-bottom: 1px solid rgba(171, 137, 255, 0.1);
+}
+
+.dropdown-item:last-child {
+	border-bottom: none;
+}
+
+.dropdown-item:hover {
+	background: rgba(171, 137, 255, 0.15);
+	color: #fff;
+	transform: translateX(4px);
+}
+
+.dropdown-item.selected {
+	background: rgba(171, 137, 255, 0.2);
+	color: #ab89ff;
+}
+
+.dropdown-item i:first-child {
+	color: #ab89ff;
+	font-size: 1.1em;
+	width: 16px;
+	text-align: center;
+}
+
+.dropdown-item span {
+	flex: 1;
+	font-weight: 500;
+}
+
+.selected-indicator {
+	color: #ab89ff;
+	font-size: 0.9em;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.dropdown-item.selected .selected-indicator {
+	opacity: 1;
+}
+
+/* Animation for dropdown items */
+.dropdown-item {
+	animation: slideInRight 0.3s ease forwards;
+	opacity: 0;
+	transform: translateX(20px);
+}
+
+.dropdown-item:nth-child(1) { animation-delay: 0.1s; }
+.dropdown-item:nth-child(2) { animation-delay: 0.15s; }
+.dropdown-item:nth-child(3) { animation-delay: 0.2s; }
+.dropdown-item:nth-child(4) { animation-delay: 0.25s; }
+.dropdown-item:nth-child(5) { animation-delay: 0.3s; }
+
+@keyframes slideInRight {
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+/* Pulse animation for current language */
+@keyframes langPulse {
+	0%, 100% { 
+		box-shadow: 0 2px 8px rgba(171, 137, 255, 0.2);
+	}
+	50% { 
+		box-shadow: 0 2px 16px rgba(171, 137, 255, 0.4);
+	}
+}
+
+.language-btn {
+	animation: langPulse 3s ease-in-out infinite;
+}
+
+/* Remove old language styles */
+.language {
+	display: none;
+}

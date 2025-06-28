@@ -188,6 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	initAdvancedThemeToggle();
 	initProjectModals();
 	init3DCardEffects();
+	initLanguageSelector();
 	initScrollAnimations();
 	initPerformanceOptimizations();
 });
@@ -623,8 +624,10 @@ function initProjectModals() {
 // Generic field validation
 function validateField(field, emptyMessage) {
   const validationMessage = field.parentElement.nextElementSibling;
+  const message = window.translationData ? window.translationData[emptyMessage] || emptyMessage : emptyMessage;
+  
   if (field.value.trim() === '') {
-    showError(field, validationMessage, emptyMessage);
+    showError(field, validationMessage, message);
     return false;
   }
   hideError(field, validationMessage);
@@ -634,13 +637,16 @@ function validateField(field, emptyMessage) {
 // Specific email validation
 function validateEmail(field) {
   const validationMessage = field.parentElement.nextElementSibling;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emptyMessage = window.translationData ? window.translationData['validation-email-empty'] : 'Email cannot be empty.';
+  const invalidMessage = window.translationData ? window.translationData['validation-email-invalid'] : 'Please enter a valid email address.';
+  
   if (field.value.trim() === '') {
-    showError(field, validationMessage, 'Email cannot be empty.');
+    showError(field, validationMessage, emptyMessage);
     return false;
   }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(field.value)) {
-    showError(field, validationMessage, 'Please enter a valid email address.');
+    showError(field, validationMessage, invalidMessage);
     return false;
   }
   hideError(field, validationMessage);
@@ -668,26 +674,33 @@ function handleAdvancedFormSubmit(e) {
   const messageInput = document.getElementById('message');
   const statusMessage = document.getElementById('form-status-message');
 
+  // Get translated messages
+  const nameEmptyMsg = window.translationData ? window.translationData['validation-name-empty'] : 'Name cannot be empty.';
+  const messageEmptyMsg = window.translationData ? window.translationData['validation-message-empty'] : 'Message cannot be empty.';
+  const fixErrorsMsg = window.translationData ? window.translationData['validation-fix-errors'] : 'Please fix the errors above and try again.';
+  const sendingMsg = window.translationData ? window.translationData['form-sending'] : 'Sending...';
+  const successMsg = window.translationData ? window.translationData['form-success'] : 'Thank you! Your message has been sent successfully.';
+
   // Perform final validation check on all fields
-  const isNameValid = validateField(nameInput, 'Name cannot be empty.');
+  const isNameValid = validateField(nameInput, 'validation-name-empty');
   const isEmailValid = validateEmail(emailInput);
-  const isMessageValid = validateField(messageInput, 'Message cannot be empty.');
+  const isMessageValid = validateField(messageInput, 'validation-message-empty');
 
   if (!isNameValid || !isEmailValid || !isMessageValid) {
-    statusMessage.textContent = 'Please fix the errors above and try again.';
+    statusMessage.textContent = fixErrorsMsg;
     statusMessage.className = 'visible error';
     return; // Stop submission if validation fails
   }
 
   // If all valid, proceed with submission
-  statusMessage.textContent = 'Sending...';
+  statusMessage.textContent = sendingMsg;
   statusMessage.className = 'visible success'; // Style as success while sending
 
   // Simulate a network request with setTimeout
   // In a real application, you would replace this with a `fetch` call to a service like Formspree
   setTimeout(() => {
     console.log("Form submitted successfully:", Object.fromEntries(new FormData(form)));
-    statusMessage.textContent = 'Thank you! Your message has been sent successfully.';
+    statusMessage.textContent = successMsg;
     statusMessage.className = 'visible success';
 
     form.reset(); // Clear the form fields
@@ -903,5 +916,762 @@ function initPerformanceOptimizations() {
 	// Reduce motion for users who prefer it
 	if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 		document.body.classList.add('reduced-motion');
+	}
+}
+
+// =================================
+// ENHANCED LANGUAGE SELECTOR
+// =================================
+function initLanguageSelector() {
+	const languageBtn = document.getElementById('language-btn');
+	const languageDropdown = document.getElementById('language-dropdown');
+	const dropdownItems = document.querySelectorAll('.dropdown-item');
+	const currentLang = document.querySelector('.current-lang');
+	
+	if (!languageBtn || !languageDropdown) {
+		console.warn('Language selector elements not found');
+		return;
+	}
+	
+	// Toggle dropdown
+	languageBtn.addEventListener('click', (e) => {
+		e.stopPropagation();
+		languageBtn.classList.toggle('active');
+		languageDropdown.classList.toggle('visible');
+		
+		// Add ripple effect
+		const ripple = document.createElement('div');
+		ripple.className = 'ripple';
+		ripple.style.cssText = `
+			position: absolute;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.3);
+			transform: scale(0);
+			animation: ripple 0.6s linear;
+			pointer-events: none;
+		`;
+		
+		const rect = languageBtn.getBoundingClientRect();
+		const size = Math.max(rect.width, rect.height);
+		const x = e.clientX - rect.left - size / 2;
+		const y = e.clientY - rect.top - size / 2;
+		
+		ripple.style.width = ripple.style.height = size + 'px';
+		ripple.style.left = x + 'px';
+		ripple.style.top = y + 'px';
+		
+		languageBtn.appendChild(ripple);
+		
+		setTimeout(() => {
+			ripple.remove();
+		}, 600);
+	});
+	
+	// Handle language selection
+	dropdownItems.forEach(item => {
+		item.addEventListener('click', () => {
+			const lang = item.dataset.lang;
+			const langText = item.querySelector('span').textContent;
+			
+			// Update current language display
+			currentLang.textContent = lang.toUpperCase();
+			
+			// Update selected state
+			dropdownItems.forEach(di => {
+				di.classList.remove('selected');
+				const indicator = di.querySelector('.selected-indicator');
+				if (indicator) indicator.style.opacity = '0';
+			});
+			item.classList.add('selected');
+			const selectedIndicator = item.querySelector('.selected-indicator');
+			if (selectedIndicator) selectedIndicator.style.opacity = '1';
+			
+			// Close dropdown
+			languageBtn.classList.remove('active');
+			languageDropdown.classList.remove('visible');
+			
+			// Save language preference
+			localStorage.setItem('language', lang);
+			
+			// Actually translate the website
+			translateWebsite(lang);
+			
+			// Add success feedback
+			showLanguageChangeFeedback(langText);
+		});
+	});
+	
+	// Close dropdown when clicking outside
+	document.addEventListener('click', (e) => {
+		if (!languageBtn.contains(e.target) && !languageDropdown.contains(e.target)) {
+			languageBtn.classList.remove('active');
+			languageDropdown.classList.remove('visible');
+		}
+	});
+	
+	// Close dropdown on escape key
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && languageDropdown.classList.contains('visible')) {
+			languageBtn.classList.remove('active');
+			languageDropdown.classList.remove('visible');
+		}
+	});
+	
+	// Load saved language preference
+	const savedLang = localStorage.getItem('language') || 'en';
+	const savedItem = document.querySelector(`[data-lang="${savedLang}"]`);
+	if (savedItem) {
+		currentLang.textContent = savedLang.toUpperCase();
+		dropdownItems.forEach(di => di.classList.remove('selected'));
+		savedItem.classList.add('selected');
+		const savedIndicator = savedItem.querySelector('.selected-indicator');
+		if (savedIndicator) savedIndicator.style.opacity = '1';
+		
+		// Translate website to saved language after a short delay
+		setTimeout(() => {
+			translateWebsite(savedLang);
+		}, 100);
+	}
+}
+
+// Show language change feedback
+function showLanguageChangeFeedback(langName) {
+	const feedback = document.createElement('div');
+	feedback.className = 'language-feedback';
+	
+	const langChangedText = window.translationData ? window.translationData['lang-changed'] : 'Language changed to';
+	
+	feedback.innerHTML = `
+		<i class="fas fa-check-circle"></i>
+		<span>${langChangedText} ${langName}</span>
+	`;
+	feedback.style.cssText = `
+		position: fixed;
+		top: 100px;
+		right: 20px;
+		background: rgba(101, 255, 204, 0.9);
+		color: #1a1a1a;
+		padding: 12px 20px;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-weight: 600;
+		z-index: 10000;
+		transform: translateX(100%);
+		transition: transform 0.3s ease;
+		backdrop-filter: blur(10px);
+		box-shadow: 0 4px 16px rgba(101, 255, 204, 0.3);
+	`;
+	
+	document.body.appendChild(feedback);
+	
+	// Animate in
+	setTimeout(() => {
+		feedback.style.transform = 'translateX(0)';
+	}, 100);
+	
+	// Remove after 3 seconds
+	setTimeout(() => {
+		feedback.style.transform = 'translateX(100%)';
+		setTimeout(() => {
+			feedback.remove();
+		}, 300);
+	}, 3000);
+}
+
+// Add ripple animation CSS
+const rippleStyle = document.createElement('style');
+rippleStyle.textContent = `
+	@keyframes ripple {
+		to {
+			transform: scale(4);
+			opacity: 0;
+		}
+	}
+	
+	.language-feedback {
+		animation: slideInRight 0.3s ease;
+	}
+	
+	@keyframes slideInRight {
+		from {
+			transform: translateX(100%);
+			opacity: 0;
+		}
+		to {
+			transform: translateX(0);
+			opacity: 1;
+		}
+	}
+`;
+document.head.appendChild(rippleStyle);
+
+// =================================
+// TRANSLATION SYSTEM
+// =================================
+const translations = {
+	en: {
+		// Navigation
+		'nav-home': 'home',
+		'nav-works': 'works',
+		'nav-about': 'about-me',
+		'nav-contacts': 'contacts',
+		
+		// Hero Section
+		'hero-greeting': "Hi, I'm",
+		'hero-title': 'Frontend Developer & Cloud Enthusiast',
+		'hero-subtitle': 'I craft responsive websites where technology meets creativity.',
+		'hero-contact-btn': 'Contact me!!',
+		'hero-current-project': 'Currently working on',
+		
+		// Projects Section
+		'projects-title': 'Projects',
+		'project-coming-soon': 'Coming Soon',
+		'project-exciting': 'Exciting project on the way. Stay tuned!',
+		'project-another': 'Another awesome project is coming soon!',
+		'project-stay-tuned': 'Stay tuned for more updates!',
+		'project-view-details': 'View Details',
+		
+		// Skills Section
+		'skills-title': 'Skills',
+		'skills-languages': 'Languages',
+		'skills-databases': 'Databases',
+		'skills-tools': 'Tools',
+		'skills-other': 'Other',
+		'skills-frameworks': 'Frameworks',
+		
+		// About Section
+		'about-title': 'About Me',
+		'about-hello': "Hello, I'm",
+		'about-ghost': 'Ghost',
+		'about-description': "I'm a self-taught frontend developer and cloud enthusiast. I develop responsive websites from scratch and turn them into modern, user-friendly web experiences.",
+		'about-fact-1': 'Passionate about UI/UX',
+		'about-fact-2': 'Cloud Computing Explorer',
+		'about-fact-3': 'Always learning new tech',
+		'about-resume-btn': 'Download Resume',
+		
+		// Contact Section
+		'contact-title': 'Contact',
+		'contact-subtitle': 'Get in touch with me',
+		'contact-name-placeholder': 'Your Name',
+		'contact-email-placeholder': 'Your Email',
+		'contact-message-placeholder': 'Your Message',
+		'contact-send-btn': 'Send Message',
+		
+		// Footer
+		'footer-copyright': 'All Rights Reserved.',
+		'footer-home': 'Home',
+		'footer-about': 'About',
+		'footer-skills': 'Skills',
+		'footer-projects': 'Projects',
+		'footer-contact': 'Contact',
+		
+		// Form Validation
+		'validation-name-empty': 'Name cannot be empty.',
+		'validation-email-empty': 'Email cannot be empty.',
+		'validation-email-invalid': 'Please enter a valid email address.',
+		'validation-message-empty': 'Message cannot be empty.',
+		'validation-fix-errors': 'Please fix the errors above and try again.',
+		'form-sending': 'Sending...',
+		'form-success': 'Thank you! Your message has been sent successfully.',
+		
+		// Language Feedback
+		'lang-changed': 'Language changed to'
+	},
+	
+	es: {
+		// Navigation
+		'nav-home': 'inicio',
+		'nav-works': 'trabajos',
+		'nav-about': 'sobre-mi',
+		'nav-contacts': 'contactos',
+		
+		// Hero Section
+		'hero-greeting': 'Hola, soy',
+		'hero-title': 'Desarrollador Frontend y Entusiasta de la Nube',
+		'hero-subtitle': 'Creo sitios web responsivos donde la tecnología se encuentra con la creatividad.',
+		'hero-contact-btn': '¡Contáctame!',
+		'hero-current-project': 'Actualmente trabajando en',
+		
+		// Projects Section
+		'projects-title': 'Proyectos',
+		'project-coming-soon': 'Próximamente',
+		'project-exciting': '¡Proyecto emocionante en camino. ¡Mantente atento!',
+		'project-another': '¡Otro proyecto increíble está por venir!',
+		'project-stay-tuned': '¡Mantente atento para más actualizaciones!',
+		'project-view-details': 'Ver Detalles',
+		
+		// Skills Section
+		'skills-title': 'Habilidades',
+		'skills-languages': 'Lenguajes',
+		'skills-databases': 'Bases de Datos',
+		'skills-tools': 'Herramientas',
+		'skills-other': 'Otros',
+		'skills-frameworks': 'Frameworks',
+		
+		// About Section
+		'about-title': 'Sobre Mí',
+		'about-hello': 'Hola, soy',
+		'about-ghost': 'Ghost',
+		'about-description': 'Soy un desarrollador frontend autodidacta y entusiasta de la nube. Desarrollo sitios web responsivos desde cero y los convierto en experiencias web modernas y fáciles de usar.',
+		'about-fact-1': 'Apasionado por UI/UX',
+		'about-fact-2': 'Explorador de Computación en la Nube',
+		'about-fact-3': 'Siempre aprendiendo nuevas tecnologías',
+		'about-resume-btn': 'Descargar CV',
+		
+		// Contact Section
+		'contact-title': 'Contacto',
+		'contact-subtitle': 'Ponte en contacto conmigo',
+		'contact-name-placeholder': 'Tu Nombre',
+		'contact-email-placeholder': 'Tu Email',
+		'contact-message-placeholder': 'Tu Mensaje',
+		'contact-send-btn': 'Enviar Mensaje',
+		
+		// Footer
+		'footer-copyright': 'Todos los Derechos Reservados.',
+		'footer-home': 'Inicio',
+		'footer-about': 'Sobre Mí',
+		'footer-skills': 'Habilidades',
+		'footer-projects': 'Proyectos',
+		'footer-contact': 'Contacto',
+		
+		// Form Validation
+		'validation-name-empty': 'El nombre no puede estar vacío.',
+		'validation-email-empty': 'El email no puede estar vacío.',
+		'validation-email-invalid': 'Por favor ingresa un email válido.',
+		'validation-message-empty': 'El mensaje no puede estar vacío.',
+		'validation-fix-errors': 'Por favor corrige los errores arriba e intenta de nuevo.',
+		'form-sending': 'Enviando...',
+		'form-success': '¡Gracias! Tu mensaje ha sido enviado exitosamente.',
+		
+		// Language Feedback
+		'lang-changed': 'Idioma cambiado a'
+	},
+	
+	fr: {
+		// Navigation
+		'nav-home': 'accueil',
+		'nav-works': 'travaux',
+		'nav-about': 'à-propos',
+		'nav-contacts': 'contacts',
+		
+		// Hero Section
+		'hero-greeting': 'Bonjour, je suis',
+		'hero-title': 'Développeur Frontend et Passionné du Cloud',
+		'hero-subtitle': 'Je crée des sites web responsifs où la technologie rencontre la créativité.',
+		'hero-contact-btn': 'Contactez-moi !',
+		'hero-current-project': 'Actuellement en train de travailler sur',
+		
+		// Projects Section
+		'projects-title': 'Projets',
+		'project-coming-soon': 'Bientôt Disponible',
+		'project-exciting': 'Projet passionnant en cours. Restez à l\'écoute !',
+		'project-another': 'Un autre projet incroyable arrive bientôt !',
+		'project-stay-tuned': 'Restez à l\'écoute pour plus de mises à jour !',
+		'project-view-details': 'Voir les Détails',
+		
+		// Skills Section
+		'skills-title': 'Compétences',
+		'skills-languages': 'Langages',
+		'skills-databases': 'Bases de Données',
+		'skills-tools': 'Outils',
+		'skills-other': 'Autres',
+		'skills-frameworks': 'Frameworks',
+		
+		// About Section
+		'about-title': 'À Propos',
+		'about-hello': 'Bonjour, je suis',
+		'about-ghost': 'Ghost',
+		'about-description': 'Je suis un développeur frontend autodidacte et passionné du cloud. Je développe des sites web responsifs à partir de zéro et les transforme en expériences web modernes et conviviales.',
+		'about-fact-1': 'Passionné par l\'UI/UX',
+		'about-fact-2': 'Explorateur du Cloud Computing',
+		'about-fact-3': 'Toujours en train d\'apprendre de nouvelles technologies',
+		'about-resume-btn': 'Télécharger le CV',
+		
+		// Contact Section
+		'contact-title': 'Contact',
+		'contact-subtitle': 'Entrez en contact avec moi',
+		'contact-name-placeholder': 'Votre Nom',
+		'contact-email-placeholder': 'Votre Email',
+		'contact-message-placeholder': 'Votre Message',
+		'contact-send-btn': 'Envoyer le Message',
+		
+		// Footer
+		'footer-copyright': 'Tous Droits Réservés.',
+		'footer-home': 'Accueil',
+		'footer-about': 'À Propos',
+		'footer-skills': 'Compétences',
+		'footer-projects': 'Projets',
+		'footer-contact': 'Contact',
+		
+		// Form Validation
+		'validation-name-empty': 'Le nom ne peut pas être vide.',
+		'validation-email-empty': 'L\'email ne peut pas être vide.',
+		'validation-email-invalid': 'Veuillez entrer une adresse email valide.',
+		'validation-message-empty': 'Le message ne peut pas être vide.',
+		'validation-fix-errors': 'Veuillez corriger les erreurs ci-dessus et réessayer.',
+		'form-sending': 'Envoi en cours...',
+		'form-success': 'Merci ! Votre message a été envoyé avec succès.',
+		
+		// Language Feedback
+		'lang-changed': 'Langue changée vers'
+	},
+	
+	de: {
+		// Navigation
+		'nav-home': 'startseite',
+		'nav-works': 'arbeiten',
+		'nav-about': 'über-mich',
+		'nav-contacts': 'kontakte',
+		
+		// Hero Section
+		'hero-greeting': 'Hallo, ich bin',
+		'hero-title': 'Frontend-Entwickler und Cloud-Enthusiast',
+		'hero-subtitle': 'Ich erstelle responsive Websites, wo Technologie auf Kreativität trifft.',
+		'hero-contact-btn': 'Kontaktiere mich!',
+		'hero-current-project': 'Aktuell arbeite ich an',
+		
+		// Projects Section
+		'projects-title': 'Projekte',
+		'project-coming-soon': 'Demnächst Verfügbar',
+		'project-exciting': 'Spannendes Projekt in Arbeit. Bleib dran!',
+		'project-another': 'Ein weiteres großartiges Projekt kommt bald!',
+		'project-stay-tuned': 'Bleib dran für weitere Updates!',
+		'project-view-details': 'Details Anzeigen',
+		
+		// Skills Section
+		'skills-title': 'Fähigkeiten',
+		'skills-languages': 'Sprachen',
+		'skills-databases': 'Datenbanken',
+		'skills-tools': 'Werkzeuge',
+		'skills-other': 'Andere',
+		'skills-frameworks': 'Frameworks',
+		
+		// About Section
+		'about-title': 'Über Mich',
+		'about-hello': 'Hallo, ich bin',
+		'about-ghost': 'Ghost',
+		'about-description': 'Ich bin ein autodidaktischer Frontend-Entwickler und Cloud-Enthusiast. Ich entwickle responsive Websites von Grund auf und verwandle sie in moderne, benutzerfreundliche Web-Erlebnisse.',
+		'about-fact-1': 'Leidenschaft für UI/UX',
+		'about-fact-2': 'Cloud Computing Explorer',
+		'about-fact-3': 'Lerne immer neue Technologien',
+		'about-resume-btn': 'Lebenslauf Herunterladen',
+		
+		// Contact Section
+		'contact-title': 'Kontakt',
+		'contact-subtitle': 'Kontaktiere mich',
+		'contact-name-placeholder': 'Dein Name',
+		'contact-email-placeholder': 'Deine Email',
+		'contact-message-placeholder': 'Deine Nachricht',
+		'contact-send-btn': 'Nachricht Senden',
+		
+		// Footer
+		'footer-copyright': 'Alle Rechte Vorbehalten.',
+		'footer-home': 'Startseite',
+		'footer-about': 'Über Mich',
+		'footer-skills': 'Fähigkeiten',
+		'footer-projects': 'Projekte',
+		'footer-contact': 'Kontakt',
+		
+		// Form Validation
+		'validation-name-empty': 'Der Name darf nicht leer sein.',
+		'validation-email-empty': 'Die Email darf nicht leer sein.',
+		'validation-email-invalid': 'Bitte geben Sie eine gültige Email-Adresse ein.',
+		'validation-message-empty': 'Die Nachricht darf nicht leer sein.',
+		'validation-fix-errors': 'Bitte beheben Sie die Fehler oben und versuchen Sie es erneut.',
+		'form-sending': 'Wird gesendet...',
+		'form-success': 'Danke! Ihre Nachricht wurde erfolgreich gesendet.',
+		
+		// Language Feedback
+		'lang-changed': 'Sprache geändert zu'
+	},
+	
+	hi: {
+		// Navigation
+		'nav-home': 'होम',
+		'nav-works': 'कार्य',
+		'nav-about': 'मेरे-बारे-में',
+		'nav-contacts': 'संपर्क',
+		
+		// Hero Section
+		'hero-greeting': 'नमस्ते, मैं हूं',
+		'hero-title': 'फ्रंटएंड डेवलपर और क्लाउड उत्साही',
+		'hero-subtitle': 'मैं रेस्पॉन्सिव वेबसाइट बनाता हूं जहां तकनीक रचनात्मकता से मिलती है।',
+		'hero-contact-btn': 'मुझसे संपर्क करें!',
+		'hero-current-project': 'वर्तमान में काम कर रहा हूं',
+		
+		// Projects Section
+		'projects-title': 'प्रोजेक्ट्स',
+		'project-coming-soon': 'जल्द आ रहा है',
+		'project-exciting': 'रोमांचक प्रोजेक्ट आ रहा है। बने रहें!',
+		'project-another': 'एक और अद्भुत प्रोजेक्ट जल्द आ रहा है!',
+		'project-stay-tuned': 'अधिक अपडेट के लिए बने रहें!',
+		'project-view-details': 'विवरण देखें',
+		
+		// Skills Section
+		'skills-title': 'कौशल',
+		'skills-languages': 'भाषाएं',
+		'skills-databases': 'डेटाबेस',
+		'skills-tools': 'उपकरण',
+		'skills-other': 'अन्य',
+		'skills-frameworks': 'फ्रेमवर्क',
+		
+		// About Section
+		'about-title': 'मेरे बारे में',
+		'about-hello': 'नमस्ते, मैं हूं',
+		'about-ghost': 'घोस्ट',
+		'about-description': 'मैं एक स्व-शिक्षित फ्रंटएंड डेवलपर और क्लाउड उत्साही हूं। मैं शुरू से रेस्पॉन्सिव वेबसाइट विकसित करता हूं और उन्हें आधुनिक, उपयोगकर्ता-अनुकूल वेब अनुभवों में बदल देता हूं।',
+		'about-fact-1': 'UI/UX के लिए जुनून',
+		'about-fact-2': 'क्लाउड कंप्यूटिंग एक्सप्लोरर',
+		'about-fact-3': 'हमेशा नई तकनीक सीख रहा हूं',
+		'about-resume-btn': 'रिज्यूमे डाउनलोड करें',
+		
+		// Contact Section
+		'contact-title': 'संपर्क',
+		'contact-subtitle': 'मुझसे संपर्क करें',
+		'contact-name-placeholder': 'आपका नाम',
+		'contact-email-placeholder': 'आपका ईमेल',
+		'contact-message-placeholder': 'आपका संदेश',
+		'contact-send-btn': 'संदेश भेजें',
+		
+		// Footer
+		'footer-copyright': 'सर्वाधिकार सुरक्षित।',
+		'footer-home': 'होम',
+		'footer-about': 'मेरे बारे में',
+		'footer-skills': 'कौशल',
+		'footer-projects': 'प्रोजेक्ट्स',
+		'footer-contact': 'संपर्क',
+		
+		// Form Validation
+		'validation-name-empty': 'नाम खाली नहीं हो सकता।',
+		'validation-email-empty': 'ईमेल खाली नहीं हो सकता।',
+		'validation-email-invalid': 'कृपया एक वैध ईमेल पता दर्ज करें।',
+		'validation-message-empty': 'संदेश खाली नहीं हो सकता।',
+		'validation-fix-errors': 'कृपया ऊपर की त्रुटियों को ठीक करें और पुनः प्रयास करें।',
+		'form-sending': 'भेज रहा है...',
+		'form-success': 'धन्यवाद! आपका संदेश सफलतापूर्वक भेज दिया गया है।',
+		
+		// Language Feedback
+		'lang-changed': 'भाषा बदली गई'
+	}
+};
+
+// Function to translate the website
+function translateWebsite(lang) {
+	const langData = translations[lang];
+	if (!langData) {
+		console.warn(`Translation data not found for language: ${lang}`);
+		return;
+	}
+	
+	try {
+		// Batch DOM updates for better performance
+		const updates = [];
+		
+		// Update navigation links
+		const navLinks = {
+			'#hero': 'nav-home',
+			'#projects': 'nav-works', 
+			'#about-me': 'nav-about',
+			'#contact': 'nav-contacts'
+		};
+		
+		Object.entries(navLinks).forEach(([href, key]) => {
+			const link = document.querySelector(`a[href="${href}"]`);
+			if (link) {
+				updates.push(() => {
+					link.textContent = `#${langData[key]}`;
+				});
+			}
+		});
+		
+		// Update hero section
+		const heroGreeting = document.querySelector('.animated-headline');
+		if (heroGreeting) {
+			updates.push(() => {
+				heroGreeting.innerHTML = `${langData['hero-greeting']} <span class="highlight">Shivam Attri</span><br><span class="typewriter">${langData['hero-title']}</span>`;
+			});
+		}
+		
+		const heroSubtext = document.querySelector('.hero-subtext');
+		if (heroSubtext) {
+			updates.push(() => {
+				heroSubtext.textContent = langData['hero-subtitle'];
+			});
+		}
+		
+		const contactBtn = document.querySelector('.contact-btn');
+		if (contactBtn) {
+			updates.push(() => {
+				contactBtn.textContent = langData['hero-contact-btn'];
+			});
+		}
+		
+		const currentProject = document.querySelector('.current-project');
+		if (currentProject) {
+			updates.push(() => {
+				currentProject.innerHTML = `<span class="project-indicator"></span> ${langData['hero-current-project']} <span class="project-highlight">Portfolio</span>`;
+			});
+		}
+		
+		// Update projects section
+		const projectsTitle = document.querySelector('.projects-title');
+		if (projectsTitle) {
+			updates.push(() => {
+				projectsTitle.textContent = langData['projects-title'];
+			});
+		}
+		
+		// Update project cards
+		const projectOverlays = document.querySelectorAll('.project-overlay h3');
+		projectOverlays.forEach(overlay => {
+			updates.push(() => {
+				overlay.textContent = langData['project-coming-soon'];
+			});
+		});
+		
+		const projectDescriptions = document.querySelectorAll('.project-overlay p');
+		if (projectDescriptions.length >= 3) {
+			updates.push(() => {
+				projectDescriptions[0].textContent = langData['project-exciting'];
+				projectDescriptions[1].textContent = langData['project-another'];
+				projectDescriptions[2].textContent = langData['project-stay-tuned'];
+			});
+		}
+		
+		const viewDetailsBtns = document.querySelectorAll('.project-live-btn');
+		viewDetailsBtns.forEach(btn => {
+			updates.push(() => {
+				btn.innerHTML = `<i class="fas fa-eye"></i> ${langData['project-view-details']}`;
+			});
+		});
+		
+		// Update skills section
+		const skillsTitle = document.querySelector('.skills-title');
+		if (skillsTitle) {
+			updates.push(() => {
+				skillsTitle.textContent = langData['skills-title'];
+			});
+		}
+		
+		// Update skill card headers
+		const skillHeaders = document.querySelectorAll('.card-header span');
+		const skillKeys = ['skills-languages', 'skills-databases', 'skills-tools', 'skills-other', 'skills-frameworks'];
+		skillHeaders.forEach((header, index) => {
+			if (skillKeys[index]) {
+				updates.push(() => {
+					header.textContent = langData[skillKeys[index]];
+				});
+			}
+		});
+		
+		// Update about section
+		const aboutTitle = document.querySelector('.about-text h2');
+		if (aboutTitle) {
+			updates.push(() => {
+				aboutTitle.innerHTML = `<span class="about-hash">#</span>${langData['about-title']}`;
+			});
+		}
+		
+		const aboutIntro = document.querySelector('.about-intro');
+		if (aboutIntro) {
+			updates.push(() => {
+				aboutIntro.innerHTML = `${langData['about-hello']} <span class="about-highlight">${langData['about-ghost']}</span>!<br>${langData['about-description']}`;
+			});
+		}
+		
+		const aboutFacts = document.querySelectorAll('.about-facts li');
+		const factKeys = ['about-fact-1', 'about-fact-2', 'about-fact-3'];
+		aboutFacts.forEach((fact, index) => {
+			if (factKeys[index]) {
+				updates.push(() => {
+					const icon = fact.querySelector('i');
+					fact.innerHTML = `${icon ? icon.outerHTML : ''} ${langData[factKeys[index]]}`;
+				});
+			}
+		});
+		
+		const aboutBtn = document.querySelector('.about-btn');
+		if (aboutBtn) {
+			updates.push(() => {
+				aboutBtn.innerHTML = `<i class="fas fa-download"></i> ${langData['about-resume-btn']}`;
+			});
+		}
+		
+		// Update contact section
+		const contactTitle = document.querySelector('.contact-info h2');
+		if (contactTitle) {
+			updates.push(() => {
+				contactTitle.innerHTML = `<span class="contact-hash">#</span>${langData['contact-title']}`;
+			});
+		}
+		
+		const contactSubtitle = document.querySelector('.contact-info p');
+		if (contactSubtitle) {
+			updates.push(() => {
+				contactSubtitle.textContent = langData['contact-subtitle'];
+			});
+		}
+		
+		// Update form placeholders
+		const nameInput = document.getElementById('name');
+		if (nameInput) {
+			updates.push(() => {
+				nameInput.placeholder = langData['contact-name-placeholder'];
+			});
+		}
+		
+		const emailInput = document.getElementById('email');
+		if (emailInput) {
+			updates.push(() => {
+				emailInput.placeholder = langData['contact-email-placeholder'];
+			});
+		}
+		
+		const messageInput = document.getElementById('message');
+		if (messageInput) {
+			updates.push(() => {
+				messageInput.placeholder = langData['contact-message-placeholder'];
+			});
+		}
+		
+		const sendBtn = document.querySelector('.submit-btn');
+		if (sendBtn) {
+			updates.push(() => {
+				sendBtn.innerHTML = `<i class="fas fa-paper-plane"></i> ${langData['contact-send-btn']}`;
+			});
+		}
+		
+		// Update footer
+		const footerLinks = document.querySelectorAll('.footer-links ul li a');
+		const footerKeys = ['footer-home', 'footer-about', 'footer-skills', 'footer-projects', 'footer-contact'];
+		footerLinks.forEach((link, index) => {
+			if (footerKeys[index]) {
+				updates.push(() => {
+					link.textContent = langData[footerKeys[index]];
+				});
+			}
+		});
+		
+		const footerCopyright = document.querySelector('.footer-copyright');
+		if (footerCopyright) {
+			updates.push(() => {
+				footerCopyright.innerHTML = `&copy; <span id="footer-year"></span> Ghost. ${langData['footer-copyright']}`;
+			});
+		}
+		
+		// Execute all updates in a single batch
+		requestAnimationFrame(() => {
+			updates.forEach(update => update());
+		});
+		
+		// Update form validation messages
+		window.translationData = langData; // Make available for form validation
+		
+		console.log(`Website translated to ${lang} successfully`);
+		
+	} catch (error) {
+		console.error('Error during translation:', error);
 	}
 }
