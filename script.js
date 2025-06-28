@@ -4,100 +4,99 @@ window.addEventListener('load', () => {
 });
 
 // Wait for the DOM to be fully loaded
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 	// Initialize Particles.js
 	if (document.getElementById('particles-js')) {
-			particlesJS('particles-js', {
-				"particles": {
-					"number": {
-						"value": 80,
-						"density": {
-							"enable": true,
-							"value_area": 800
-						}
-					},
-					"color": {
-						"value": "#ab89ff"
-					},
-					"shape": {
-						"type": "circle",
-						"stroke": {
-							"width": 0,
-							"color": "#000000"
-						},
-					},
-					"opacity": {
-						"value": 0.5,
-						"random": true,
-						"anim": {
-							"enable": true,
-							"speed": 1,
-							"opacity_min": 0.1,
-							"sync": false
-						}
-					},
-					"size": {
-						"value": 3,
-						"random": true,
-						"anim": {
-							"enable": false
-						}
-					},
-					"line_linked": {
+		particlesJS('particles-js', {
+			"particles": {
+				"number": {
+					"value": 80,
+					"density": {
 						"enable": true,
-						"distance": 150,
-						"color": "#ffffff",
-						"opacity": 0.1,
-						"width": 1
-					},
-					"move": {
-						"enable": true,
-						"speed": 2,
-						"direction": "none",
-						"random": false,
-						"straight": false,
-						"out_mode": "out",
-						"bounce": false,
-						"attract": {
-							"enable": false
-						}
+						"value_area": 800
 					}
 				},
-				"interactivity": {
-					"detect_on": "canvas",
-					"events": {
-						"onhover": {
-							"enable": true,
-							"mode": "grab"
-						},
-						"onclick": {
-							"enable": true,
-							"mode": "push"
-						},
-						"resize": true
+				"color": {
+					"value": "#ab89ff"
+				},
+				"shape": {
+					"type": "circle",
+					"stroke": {
+						"width": 0,
+						"color": "#000000"
 					},
-					"modes": {
-						"grab": {
-							"distance": 140,
-							"line_linked": {
-								"opacity": 0.2
-							}
-						},
-						"push": {
-							"particles_nb": 4
-						}
+				},
+				"opacity": {
+					"value": 0.5,
+					"random": true,
+					"anim": {
+						"enable": true,
+						"speed": 1,
+						"opacity_min": 0.1,
+						"sync": false
 					}
 				},
-				"retina_detect": true
-			});
+				"size": {
+					"value": 3,
+					"random": true,
+					"anim": {
+						"enable": false
+					}
+				},
+				"line_linked": {
+					"enable": true,
+					"distance": 150,
+					"color": "#ffffff",
+					"opacity": 0.1,
+					"width": 1
+				},
+				"move": {
+					"enable": true,
+					"speed": 2,
+					"direction": "none",
+					"random": false,
+					"straight": false,
+					"out_mode": "out",
+					"bounce": false,
+					"attract": {
+						"enable": false
+					}
+				}
+			},
+			"interactivity": {
+				"detect_on": "canvas",
+				"events": {
+					"onhover": {
+						"enable": true,
+						"mode": "grab"
+					},
+					"onclick": {
+						"enable": true,
+						"mode": "push"
+					},
+					"resize": true
+				},
+				"modes": {
+					"grab": {
+						"distance": 140,
+						"line_linked": {
+							"opacity": 0.2
+						}
+					},
+					"push": {
+						"particles_nb": 4
+					}
+				}
+			},
+			"retina_detect": true
+		});
 	}
-	
+
 	// Smooth scrolling for navigation links
 	const navLinks = document.querySelectorAll(".nav-links a");
 	navLinks.forEach((link) => {
 		link.addEventListener("click", smoothScroll);
-        checkProjectImages();
-        
+		checkProjectImages();
 	});
 
 	// Highlight active navigation link
@@ -169,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		requestAnimationFrame(animateCursor);
 	};
-	
+
 	animateCursor();
 
 	// Add hover effect for interactive elements
@@ -240,12 +239,12 @@ function handleFormSubmit(e) {
 
 	setTimeout(() => {
 		console.log("Form submitted with data:", Object.fromEntries(formData));
-		
+
 		statusMessage.textContent = 'Thank you! Your message has been sent.';
 		statusMessage.className = 'visible success';
 
 		e.target.reset(); // Clear the form
-		
+
 		// Hide the message after a few seconds
 		setTimeout(() => {
 			statusMessage.className = '';
@@ -279,7 +278,7 @@ function typeWriter(element, index) {
 }
 
 // Lazy loading for project images
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 	const images = document.querySelectorAll(".project-card img");
 	const options = {
 		root: null,
@@ -305,15 +304,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // this function to check if images are present for project cards
 const checkProjectImages = () => {
-  const projectCards = document.querySelectorAll(".project-card");
-  projectCards.forEach((card, index) => {
-    const img = card.querySelector("img");
-    if (img) {
-      console.log(`Project card ${index + 1} image:`, img.src);
-    } else {
-      console.log(`Project card ${index + 1} has no image`);
-    }
-  });
+	const projectCards = document.querySelectorAll(".project-card");
+	projectCards.forEach((card, index) => {
+		const img = card.querySelector("img");
+		if (img) {
+			console.log(`Project card ${index + 1} image:`, img.src);
+		} else {
+			console.log(`Project card ${index + 1} has no image`);
+		}
+	});
 };
 
 // =================================
@@ -435,18 +434,18 @@ function initAdvancedThemeToggle() {
 
 // Debounce function for performance optimization
 function debounce(func, wait = 20, immediate = true) {
-  let timeout;
-  return function() {
-    const context = this, args = arguments;
-    const later = function() {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    const callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
+	let timeout;
+	return function() {
+		const context = this, args = arguments;
+		const later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		const callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
 }
 
 // Optimize scroll event listener
@@ -455,43 +454,43 @@ window.addEventListener("scroll", optimizedHighlightActiveNavLink);
 
 // Optimize lazy loading and ensure project backgrounds are visible
 const lazyLoadImages = () => {
-  const projectCards = document.querySelectorAll(".project-card");
-  const imageObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const projectCard = entry.target;
-        const img = projectCard.querySelector('img');
-        if (img && img.dataset.src) {
-          const tempImage = new Image();
-          tempImage.src = img.dataset.src;
-          tempImage.onload = () => {
-            img.src = img.dataset.src;
-            img.classList.add('fade-in');
-            img.removeAttribute('data-src');
-            projectCard.style.backgroundImage = `url(${img.src})`;
-            projectCard.style.backgroundSize = 'cover';
-            projectCard.style.backgroundPosition = 'center';
-            projectCard.style.backgroundRepeat = 'no-repeat';
-            projectCard.style.opacity = '1'; // Ensure the card is visible
-            imageObserver.unobserve(projectCard);
-          };
-          tempImage.onerror = () => {
-            console.error(`Failed to load image: ${img.dataset.src}`);
-            projectCard.style.backgroundColor = '#f0f0f0'; // Fallback background color
-            imageObserver.unobserve(projectCard);
-          };
-        } else {
-          console.warn('Project card has no image or data-src attribute');
-          projectCard.style.backgroundColor = '#f0f0f0'; // Fallback background color
-          imageObserver.unobserve(projectCard);
-        }
-      }
-    });
-  }, { rootMargin: "0px 0px 200px 0px", threshold: 0.1 });
+	const projectCards = document.querySelectorAll(".project-card");
+	const imageObserver = new IntersectionObserver((entries, observer) => {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting) {
+				const projectCard = entry.target;
+				const img = projectCard.querySelector('img');
+				if (img && img.dataset.src) {
+					const tempImage = new Image();
+					tempImage.src = img.dataset.src;
+					tempImage.onload = () => {
+						img.src = img.dataset.src;
+						img.classList.add('fade-in');
+						img.removeAttribute('data-src');
+						projectCard.style.backgroundImage = `url(${img.src})`;
+						projectCard.style.backgroundSize = 'cover';
+						projectCard.style.backgroundPosition = 'center';
+						projectCard.style.backgroundRepeat = 'no-repeat';
+						projectCard.style.opacity = '1'; // Ensure the card is visible
+						imageObserver.unobserve(projectCard);
+					};
+					tempImage.onerror = () => {
+						console.error(`Failed to load image: ${img.dataset.src}`);
+						projectCard.style.backgroundColor = '#f0f0f0'; // Fallback background color
+						imageObserver.unobserve(projectCard);
+					};
+				} else {
+					console.warn('Project card has no image or data-src attribute');
+					projectCard.style.backgroundColor = '#f0f0f0'; // Fallback background color
+					imageObserver.unobserve(projectCard);
+				}
+			}
+		});
+	}, { rootMargin: "0px 0px 200px 0px", threshold: 0.1 });
 
-  projectCards.forEach((card) => {
-    imageObserver.observe(card);
-  });
+	projectCards.forEach((card) => {
+		imageObserver.observe(card);
+	});
 };
 
 // Call the function when the DOM is loaded
@@ -499,250 +498,250 @@ document.addEventListener('DOMContentLoaded', lazyLoadImages);
 
 // Use requestAnimationFrame for smoother animations
 function smoothScrollRAF(targetElement, duration) {
-  const start = window.pageYOffset;
-  const target = targetElement.offsetTop - 60;
-  const distance = target - start;
-  let startTime = null;
+	const start = window.pageYOffset;
+	const target = targetElement.offsetTop - 60;
+	const distance = target - start;
+	let startTime = null;
 
-  function animation(currentTime) {
-    if (startTime === null) startTime = currentTime;
-    const timeElapsed = currentTime - startTime;
-    const run = ease(timeElapsed, start, distance, duration);
-    window.scrollTo(0, run);
-    if (timeElapsed < duration) requestAnimationFrame(animation);
-  }
+	function animation(currentTime) {
+		if (startTime === null) startTime = currentTime;
+		const timeElapsed = currentTime - startTime;
+		const run = ease(timeElapsed, start, distance, duration);
+		window.scrollTo(0, run);
+		if (timeElapsed < duration) requestAnimationFrame(animation);
+	}
 
-  function ease(t, b, c, d) {
-    t /= d / 2;
-    if (t < 1) return c / 2 * t * t + b;
-    t--;
-    return -c / 2 * (t * (t - 2) - 1) + b;
-  }
+	function ease(t, b, c, d) {
+		t /= d / 2;
+		if (t < 1) return c / 2 * t * t + b;
+		t--;
+		return -c / 2 * (t * (t - 2) - 1) + b;
+	}
 
-  requestAnimationFrame(animation);
+	requestAnimationFrame(animation);
 }
 
 // Update smooth scroll function
 function smoothScroll(e) {
-  e.preventDefault();
-  const targetId = this.getAttribute("href");
-  const targetElement = document.querySelector(targetId);
-  smoothScrollRAF(targetElement, 1000);
+	e.preventDefault();
+	const targetId = this.getAttribute("href");
+	const targetElement = document.querySelector(targetId);
+	smoothScrollRAF(targetElement, 1000);
 }
 
 // Navbar shadow and background on scroll
 window.addEventListener('scroll', function() {
-  const navbar = document.querySelector('.navbar');
-  if (window.scrollY > 10) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
-  }
+	const navbar = document.querySelector('.navbar');
+	if (window.scrollY > 10) {
+		navbar.classList.add('scrolled');
+	} else {
+		navbar.classList.remove('scrolled');
+	}
 });
 
 // Initialize project modals
 function initProjectModals() {
-  const modalOverlay = document.getElementById('project-modal-overlay');
-  if (!modalOverlay) return;
+	const modalOverlay = document.getElementById('project-modal-overlay');
+	if (!modalOverlay) return;
 
-  const modalContent = document.getElementById('project-modal-content');
-  const modalCloseBtn = document.getElementById('modal-close-btn');
-  const projectCards = document.querySelectorAll('.project-card-glass');
+	const modalContent = document.getElementById('project-modal-content');
+	const modalCloseBtn = document.getElementById('modal-close-btn');
+	const projectCards = document.querySelectorAll('.project-card-glass');
 
-  // Modal content elements
-  const modalImg = modalContent.querySelector('.modal-img');
-  const modalTitle = modalContent.querySelector('.modal-title');
-  const modalTagsContainer = modalContent.querySelector('.modal-tags');
-  const modalDescription = modalContent.querySelector('.modal-description');
-  const modalLiveLink = document.getElementById('modal-live-link');
-  const modalCodeLink = document.getElementById('modal-code-link');
+	// Modal content elements
+	const modalImg = modalContent.querySelector('.modal-img');
+	const modalTitle = modalContent.querySelector('.modal-title');
+	const modalTagsContainer = modalContent.querySelector('.modal-tags');
+	const modalDescription = modalContent.querySelector('.modal-description');
+	const modalLiveLink = document.getElementById('modal-live-link');
+	const modalCodeLink = document.getElementById('modal-code-link');
 
-  projectCards.forEach(card => {
-    card.addEventListener('click', () => {
-      // 1. Get data from the clicked card's data attributes
-      const title = card.dataset.title;
-      const description = card.dataset.description;
-      const imgSrc = card.dataset.imageSrc;
-      const tags = card.dataset.tags.split(',');
-      const status = card.dataset.status;
-      const liveLink = card.dataset.liveLink || '#';
-      const codeLink = card.dataset.codeLink || '#';
+	projectCards.forEach(card => {
+		card.addEventListener('click', () => {
+			// 1. Get data from the clicked card's data attributes
+			const title = card.dataset.title;
+			const description = card.dataset.description;
+			const imgSrc = card.dataset.imageSrc;
+			const tags = card.dataset.tags.split(',');
+			const status = card.dataset.status;
+			const liveLink = card.dataset.liveLink || '#';
+			const codeLink = card.dataset.codeLink || '#';
 
-      // 2. Populate the modal with the data
-      modalTitle.textContent = title;
-      modalDescription.textContent = description;
-      modalImg.src = imgSrc;
+			// 2. Populate the modal with the data
+			modalTitle.textContent = title;
+			modalDescription.textContent = description;
+			modalImg.src = imgSrc;
 
-      // Create tag elements
-      modalTagsContainer.innerHTML = '';
-      tags.forEach(tag => {
-        const tagElement = document.createElement('span');
-        tagElement.textContent = tag.trim();
-        modalTagsContainer.appendChild(tagElement);
-      });
-      
-      // 3. Handle link states (live, coming-soon, etc.)
-      modalLiveLink.href = liveLink;
-      modalCodeLink.href = codeLink;
+			// Create tag elements
+			modalTagsContainer.innerHTML = '';
+			tags.forEach(tag => {
+				const tagElement = document.createElement('span');
+				tagElement.textContent = tag.trim();
+				modalTagsContainer.appendChild(tagElement);
+			});
+			
+			// 3. Handle link states (live, coming-soon, etc.)
+			modalLiveLink.href = liveLink;
+			modalCodeLink.href = codeLink;
 
-      if (status === 'coming-soon') {
-        modalLiveLink.classList.add('disabled');
-        modalCodeLink.classList.add('disabled');
-      } else {
-        modalLiveLink.classList.remove('disabled');
-        modalCodeLink.classList.remove('disabled');
-      }
+			if (status === 'coming-soon') {
+				modalLiveLink.classList.add('disabled');
+				modalCodeLink.classList.add('disabled');
+			} else {
+				modalLiveLink.classList.remove('disabled');
+				modalCodeLink.classList.remove('disabled');
+			}
 
-      // 4. Show the modal
-      modalOverlay.classList.add('visible');
-    });
-  });
+			// 4. Show the modal
+			modalOverlay.classList.add('visible');
+		});
+	});
 
-  // Function to close the modal
-  const closeModal = () => {
-    modalOverlay.classList.remove('visible');
-  };
+	// Function to close the modal
+	const closeModal = () => {
+		modalOverlay.classList.remove('visible');
+	};
 
-  // Close modal when clicking the close button or the overlay
-  modalCloseBtn.addEventListener('click', closeModal);
-  modalOverlay.addEventListener('click', (e) => {
-    if (e.target === modalOverlay) {
-      closeModal();
-    }
-  });
+	// Close modal when clicking the close button or the overlay
+	modalCloseBtn.addEventListener('click', closeModal);
+	modalOverlay.addEventListener('click', (e) => {
+		if (e.target === modalOverlay) {
+			closeModal();
+		}
+	});
 
-  // Close modal with the Escape key
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
-      closeModal();
-    }
-  });
+	// Close modal with the Escape key
+	window.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
+			closeModal();
+		}
+	});
 }
 
 // --- Advanced Form Validation and Submission ---
 
 // Generic field validation
 function validateField(field, emptyMessage) {
-  const validationMessage = field.parentElement.nextElementSibling;
-  const message = window.translationData ? window.translationData[emptyMessage] || emptyMessage : emptyMessage;
-  
-  if (field.value.trim() === '') {
-    showError(field, validationMessage, message);
-    return false;
-  }
-  hideError(field, validationMessage);
-  return true;
+	const validationMessage = field.parentElement.nextElementSibling;
+	const message = window.translationData ? window.translationData[emptyMessage] || emptyMessage : emptyMessage;
+	
+	if (field.value.trim() === '') {
+		showError(field, validationMessage, message);
+		return false;
+	}
+	hideError(field, validationMessage);
+	return true;
 }
 
 // Specific email validation
 function validateEmail(field) {
-  const validationMessage = field.parentElement.nextElementSibling;
-  const emptyMessage = window.translationData ? window.translationData['validation-email-empty'] : 'Email cannot be empty.';
-  const invalidMessage = window.translationData ? window.translationData['validation-email-invalid'] : 'Please enter a valid email address.';
-  
-  if (field.value.trim() === '') {
-    showError(field, validationMessage, emptyMessage);
-    return false;
-  }
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(field.value)) {
-    showError(field, validationMessage, invalidMessage);
-    return false;
-  }
-  hideError(field, validationMessage);
-  return true;
+	const validationMessage = field.parentElement.nextElementSibling;
+	const emptyMessage = window.translationData ? window.translationData['validation-email-empty'] : 'Email cannot be empty.';
+	const invalidMessage = window.translationData ? window.translationData['validation-email-invalid'] : 'Please enter a valid email address.';
+	
+	if (field.value.trim() === '') {
+		showError(field, validationMessage, emptyMessage);
+		return false;
+	}
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	if (!emailRegex.test(field.value)) {
+		showError(field, validationMessage, invalidMessage);
+		return false;
+	}
+	hideError(field, validationMessage);
+	return true;
 }
 
 function showError(field, messageElement, message) {
-  field.parentElement.classList.add('error');
-  messageElement.textContent = message;
-  messageElement.classList.add('visible');
+	field.parentElement.classList.add('error');
+	messageElement.textContent = message;
+	messageElement.classList.add('visible');
 }
 
 function hideError(field, messageElement) {
-  field.parentElement.classList.remove('error');
-  messageElement.classList.remove('visible');
+	field.parentElement.classList.remove('error');
+	messageElement.classList.remove('visible');
 }
 
 // Handle advanced form submission
 function handleAdvancedFormSubmit(e) {
-  e.preventDefault();
+	e.preventDefault();
 
-  const form = e.target;
-  const nameInput = document.getElementById('name');
-  const emailInput = document.getElementById('email');
-  const messageInput = document.getElementById('message');
-  const statusMessage = document.getElementById('form-status-message');
+	const form = e.target;
+	const nameInput = document.getElementById('name');
+	const emailInput = document.getElementById('email');
+	const messageInput = document.getElementById('message');
+	const statusMessage = document.getElementById('form-status-message');
 
-  // Get translated messages
-  const nameEmptyMsg = window.translationData ? window.translationData['validation-name-empty'] : 'Name cannot be empty.';
-  const messageEmptyMsg = window.translationData ? window.translationData['validation-message-empty'] : 'Message cannot be empty.';
-  const fixErrorsMsg = window.translationData ? window.translationData['validation-fix-errors'] : 'Please fix the errors above and try again.';
-  const sendingMsg = window.translationData ? window.translationData['form-sending'] : 'Sending...';
-  const successMsg = window.translationData ? window.translationData['form-success'] : 'Thank you! Your message has been sent successfully.';
+	// Get translated messages
+	const nameEmptyMsg = window.translationData ? window.translationData['validation-name-empty'] : 'Name cannot be empty.';
+	const messageEmptyMsg = window.translationData ? window.translationData['validation-message-empty'] : 'Message cannot be empty.';
+	const fixErrorsMsg = window.translationData ? window.translationData['validation-fix-errors'] : 'Please fix the errors above and try again.';
+	const sendingMsg = window.translationData ? window.translationData['form-sending'] : 'Sending...';
+	const successMsg = window.translationData ? window.translationData['form-success'] : 'Thank you! Your message has been sent successfully.';
 
-  // Perform final validation check on all fields
-  const isNameValid = validateField(nameInput, 'validation-name-empty');
-  const isEmailValid = validateEmail(emailInput);
-  const isMessageValid = validateField(messageInput, 'validation-message-empty');
+	// Perform final validation check on all fields
+	const isNameValid = validateField(nameInput, 'validation-name-empty');
+	const isEmailValid = validateEmail(emailInput);
+	const isMessageValid = validateField(messageInput, 'validation-message-empty');
 
-  if (!isNameValid || !isEmailValid || !isMessageValid) {
-    statusMessage.textContent = fixErrorsMsg;
-    statusMessage.className = 'visible error';
-    return; // Stop submission if validation fails
-  }
+	if (!isNameValid || !isEmailValid || !isMessageValid) {
+		statusMessage.textContent = fixErrorsMsg;
+		statusMessage.className = 'visible error';
+		return; // Stop submission if validation fails
+	}
 
-  // If all valid, proceed with submission
-  statusMessage.textContent = sendingMsg;
-  statusMessage.className = 'visible success'; // Style as success while sending
+	// If all valid, proceed with submission
+	statusMessage.textContent = sendingMsg;
+	statusMessage.className = 'visible success'; // Style as success while sending
 
-  // Simulate a network request with setTimeout
-  // In a real application, you would replace this with a `fetch` call to a service like Formspree
-  setTimeout(() => {
-    console.log("Form submitted successfully:", Object.fromEntries(new FormData(form)));
-    statusMessage.textContent = successMsg;
-    statusMessage.className = 'visible success';
+	// Simulate a network request with setTimeout
+	// In a real application, you would replace this with a `fetch` call to a service like Formspree
+	setTimeout(() => {
+		console.log("Form submitted successfully:", Object.fromEntries(new FormData(form)));
+		statusMessage.textContent = successMsg;
+		statusMessage.className = 'visible success';
 
-    form.reset(); // Clear the form fields
-    // Remove all error states
-    hideError(nameInput, nameInput.parentElement.nextElementSibling);
-    hideError(emailInput, emailInput.parentElement.nextElementSibling);
-    hideError(messageInput, messageInput.parentElement.nextElementSibling);
+		form.reset(); // Clear the form fields
+		// Remove all error states
+		hideError(nameInput, nameInput.parentElement.nextElementSibling);
+		hideError(emailInput, emailInput.parentElement.nextElementSibling);
+		hideError(messageInput, messageInput.parentElement.nextElementSibling);
 
-    // Hide the status message after a few seconds
-    setTimeout(() => {
-      statusMessage.className = '';
-    }, 5000);
-  }, 1500);
+		// Hide the status message after a few seconds
+		setTimeout(() => {
+			statusMessage.className = '';
+		}, 5000);
+	}, 1500);
 }
 
 // Initialize all functions
 document.addEventListener("DOMContentLoaded", function () {
-  const navLinks = document.querySelectorAll(".nav-links a");
-  navLinks.forEach((link) => link.addEventListener("click", smoothScroll));
+	const navLinks = document.querySelectorAll(".nav-links a");
+	navLinks.forEach((link) => link.addEventListener("click", smoothScroll));
 
-  const contactForm = document.querySelector(".contact-form");
-  if (contactForm) contactForm.addEventListener("submit", handleAdvancedFormSubmit);
+	const contactForm = document.querySelector(".contact-form");
+	if (contactForm) contactForm.addEventListener("submit", handleAdvancedFormSubmit);
 
-  const projectCards = document.querySelectorAll(".project-card");
-  projectCards.forEach((card) => {
-    card.addEventListener("mouseenter", projectCardHover);
-    card.addEventListener("mouseleave", projectCardHover);
-  });
+	const projectCards = document.querySelectorAll(".project-card");
+	projectCards.forEach((card) => {
+		card.addEventListener("mouseenter", projectCardHover);
+		card.addEventListener("mouseleave", projectCardHover);
+	});
 
-  const heroText = document.querySelector(".hero-text h1");
-  if (heroText) typeWriter(heroText, 0);
+	const heroText = document.querySelector(".hero-text h1");
+	if (heroText) typeWriter(heroText, 0);
 
-  lazyLoadImages();
-  initAdvancedThemeToggle();
-  initProjectModals();
+	lazyLoadImages();
+	initAdvancedThemeToggle();
+	initProjectModals();
 });
 
 // Fallback theme initialization
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initAdvancedThemeToggle);
+	document.addEventListener('DOMContentLoaded', initAdvancedThemeToggle);
 } else {
-  initAdvancedThemeToggle();
+	initAdvancedThemeToggle();
 }
 
 // =================================
@@ -1108,7 +1107,7 @@ rippleStyle.textContent = `
 document.head.appendChild(rippleStyle);
 
 // =================================
-// TRANSLATION SYSTEM
+// EFFICIENT TRANSLATION SYSTEM
 // =================================
 const translations = {
 	en: {
@@ -1181,36 +1180,27 @@ const translations = {
 	},
 	
 	es: {
-		// Navigation
 		'nav-home': 'inicio',
 		'nav-works': 'trabajos',
 		'nav-about': 'sobre-mi',
 		'nav-contacts': 'contactos',
-		
-		// Hero Section
 		'hero-greeting': 'Hola, soy',
 		'hero-title': 'Desarrollador Frontend y Entusiasta de la Nube',
 		'hero-subtitle': 'Creo sitios web responsivos donde la tecnología se encuentra con la creatividad.',
 		'hero-contact-btn': '¡Contáctame!',
 		'hero-current-project': 'Actualmente trabajando en',
-		
-		// Projects Section
 		'projects-title': 'Proyectos',
 		'project-coming-soon': 'Próximamente',
 		'project-exciting': '¡Proyecto emocionante en camino. ¡Mantente atento!',
 		'project-another': '¡Otro proyecto increíble está por venir!',
 		'project-stay-tuned': '¡Mantente atento para más actualizaciones!',
 		'project-view-details': 'Ver Detalles',
-		
-		// Skills Section
 		'skills-title': 'Habilidades',
 		'skills-languages': 'Lenguajes',
 		'skills-databases': 'Bases de Datos',
 		'skills-tools': 'Herramientas',
 		'skills-other': 'Otros',
 		'skills-frameworks': 'Frameworks',
-		
-		// About Section
 		'about-title': 'Sobre Mí',
 		'about-hello': 'Hola, soy',
 		'about-ghost': 'Ghost',
@@ -1219,24 +1209,18 @@ const translations = {
 		'about-fact-2': 'Explorador de Computación en la Nube',
 		'about-fact-3': 'Siempre aprendiendo nuevas tecnologías',
 		'about-resume-btn': 'Descargar CV',
-		
-		// Contact Section
 		'contact-title': 'Contacto',
 		'contact-subtitle': 'Ponte en contacto conmigo',
 		'contact-name-placeholder': 'Tu Nombre',
 		'contact-email-placeholder': 'Tu Email',
 		'contact-message-placeholder': 'Tu Mensaje',
 		'contact-send-btn': 'Enviar Mensaje',
-		
-		// Footer
 		'footer-copyright': 'Todos los Derechos Reservados.',
 		'footer-home': 'Inicio',
 		'footer-about': 'Sobre Mí',
 		'footer-skills': 'Habilidades',
 		'footer-projects': 'Proyectos',
 		'footer-contact': 'Contacto',
-		
-		// Form Validation
 		'validation-name-empty': 'El nombre no puede estar vacío.',
 		'validation-email-empty': 'El email no puede estar vacío.',
 		'validation-email-invalid': 'Por favor ingresa un email válido.',
@@ -1244,42 +1228,31 @@ const translations = {
 		'validation-fix-errors': 'Por favor corrige los errores arriba e intenta de nuevo.',
 		'form-sending': 'Enviando...',
 		'form-success': '¡Gracias! Tu mensaje ha sido enviado exitosamente.',
-		
-		// Language Feedback
 		'lang-changed': 'Idioma cambiado a'
 	},
 	
 	fr: {
-		// Navigation
 		'nav-home': 'accueil',
 		'nav-works': 'travaux',
 		'nav-about': 'à-propos',
 		'nav-contacts': 'contacts',
-		
-		// Hero Section
 		'hero-greeting': 'Bonjour, je suis',
 		'hero-title': 'Développeur Frontend et Passionné du Cloud',
 		'hero-subtitle': 'Je crée des sites web responsifs où la technologie rencontre la créativité.',
 		'hero-contact-btn': 'Contactez-moi !',
 		'hero-current-project': 'Actuellement en train de travailler sur',
-		
-		// Projects Section
 		'projects-title': 'Projets',
 		'project-coming-soon': 'Bientôt Disponible',
 		'project-exciting': 'Projet passionnant en cours. Restez à l\'écoute !',
 		'project-another': 'Un autre projet incroyable arrive bientôt !',
 		'project-stay-tuned': 'Restez à l\'écoute pour plus de mises à jour !',
 		'project-view-details': 'Voir les Détails',
-		
-		// Skills Section
 		'skills-title': 'Compétences',
 		'skills-languages': 'Langages',
 		'skills-databases': 'Bases de Données',
 		'skills-tools': 'Outils',
 		'skills-other': 'Autres',
 		'skills-frameworks': 'Frameworks',
-		
-		// About Section
 		'about-title': 'À Propos',
 		'about-hello': 'Bonjour, je suis',
 		'about-ghost': 'Ghost',
@@ -1288,24 +1261,18 @@ const translations = {
 		'about-fact-2': 'Explorateur du Cloud Computing',
 		'about-fact-3': 'Toujours en train d\'apprendre de nouvelles technologies',
 		'about-resume-btn': 'Télécharger le CV',
-		
-		// Contact Section
 		'contact-title': 'Contact',
 		'contact-subtitle': 'Entrez en contact avec moi',
 		'contact-name-placeholder': 'Votre Nom',
 		'contact-email-placeholder': 'Votre Email',
 		'contact-message-placeholder': 'Votre Message',
 		'contact-send-btn': 'Envoyer le Message',
-		
-		// Footer
 		'footer-copyright': 'Tous Droits Réservés.',
 		'footer-home': 'Accueil',
 		'footer-about': 'À Propos',
 		'footer-skills': 'Compétences',
 		'footer-projects': 'Projets',
 		'footer-contact': 'Contact',
-		
-		// Form Validation
 		'validation-name-empty': 'Le nom ne peut pas être vide.',
 		'validation-email-empty': 'L\'email ne peut pas être vide.',
 		'validation-email-invalid': 'Veuillez entrer une adresse email valide.',
@@ -1313,42 +1280,31 @@ const translations = {
 		'validation-fix-errors': 'Veuillez corriger les erreurs ci-dessus et réessayer.',
 		'form-sending': 'Envoi en cours...',
 		'form-success': 'Merci ! Votre message a été envoyé avec succès.',
-		
-		// Language Feedback
 		'lang-changed': 'Langue changée vers'
 	},
 	
 	de: {
-		// Navigation
 		'nav-home': 'startseite',
 		'nav-works': 'arbeiten',
 		'nav-about': 'über-mich',
 		'nav-contacts': 'kontakte',
-		
-		// Hero Section
 		'hero-greeting': 'Hallo, ich bin',
 		'hero-title': 'Frontend-Entwickler und Cloud-Enthusiast',
 		'hero-subtitle': 'Ich erstelle responsive Websites, wo Technologie auf Kreativität trifft.',
 		'hero-contact-btn': 'Kontaktiere mich!',
 		'hero-current-project': 'Aktuell arbeite ich an',
-		
-		// Projects Section
 		'projects-title': 'Projekte',
 		'project-coming-soon': 'Demnächst Verfügbar',
 		'project-exciting': 'Spannendes Projekt in Arbeit. Bleib dran!',
 		'project-another': 'Ein weiteres großartiges Projekt kommt bald!',
 		'project-stay-tuned': 'Bleib dran für weitere Updates!',
 		'project-view-details': 'Details Anzeigen',
-		
-		// Skills Section
 		'skills-title': 'Fähigkeiten',
 		'skills-languages': 'Sprachen',
 		'skills-databases': 'Datenbanken',
 		'skills-tools': 'Werkzeuge',
 		'skills-other': 'Andere',
 		'skills-frameworks': 'Frameworks',
-		
-		// About Section
 		'about-title': 'Über Mich',
 		'about-hello': 'Hallo, ich bin',
 		'about-ghost': 'Ghost',
@@ -1357,24 +1313,18 @@ const translations = {
 		'about-fact-2': 'Cloud Computing Explorer',
 		'about-fact-3': 'Lerne immer neue Technologien',
 		'about-resume-btn': 'Lebenslauf Herunterladen',
-		
-		// Contact Section
 		'contact-title': 'Kontakt',
 		'contact-subtitle': 'Kontaktiere mich',
 		'contact-name-placeholder': 'Dein Name',
 		'contact-email-placeholder': 'Deine Email',
 		'contact-message-placeholder': 'Deine Nachricht',
 		'contact-send-btn': 'Nachricht Senden',
-		
-		// Footer
 		'footer-copyright': 'Alle Rechte Vorbehalten.',
 		'footer-home': 'Startseite',
 		'footer-about': 'Über Mich',
 		'footer-skills': 'Fähigkeiten',
 		'footer-projects': 'Projekte',
 		'footer-contact': 'Kontakt',
-		
-		// Form Validation
 		'validation-name-empty': 'Der Name darf nicht leer sein.',
 		'validation-email-empty': 'Die Email darf nicht leer sein.',
 		'validation-email-invalid': 'Bitte geben Sie eine gültige Email-Adresse ein.',
@@ -1382,42 +1332,31 @@ const translations = {
 		'validation-fix-errors': 'Bitte beheben Sie die Fehler oben und versuchen Sie es erneut.',
 		'form-sending': 'Wird gesendet...',
 		'form-success': 'Danke! Ihre Nachricht wurde erfolgreich gesendet.',
-		
-		// Language Feedback
 		'lang-changed': 'Sprache geändert zu'
 	},
 	
 	hi: {
-		// Navigation
 		'nav-home': 'होम',
 		'nav-works': 'कार्य',
 		'nav-about': 'मेरे-बारे-में',
 		'nav-contacts': 'संपर्क',
-		
-		// Hero Section
 		'hero-greeting': 'नमस्ते, मैं हूं',
 		'hero-title': 'फ्रंटएंड डेवलपर और क्लाउड उत्साही',
 		'hero-subtitle': 'मैं रेस्पॉन्सिव वेबसाइट बनाता हूं जहां तकनीक रचनात्मकता से मिलती है।',
 		'hero-contact-btn': 'मुझसे संपर्क करें!',
 		'hero-current-project': 'वर्तमान में काम कर रहा हूं',
-		
-		// Projects Section
 		'projects-title': 'प्रोजेक्ट्स',
 		'project-coming-soon': 'जल्द आ रहा है',
 		'project-exciting': 'रोमांचक प्रोजेक्ट आ रहा है। बने रहें!',
 		'project-another': 'एक और अद्भुत प्रोजेक्ट जल्द आ रहा है!',
 		'project-stay-tuned': 'अधिक अपडेट के लिए बने रहें!',
 		'project-view-details': 'विवरण देखें',
-		
-		// Skills Section
 		'skills-title': 'कौशल',
 		'skills-languages': 'भाषाएं',
 		'skills-databases': 'डेटाबेस',
 		'skills-tools': 'उपकरण',
 		'skills-other': 'अन्य',
 		'skills-frameworks': 'फ्रेमवर्क',
-		
-		// About Section
 		'about-title': 'मेरे बारे में',
 		'about-hello': 'नमस्ते, मैं हूं',
 		'about-ghost': 'घोस्ट',
@@ -1426,24 +1365,18 @@ const translations = {
 		'about-fact-2': 'क्लाउड कंप्यूटिंग एक्सप्लोरर',
 		'about-fact-3': 'हमेशा नई तकनीक सीख रहा हूं',
 		'about-resume-btn': 'रिज्यूमे डाउनलोड करें',
-		
-		// Contact Section
 		'contact-title': 'संपर्क',
 		'contact-subtitle': 'मुझसे संपर्क करें',
 		'contact-name-placeholder': 'आपका नाम',
 		'contact-email-placeholder': 'आपका ईमेल',
 		'contact-message-placeholder': 'आपका संदेश',
 		'contact-send-btn': 'संदेश भेजें',
-		
-		// Footer
 		'footer-copyright': 'सर्वाधिकार सुरक्षित।',
 		'footer-home': 'होम',
 		'footer-about': 'मेरे बारे में',
 		'footer-skills': 'कौशल',
 		'footer-projects': 'प्रोजेक्ट्स',
 		'footer-contact': 'संपर्क',
-		
-		// Form Validation
 		'validation-name-empty': 'नाम खाली नहीं हो सकता।',
 		'validation-email-empty': 'ईमेल खाली नहीं हो सकता।',
 		'validation-email-invalid': 'कृपया एक वैध ईमेल पता दर्ज करें।',
@@ -1451,13 +1384,11 @@ const translations = {
 		'validation-fix-errors': 'कृपया ऊपर की त्रुटियों को ठीक करें और पुनः प्रयास करें।',
 		'form-sending': 'भेज रहा है...',
 		'form-success': 'धन्यवाद! आपका संदेश सफलतापूर्वक भेज दिया गया है।',
-		
-		// Language Feedback
 		'lang-changed': 'भाषा बदली गई'
 	}
 };
 
-// Function to translate the website
+// Efficient translation function using data attributes
 function translateWebsite(lang) {
 	const langData = translations[lang];
 	if (!langData) {
@@ -1466,200 +1397,27 @@ function translateWebsite(lang) {
 	}
 	
 	try {
+		// Find all elements with data-translate attribute
+		const translatableElements = document.querySelectorAll('[data-translate]');
+		
 		// Batch DOM updates for better performance
 		const updates = [];
 		
-		// Update navigation links
-		const navLinks = {
-			'#hero': 'nav-home',
-			'#projects': 'nav-works', 
-			'#about-me': 'nav-about',
-			'#contact': 'nav-contacts'
-		};
-		
-		Object.entries(navLinks).forEach(([href, key]) => {
-			const link = document.querySelector(`a[href="${href}"]`);
-			if (link) {
+		translatableElements.forEach(element => {
+			const key = element.getAttribute('data-translate');
+			const translation = langData[key];
+			
+			if (translation) {
 				updates.push(() => {
-					link.textContent = `#${langData[key]}`;
+					// Handle different element types
+					if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+						element.placeholder = translation;
+					} else {
+						element.textContent = translation;
+					}
 				});
 			}
 		});
-		
-		// Update hero section
-		const heroGreeting = document.querySelector('.animated-headline');
-		if (heroGreeting) {
-			updates.push(() => {
-				heroGreeting.innerHTML = `${langData['hero-greeting']} <span class="highlight">Shivam Attri</span><br><span class="typewriter">${langData['hero-title']}</span>`;
-			});
-		}
-		
-		const heroSubtext = document.querySelector('.hero-subtext');
-		if (heroSubtext) {
-			updates.push(() => {
-				heroSubtext.textContent = langData['hero-subtitle'];
-			});
-		}
-		
-		const contactBtn = document.querySelector('.contact-btn');
-		if (contactBtn) {
-			updates.push(() => {
-				contactBtn.textContent = langData['hero-contact-btn'];
-			});
-		}
-		
-		const currentProject = document.querySelector('.current-project');
-		if (currentProject) {
-			updates.push(() => {
-				currentProject.innerHTML = `<span class="project-indicator"></span> ${langData['hero-current-project']} <span class="project-highlight">Portfolio</span>`;
-			});
-		}
-		
-		// Update projects section
-		const projectsTitle = document.querySelector('.projects-title');
-		if (projectsTitle) {
-			updates.push(() => {
-				projectsTitle.textContent = langData['projects-title'];
-			});
-		}
-		
-		// Update project cards
-		const projectOverlays = document.querySelectorAll('.project-overlay h3');
-		projectOverlays.forEach(overlay => {
-			updates.push(() => {
-				overlay.textContent = langData['project-coming-soon'];
-			});
-		});
-		
-		const projectDescriptions = document.querySelectorAll('.project-overlay p');
-		if (projectDescriptions.length >= 3) {
-			updates.push(() => {
-				projectDescriptions[0].textContent = langData['project-exciting'];
-				projectDescriptions[1].textContent = langData['project-another'];
-				projectDescriptions[2].textContent = langData['project-stay-tuned'];
-			});
-		}
-		
-		const viewDetailsBtns = document.querySelectorAll('.project-live-btn');
-		viewDetailsBtns.forEach(btn => {
-			updates.push(() => {
-				btn.innerHTML = `<i class="fas fa-eye"></i> ${langData['project-view-details']}`;
-			});
-		});
-		
-		// Update skills section
-		const skillsTitle = document.querySelector('.skills-title');
-		if (skillsTitle) {
-			updates.push(() => {
-				skillsTitle.textContent = langData['skills-title'];
-			});
-		}
-		
-		// Update skill card headers
-		const skillHeaders = document.querySelectorAll('.card-header span');
-		const skillKeys = ['skills-languages', 'skills-databases', 'skills-tools', 'skills-other', 'skills-frameworks'];
-		skillHeaders.forEach((header, index) => {
-			if (skillKeys[index]) {
-				updates.push(() => {
-					header.textContent = langData[skillKeys[index]];
-				});
-			}
-		});
-		
-		// Update about section
-		const aboutTitle = document.querySelector('.about-text h2');
-		if (aboutTitle) {
-			updates.push(() => {
-				aboutTitle.innerHTML = `<span class="about-hash">#</span>${langData['about-title']}`;
-			});
-		}
-		
-		const aboutIntro = document.querySelector('.about-intro');
-		if (aboutIntro) {
-			updates.push(() => {
-				aboutIntro.innerHTML = `${langData['about-hello']} <span class="about-highlight">${langData['about-ghost']}</span>!<br>${langData['about-description']}`;
-			});
-		}
-		
-		const aboutFacts = document.querySelectorAll('.about-facts li');
-		const factKeys = ['about-fact-1', 'about-fact-2', 'about-fact-3'];
-		aboutFacts.forEach((fact, index) => {
-			if (factKeys[index]) {
-				updates.push(() => {
-					const icon = fact.querySelector('i');
-					fact.innerHTML = `${icon ? icon.outerHTML : ''} ${langData[factKeys[index]]}`;
-				});
-			}
-		});
-		
-		const aboutBtn = document.querySelector('.about-btn');
-		if (aboutBtn) {
-			updates.push(() => {
-				aboutBtn.innerHTML = `<i class="fas fa-download"></i> ${langData['about-resume-btn']}`;
-			});
-		}
-		
-		// Update contact section
-		const contactTitle = document.querySelector('.contact-info h2');
-		if (contactTitle) {
-			updates.push(() => {
-				contactTitle.innerHTML = `<span class="contact-hash">#</span>${langData['contact-title']}`;
-			});
-		}
-		
-		const contactSubtitle = document.querySelector('.contact-info p');
-		if (contactSubtitle) {
-			updates.push(() => {
-				contactSubtitle.textContent = langData['contact-subtitle'];
-			});
-		}
-		
-		// Update form placeholders
-		const nameInput = document.getElementById('name');
-		if (nameInput) {
-			updates.push(() => {
-				nameInput.placeholder = langData['contact-name-placeholder'];
-			});
-		}
-		
-		const emailInput = document.getElementById('email');
-		if (emailInput) {
-			updates.push(() => {
-				emailInput.placeholder = langData['contact-email-placeholder'];
-			});
-		}
-		
-		const messageInput = document.getElementById('message');
-		if (messageInput) {
-			updates.push(() => {
-				messageInput.placeholder = langData['contact-message-placeholder'];
-			});
-		}
-		
-		const sendBtn = document.querySelector('.submit-btn');
-		if (sendBtn) {
-			updates.push(() => {
-				sendBtn.innerHTML = `<i class="fas fa-paper-plane"></i> ${langData['contact-send-btn']}`;
-			});
-		}
-		
-		// Update footer
-		const footerLinks = document.querySelectorAll('.footer-links ul li a');
-		const footerKeys = ['footer-home', 'footer-about', 'footer-skills', 'footer-projects', 'footer-contact'];
-		footerLinks.forEach((link, index) => {
-			if (footerKeys[index]) {
-				updates.push(() => {
-					link.textContent = langData[footerKeys[index]];
-				});
-			}
-		});
-		
-		const footerCopyright = document.querySelector('.footer-copyright');
-		if (footerCopyright) {
-			updates.push(() => {
-				footerCopyright.innerHTML = `&copy; <span id="footer-year"></span> Ghost. ${langData['footer-copyright']}`;
-			});
-		}
 		
 		// Execute all updates in a single batch
 		requestAnimationFrame(() => {
@@ -1667,7 +1425,7 @@ function translateWebsite(lang) {
 		});
 		
 		// Update form validation messages
-		window.translationData = langData; // Make available for form validation
+		window.translationData = langData;
 		
 		console.log(`Website translated to ${lang} successfully`);
 		

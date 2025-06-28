@@ -31,10 +31,10 @@
 					<a href="#"> <img src="Style=Default.svg" alt="Logo" />Ghost</a>
 				</div>
 				<ul class="nav-links">
-					<li><a href="#hero" >#home</a></li>
-					<li><a href="#projects">#works</a></li>
-					<li><a href="#about-me">#about-me</a></li>
-					<li><a href="#contact">#contacts</a></li>
+					<li><a href="#hero" data-translate="nav-home">#home</a></li>
+					<li><a href="#projects" data-translate="nav-works">#works</a></li>
+					<li><a href="#about-me" data-translate="nav-about">#about-me</a></li>
+					<li><a href="#contact" data-translate="nav-contacts">#contacts</a></li>
 				</ul>
 				<div class="language-selector">
 					<button class="language-btn" id="language-btn" aria-label="Language Settings">
@@ -79,15 +79,15 @@
 			<div class="hero-bg-blur"></div>
 			<div class="hero-text">
 				<h1 class="animated-headline">
-					Hi, I'm <span class="highlight">Shivam Attri</span><br>
-					<span class="typewriter">Frontend Developer & Cloud Enthusiast</span>
+					<span data-translate="hero-greeting">Hi, I'm</span> <span class="highlight">Shivam Attri</span><br>
+					<span class="typewriter" data-translate="hero-title">Frontend Developer & Cloud Enthusiast</span>
 				</h1>
-				<p class="hero-subtext">I craft responsive websites where technology meets creativity.</p>
+				<p class="hero-subtext" data-translate="hero-subtitle">I craft responsive websites where technology meets creativity.</p>
 				<div class="hero-socials">
 					<a href="https://github.com/Shivam8286" target="_blank"><i class="fab fa-github"></i></a>
 					<a href="https://linkedin.com/in/shivam-attri23" target="_blank"><i class="fab fa-linkedin"></i></a>
 				</div>
-				<button class="contact-btn pulse">Contact me!!</button>
+				<button class="contact-btn pulse" data-translate="hero-contact-btn">Contact me!!</button>
 			</div>
 			<div class="hero-image">
 				<div class="image-glow"></div>
@@ -99,7 +99,7 @@
 			</div>
 		</section>
         <section id="projects" class="projects-section">
-  <h1 class="projects-title">Projects</h1>
+  <h1 class="projects-title" data-translate="projects-title">Projects</h1>
   <div class="projects-grid">
     <!-- Skeleton Loading Cards -->
     <div class="project-skeleton" id="project-skeleton-1">
@@ -142,8 +142,8 @@
       <div class="project-image-container">
         <img src="img.avif" alt="Project 1" />
         <div class="project-overlay">
-          <h3>Coming Soon</h3>
-          <p>Exciting project on the way. Stay tuned!</p>
+          <h3 data-translate="project-coming-soon">Coming Soon</h3>
+          <p data-translate="project-exciting">Exciting project on the way. Stay tuned!</p>
           <div class="project-tags">
             <span>HTML</span>
             <span>CSS</span>
@@ -152,7 +152,7 @@
         </div>
       </div>
       <button class="project-live-btn">
-        <i class="fas fa-eye"></i> View Details
+        <i class="fas fa-eye"></i> <span data-translate="project-view-details">View Details</span>
       </button>
     </div>
     <!-- Repeat for more projects -->
@@ -167,8 +167,8 @@
       <div class="project-image-container">
         <img src="img.avif" alt="Project 2" />
         <div class="project-overlay">
-          <h3>Coming Soon</h3>
-          <p>Another awesome project is coming soon!</p>
+          <h3 data-translate="project-coming-soon">Coming Soon</h3>
+          <p data-translate="project-another">Another awesome project is coming soon!</p>
           <div class="project-tags">
             <span>React</span>
             <span>API</span>
@@ -176,7 +176,7 @@
         </div>
       </div>
       <button class="project-live-btn">
-        <i class="fas fa-eye"></i> View Details
+        <i class="fas fa-eye"></i> <span data-translate="project-view-details">View Details</span>
       </button>
     </div>
     <div class="project-card-glass"
@@ -190,8 +190,8 @@
       <div class="project-image-container">
         <img src="img.avif" alt="Project 3" />
         <div class="project-overlay">
-          <h3>Coming Soon</h3>
-          <p>Stay tuned for more updates!</p>
+          <h3 data-translate="project-coming-soon">Coming Soon</h3>
+          <p data-translate="project-stay-tuned">Stay tuned for more updates!</p>
           <div class="project-tags">
             <span>MongoDB</span>
             <span>Node.js</span>
@@ -199,20 +199,20 @@
         </div>
       </div>
       <button class="project-live-btn">
-        <i class="fas fa-eye"></i> View Details
+        <i class="fas fa-eye"></i> <span data-translate="project-view-details">View Details</span>
       </button>
     </div>
   </div>
 </section>
 
     <section id="skills">
-      <h1 class="skills-title">Skills</h1>
+      <h1 class="skills-title" data-translate="skills-title">Skills</h1>
       <div class="skills-glass-grid">
         <!-- Languages -->
         <div class="glass-card accent-languages">
           <div class="card-header">
             <i class="fas fa-code"></i>
-            <span>Languages</span>
+            <span data-translate="skills-languages">Languages</span>
           </div>
           <ul>
             <li>
@@ -237,7 +237,7 @@
         <div class="glass-card accent-databases">
           <div class="card-header">
             <i class="fas fa-database"></i>
-            <span>Databases</span>
+            <span data-translate="skills-databases">Databases</span>
           </div>
           <ul>
             <li>
@@ -254,7 +254,7 @@
         <div class="glass-card accent-tools">
           <div class="card-header">
             <i class="fas fa-tools"></i>
-            <span>Tools</span>
+            <span data-translate="skills-tools">Tools</span>
           </div>
           <ul>
             <li><span><i class="fas fa-code"></i> VSCode</span></li>
@@ -268,7 +268,7 @@
         <div class="glass-card accent-other">
           <div class="card-header">
             <i class="fas fa-globe"></i>
-            <span>Other</span>
+            <span data-translate="skills-other">Other</span>
           </div>
           <ul>
             <li><span><i class="fab fa-html5"></i> HTML</span></li>
@@ -279,7 +279,7 @@
         <div class="glass-card accent-frameworks">
           <div class="card-header">
             <i class="fas fa-layer-group"></i>
-            <span>Frameworks</span>
+            <span data-translate="skills-frameworks">Frameworks</span>
           </div>
           <ul>
             <li><span><i class="fab fa-react"></i> React</span></li>
@@ -294,26 +294,25 @@
           <img src="about-me.png" alt="About Me">
         </div>
         <div class="about-text">
-          <h2><span class="about-hash">#</span>About Me</h2>
+          <h2><span class="about-hash">#</span><span data-translate="about-title">About Me</span></h2>
           <p class="about-intro">
-            Hello, I'm <span class="about-highlight">Ghost</span>!<br>
-            I'm a <span class="about-highlight">self-taught frontend developer</span> and <span class="about-highlight">cloud enthusiast</span>.<br>
-            I develop responsive websites from scratch and turn them into modern, user-friendly web experiences.
+            <span data-translate="about-hello">Hello, I'm</span> <span class="about-highlight" data-translate="about-ghost">Ghost</span>!<br>
+            <span data-translate="about-description">I'm a self-taught frontend developer and cloud enthusiast. I develop responsive websites from scratch and turn them into modern, user-friendly web experiences.</span>
           </p>
           <ul class="about-facts">
-            <li><i class="fas fa-laptop-code"></i> Passionate about UI/UX</li>
-            <li><i class="fas fa-cloud"></i> Cloud Computing Explorer</li>
-            <li><i class="fas fa-rocket"></i> Always learning new tech</li>
+            <li><i class="fas fa-laptop-code"></i> <span data-translate="about-fact-1">Passionate about UI/UX</span></li>
+            <li><i class="fas fa-cloud"></i> <span data-translate="about-fact-2">Cloud Computing Explorer</span></li>
+            <li><i class="fas fa-rocket"></i> <span data-translate="about-fact-3">Always learning new tech</span></li>
           </ul>
-          <a href="YOUR_RESUME_LINK.pdf" class="about-btn" target="_blank"><i class="fas fa-download"></i> Download Resume</a>
+          <a href="YOUR_RESUME_LINK.pdf" class="about-btn" target="_blank"><i class="fas fa-download"></i> <span data-translate="about-resume-btn">Download Resume</span></a>
         </div>
       </div>
     </section>
     <section id="contact" class="contact-section">
       <div class="contact-glass-card">
         <div class="contact-info">
-          <h2><span class="contact-hash">#</span>Contact</h2>
-          <p>Get in touch with me</p>
+          <h2><span class="contact-hash">#</span><span data-translate="contact-title">Contact</span></h2>
+          <p data-translate="contact-subtitle">Get in touch with me</p>
           <ul class="contact-details">
             <li><i class="fas fa-envelope"></i> <a href="mailto:your.email@example.com">shivamattri2335@gmail.com</a></li>
             <li><i class="fab fa-linkedin"></i> <a href="https://linkedin.com/in/shivam-attri23" target="_blank">LinkedIn</a></li>
@@ -323,20 +322,20 @@
         <form class="contact-form" action="#" method="post">
           <div class="form-group">
             <label for="name"><i class="fas fa-user"></i></label>
-            <input type="text" id="name" name="name" placeholder="Your Name" required>
+            <input type="text" id="name" name="name" data-translate="contact-name-placeholder" placeholder="Your Name" required>
           </div>
            <small class="validation-message"></small>
           <div class="form-group">
             <label for="email"><i class="fas fa-envelope"></i></label>
-            <input type="email" id="email" name="email" placeholder="Your Email" required>
+            <input type="email" id="email" name="email" data-translate="contact-email-placeholder" placeholder="Your Email" required>
           </div>
            <small class="validation-message"></small>
           <div class="form-group">
             <label for="message"><i class="fas fa-comment-dots"></i></label>
-            <textarea id="message" name="message" rows="4" placeholder="Your Message" required></textarea>
+            <textarea id="message" name="message" rows="4" data-translate="contact-message-placeholder" placeholder="Your Message" required></textarea>
           </div>
            <small class="validation-message"></small>
-          <button type="submit" class="submit-btn pulse"><i class="fas fa-paper-plane"></i> Send Message</button>
+          <button type="submit" class="submit-btn pulse"><i class="fas fa-paper-plane"></i> <span data-translate="contact-send-btn">Send Message</span></button>
           <div id="form-status-message"></div>
         </form>
       </div>
@@ -359,16 +358,16 @@
         <div class="footer-divider"></div>
         <div class="footer-links">
           <ul>
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#about-me">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#hero" data-translate="footer-home">Home</a></li>
+            <li><a href="#about-me" data-translate="footer-about">About</a></li>
+            <li><a href="#skills" data-translate="footer-skills">Skills</a></li>
+            <li><a href="#projects" data-translate="footer-projects">Projects</a></li>
+            <li><a href="#contact" data-translate="footer-contact">Contact</a></li>
           </ul>
         </div>
         <div class="footer-bottom">
           <p class="footer-copyright">
-            &copy; <span id="footer-year"></span> Ghost. All Rights Reserved.
+            &copy; <span id="footer-year"></span> Ghost. <span data-translate="footer-copyright">All Rights Reserved.</span>
           </p>
         </div>
         <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to Top">
