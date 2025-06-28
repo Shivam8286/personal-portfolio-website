@@ -1217,6 +1217,10 @@ const translations = {
 		'project-another': 'Another awesome project is coming soon!',
 		'project-stay-tuned': 'Stay tuned for more updates!',
 		'project-view-details': 'View Details',
+		'portfolio-title': 'Portfolio Website - Ghost',
+		'portfolio-description': 'A modern, responsive portfolio website showcasing my skills and projects. Features include dark/light mode toggle, custom animated cursor, particles.js background, multi-language support (5 languages), real email functionality with EmailJS, interactive project modals, 3D card effects, parallax scrolling, and smooth animations. Built with vanilla HTML, CSS, and JavaScript for optimal performance.',
+		'portfolio-overlay-title': 'Portfolio Website',
+		'portfolio-overlay-desc': 'Modern portfolio with real email functionality, multi-language support, and interactive features',
 		
 		// Skills Section
 		'skills-title': 'Skills',
@@ -1307,6 +1311,10 @@ const translations = {
 		'project-another': '¡Otro proyecto increíble está por venir!',
 		'project-stay-tuned': '¡Mantente atento para más actualizaciones!',
 		'project-view-details': 'Ver Detalles',
+		'portfolio-title': 'Sitio Web de Portafolio - Ghost',
+		'portfolio-description': 'Un sitio web de portafolio moderno y responsivo que muestra mis habilidades y proyectos.',
+		'portfolio-overlay-title': 'Sitio Web de Portafolio',
+		'portfolio-overlay-desc': 'Portafolio moderno con funcionalidad de email real',
 		'skills-title': 'Habilidades',
 		'skills-languages': 'Lenguajes',
 		'skills-databases': 'Bases de Datos',
