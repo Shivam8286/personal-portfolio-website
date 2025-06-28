@@ -126,11 +126,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		card.addEventListener("mouseleave", projectCardHover);
 	});
 
-	// Typing effect for hero text
-	const heroText = document.querySelector(".hero-text h1");
-	if (heroText) {
-		typeWriter(heroText, 0);
-	}
+	// Temporarily disabled typewriter for translation testing
+	// const heroText = document.querySelector(".hero-text h1");
+	// if (heroText) typeWriter(heroText, 0);
 
 	// Set footer year automatically
 	const yearSpan = document.getElementById("footer-year");
@@ -188,8 +186,9 @@ document.addEventListener("DOMContentLoaded", function() {
 	lazyLoadImages();
 	initAdvancedThemeToggle();
 	initProjectModals();
+	initEmailJS(); // Initialize EmailJS
+	console.log('Initializing language selector...');
 	init3DCardEffects();
-	initLanguageSelector();
 	initScrollAnimations();
 	initPerformanceOptimizations();
 
@@ -210,17 +209,10 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	}
 	
-	// Initialize contact modal
 	initContactModal();
-	
-	// Initialize contact analytics
-	initContactAnalytics();
-	
-	// Initialize resume functionality
 	initResumeDownload();
-	
-	// Initialize resume modal
 	initResumeModal();
+	initContactAnalytics();
 });
 
 // Smooth scrolling function
@@ -292,20 +284,6 @@ function projectCardHover(e) {
 	} else {
 		this.style.transform = "scale(1)";
 	}
-}
-
-// Typing effect for hero text
-function typeWriter(element, index) {
-	const text = element.textContent;
-	element.innerHTML = "";
-	function type() {
-		if (index < text.length) {
-			element.innerHTML += text.charAt(index);
-			index++;
-			setTimeout(type, 50);
-		}
-	}
-	type();
 }
 
 // Lazy loading for project images
@@ -553,12 +531,12 @@ function smoothScrollRAF(targetElement, duration) {
 }
 
 // Update smooth scroll function
-function smoothScroll(e) {
-	e.preventDefault();
-	const targetId = this.getAttribute("href");
-	const targetElement = document.querySelector(targetId);
-	smoothScrollRAF(targetElement, 1000);
-}
+// function smoothScroll(e) {
+// 	e.preventDefault();
+// 	const targetId = this.getAttribute("href");
+// 	const targetElement = document.querySelector(targetId);
+// 	smoothScrollRAF(targetElement, 1000);
+// }
 
 // Navbar shadow and background on scroll
 window.addEventListener('scroll', function() {
@@ -797,6 +775,8 @@ function handleAdvancedFormSubmit(e) {
 
 // Initialize all functions
 document.addEventListener("DOMContentLoaded", function () {
+	console.log('DOMContentLoaded event fired');
+	
 	const navLinks = document.querySelectorAll(".nav-links a");
 	navLinks.forEach((link) => link.addEventListener("click", smoothScroll));
 
@@ -809,14 +789,36 @@ document.addEventListener("DOMContentLoaded", function () {
 		card.addEventListener("mouseleave", projectCardHover);
 	});
 
-	const heroText = document.querySelector(".hero-text h1");
-	if (heroText) typeWriter(heroText, 0);
+	// Temporarily disabled typewriter for translation testing
+	// const heroText = document.querySelector(".hero-text h1");
+	// if (heroText) typeWriter(heroText, 0);
 
 	lazyLoadImages();
 	initAdvancedThemeToggle();
 	initProjectModals();
 	initEmailJS(); // Initialize EmailJS
-	initLanguageSelector();
+	console.log('Initializing language selector...');
+	init3DCardEffects();
+	initScrollAnimations();
+	initPerformanceOptimizations();
+
+	// Enhanced Contact Button Functionality - All Features Combined
+	const contactBtn = document.querySelector('.contact-btn');
+	if (contactBtn) {
+		contactBtn.addEventListener('click', handleContactButtonClick);
+		
+		// Add hover effects
+		contactBtn.addEventListener('mouseenter', () => {
+			contactBtn.style.transform = 'scale(1.05)';
+			contactBtn.style.boxShadow = '0 8px 32px rgba(171, 137, 255, 0.5)';
+		});
+		
+		contactBtn.addEventListener('mouseleave', () => {
+			contactBtn.style.transform = 'scale(1)';
+			contactBtn.style.boxShadow = '0 4px 24px #ab89ff33';
+		});
+	}
+	
 	initContactModal();
 	initResumeDownload();
 	initResumeModal();
@@ -1018,43 +1020,41 @@ function initLanguageSelector() {
 		return;
 	}
 	
-	// Toggle dropdown
+	// Toggle dropdown with proper event handling
 	languageBtn.addEventListener('click', (e) => {
+		e.preventDefault();
 		e.stopPropagation();
-		languageBtn.classList.toggle('active');
-		languageDropdown.classList.toggle('visible');
+		
+		console.log('Language button clicked!'); // Debug log
+		
+		// Toggle active state
+		const isActive = languageBtn.classList.contains('active');
+		
+		console.log('Is active:', isActive); // Debug log
+		
+		if (isActive) {
+			// Close dropdown
+			languageBtn.classList.remove('active');
+			languageDropdown.classList.remove('visible');
+			console.log('Closing dropdown'); // Debug log
+		} else {
+			// Open dropdown
+			languageBtn.classList.add('active');
+			languageDropdown.classList.add('visible');
+			console.log('Opening dropdown'); // Debug log
+			console.log('Dropdown classes:', languageDropdown.className); // Debug log
+		}
 		
 		// Add ripple effect
-		const ripple = document.createElement('div');
-		ripple.className = 'ripple';
-		ripple.style.cssText = `
-			position: absolute;
-			border-radius: 50%;
-			background: rgba(255, 255, 255, 0.3);
-			transform: scale(0);
-			animation: ripple 0.6s linear;
-			pointer-events: none;
-		`;
-		
-		const rect = languageBtn.getBoundingClientRect();
-		const size = Math.max(rect.width, rect.height);
-		const x = e.clientX - rect.left - size / 2;
-		const y = e.clientY - rect.top - size / 2;
-		
-		ripple.style.width = ripple.style.height = size + 'px';
-		ripple.style.left = x + 'px';
-		ripple.style.top = y + 'px';
-		
-		languageBtn.appendChild(ripple);
-		
-		setTimeout(() => {
-			ripple.remove();
-		}, 600);
+		addRippleEffect(e, languageBtn);
 	});
 	
 	// Handle language selection
 	dropdownItems.forEach(item => {
-		item.addEventListener('click', () => {
+		item.addEventListener('click', (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			
 			const lang = item.dataset.lang;
 			const langText = item.querySelector('span').textContent;
 			
@@ -1062,26 +1062,18 @@ function initLanguageSelector() {
 			currentLang.textContent = lang.toUpperCase();
 			
 			// Update selected state
-			dropdownItems.forEach(di => {
-				di.classList.remove('selected');
-				const indicator = di.querySelector('.selected-indicator');
-				if (indicator) indicator.style.opacity = '0';
-			});
-			item.classList.add('selected');
-			const selectedIndicator = item.querySelector('.selected-indicator');
-			if (selectedIndicator) selectedIndicator.style.opacity = '1';
+			updateSelectedLanguage(item, dropdownItems);
 			
 			// Close dropdown
-			languageBtn.classList.remove('active');
-			languageDropdown.classList.remove('visible');
+			closeDropdown(languageBtn, languageDropdown);
 			
 			// Save language preference
 			localStorage.setItem('language', lang);
 			
-			// Actually translate the website
+			// Translate the website
 			translateWebsite(lang);
 			
-			// Add success feedback
+			// Show success feedback
 			showLanguageChangeFeedback(langText);
 		});
 	});
@@ -1089,28 +1081,66 @@ function initLanguageSelector() {
 	// Close dropdown when clicking outside
 	document.addEventListener('click', (e) => {
 		if (!languageBtn.contains(e.target) && !languageDropdown.contains(e.target)) {
-			languageBtn.classList.remove('active');
-			languageDropdown.classList.remove('visible');
+			closeDropdown(languageBtn, languageDropdown);
 		}
 	});
 	
 	// Close dropdown on escape key
 	document.addEventListener('keydown', (e) => {
 		if (e.key === 'Escape' && languageDropdown.classList.contains('visible')) {
-			languageBtn.classList.remove('active');
-			languageDropdown.classList.remove('visible');
+			closeDropdown(languageBtn, languageDropdown);
 		}
 	});
 	
 	// Load saved language preference
+	loadSavedLanguage(currentLang, dropdownItems);
+}
+
+// Helper functions for language selector
+function addRippleEffect(e, button) {
+	const ripple = document.createElement('div');
+	ripple.className = 'ripple';
+	
+	const rect = button.getBoundingClientRect();
+	const size = Math.max(rect.width, rect.height);
+	const x = e.clientX - rect.left - size / 2;
+	const y = e.clientY - rect.top - size / 2;
+	
+	ripple.style.width = ripple.style.height = size + 'px';
+	ripple.style.left = x + 'px';
+	ripple.style.top = y + 'px';
+	
+	button.appendChild(ripple);
+	
+	setTimeout(() => {
+		ripple.remove();
+	}, 600);
+}
+
+function updateSelectedLanguage(selectedItem, allItems) {
+	allItems.forEach(item => {
+		item.classList.remove('selected');
+		const indicator = item.querySelector('.selected-indicator');
+		if (indicator) indicator.style.opacity = '0';
+	});
+	
+	selectedItem.classList.add('selected');
+	const selectedIndicator = selectedItem.querySelector('.selected-indicator');
+	if (selectedIndicator) selectedIndicator.style.opacity = '1';
+}
+
+function closeDropdown(button, dropdown) {
+	button.classList.remove('active');
+	dropdown.classList.remove('visible');
+}
+
+function loadSavedLanguage(currentLangElement, dropdownItems) {
 	const savedLang = localStorage.getItem('language') || 'en';
 	const savedItem = document.querySelector(`[data-lang="${savedLang}"]`);
+	
 	if (savedItem) {
-		currentLang.textContent = savedLang.toUpperCase();
-		dropdownItems.forEach(di => di.classList.remove('selected'));
-		savedItem.classList.add('selected');
-		const savedIndicator = savedItem.querySelector('.selected-indicator');
-		if (savedIndicator) savedIndicator.style.opacity = '1';
+		currentLangElement.textContent = savedLang.toUpperCase();
+		updateSelectedLanguage(savedItem, dropdownItems);
 		
 		// Translate website to saved language after a short delay
 		setTimeout(() => {
@@ -1124,11 +1154,9 @@ function showLanguageChangeFeedback(langName) {
 	const feedback = document.createElement('div');
 	feedback.className = 'language-feedback';
 	
-	const langChangedText = window.translationData ? window.translationData['lang-changed'] : 'Language changed to';
-	
 	feedback.innerHTML = `
 		<i class="fas fa-check-circle"></i>
-		<span>${langChangedText} ${langName}</span>
+		<span>Language changed to ${langName}</span>
 	`;
 	feedback.style.cssText = `
 		position: fixed;
@@ -1592,6 +1620,9 @@ const translations = {
 	}
 };
 
+// Make translations globally accessible
+window.translationData = translations;
+
 // Efficient translation function using data attributes
 function translateWebsite(lang) {
 	const langData = translations[lang];
@@ -1628,501 +1659,55 @@ function translateWebsite(lang) {
 			updates.forEach(update => update());
 		});
 		
-		// Update form validation messages
-		window.translationData = langData;
-		
-		console.log(`Website translated to ${lang} successfully`);
+		console.log(`Website translated to ${lang}`);
 		
 	} catch (error) {
 		console.error('Error during translation:', error);
 	}
 }
 
-// Contact button click handler - All features combined
-function handleContactButtonClick() {
-	const contactBtn = document.querySelector('.contact-btn');
+// Show language change feedback
+function showLanguageChangeFeedback(langName) {
+	const feedback = document.createElement('div');
+	feedback.className = 'language-feedback';
 	
-	// Track analytics
-	trackContactClick('hero_button');
+	feedback.innerHTML = `
+		<i class="fas fa-check-circle"></i>
+		<span>Language changed to ${langName}</span>
+	`;
+	feedback.style.cssText = `
+		position: fixed;
+		top: 100px;
+		right: 20px;
+		background: rgba(101, 255, 204, 0.9);
+		color: #1a1a1a;
+		padding: 12px 20px;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-weight: 600;
+		z-index: 10000;
+		transform: translateX(100%);
+		transition: transform 0.3s ease;
+		backdrop-filter: blur(10px);
+		box-shadow: 0 4px 16px rgba(101, 255, 204, 0.3);
+	`;
 	
-	// Add loading state
-	const originalText = contactBtn.textContent;
-	contactBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-	contactBtn.disabled = true;
+	document.body.appendChild(feedback);
 	
-	// Show contact modal with options
+	// Animate in
 	setTimeout(() => {
-		showContactModal();
-		
-		// Reset button
-		contactBtn.innerHTML = originalText;
-		contactBtn.style.background = 'linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%)';
-		contactBtn.disabled = false;
-	}, 500);
-}
-
-// Initialize contact modal functionality
-function initContactModal() {
-	const modalOverlay = document.getElementById('contact-modal-overlay');
-	const modal = document.getElementById('contact-modal');
-	const closeBtn = document.getElementById('contact-modal-close');
-	const contactOptions = document.querySelectorAll('.contact-option');
+		feedback.style.transform = 'translateX(0)';
+	}, 100);
 	
-	// Close modal handlers
-	closeBtn.addEventListener('click', hideContactModal);
-	modalOverlay.addEventListener('click', (e) => {
-		if (e.target === modalOverlay) {
-			hideContactModal();
-		}
-	});
-	
-	// Close on escape key
-	document.addEventListener('keydown', (e) => {
-		if (e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
-			hideContactModal();
-		}
-	});
-	
-	// Handle contact option clicks
-	contactOptions.forEach(option => {
-		option.addEventListener('click', () => {
-			const action = option.getAttribute('data-action');
-			handleContactAction(action);
-		});
-	});
-}
-
-// Show contact modal
-function showContactModal() {
-	const modalOverlay = document.getElementById('contact-modal-overlay');
-	modalOverlay.classList.add('visible');
-	document.body.style.overflow = 'hidden';
-}
-
-// Hide contact modal
-function hideContactModal() {
-	const modalOverlay = document.getElementById('contact-modal-overlay');
-	modalOverlay.classList.remove('visible');
-	document.body.style.overflow = '';
-}
-
-// Handle different contact actions
-function handleContactAction(action) {
-	hideContactModal();
-	
-	switch(action) {
-		case 'scroll':
-			scrollToContactForm();
-			break;
-		case 'email':
-			openEmailClient();
-			break;
-		case 'linkedin':
-			openLinkedIn();
-			break;
-		case 'github':
-			openGitHub();
-			break;
-		case 'copy-email':
-			copyEmailToClipboard();
-			break;
-		case 'smart':
-			smartContact();
-			break;
-		default:
-			console.warn('Unknown contact action:', action);
-	}
-}
-
-// Scroll to contact form
-function scrollToContactForm() {
-	const contactSection = document.querySelector('#contact');
-	if (contactSection) {
-		contactSection.scrollIntoView({
-			behavior: 'smooth',
-			block: 'start'
-		});
-		
-		// Focus on name input after scrolling
+	// Remove after 3 seconds
+	setTimeout(() => {
+		feedback.style.transform = 'translateX(100%)';
 		setTimeout(() => {
-			const nameInput = document.getElementById('name');
-			if (nameInput) {
-				nameInput.focus();
-				// Add highlight effect
-				contactSection.style.boxShadow = '0 0 50px rgba(171, 137, 255, 0.3)';
-				setTimeout(() => {
-					contactSection.style.boxShadow = '';
-				}, 3000);
-			}
-		}, 1000);
-		
-		showNotification('Scrolled to contact form!');
-		trackContactClick('scroll_to_form');
-	}
-}
-
-// Open email client
-function openEmailClient() {
-	const email = 'shivamattri2335@gmail.com';
-	const subject = 'Portfolio Contact';
-	const body = 'Hi Shivam,\n\nI would like to discuss...';
-	
-	window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-	
-	showNotification('Opening email client...');
-	trackContactClick('email_client');
-}
-
-// Open LinkedIn
-function openLinkedIn() {
-	window.open('https://linkedin.com/in/shivam-attri23', '_blank');
-	showNotification('Opening LinkedIn profile...');
-	trackContactClick('linkedin');
-}
-
-// Open GitHub
-function openGitHub() {
-	window.open('https://github.com/Shivam8286', '_blank');
-	showNotification('Opening GitHub profile...');
-	trackContactClick('github');
-}
-
-// Copy email to clipboard
-async function copyEmailToClipboard() {
-	const email = 'shivamattri2335@gmail.com';
-	
-	try {
-		await navigator.clipboard.writeText(email);
-		showNotification('Email copied to clipboard!');
-		trackContactClick('copy_email');
-	} catch (err) {
-		console.error('Failed to copy email:', err);
-		showNotification('Failed to copy email', 'error');
-	}
-}
-
-// Smart contact detection
-function smartContact() {
-	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-	const isTablet = /iPad|Android/i.test(navigator.userAgent) && window.innerWidth >= 768;
-	
-	if (isMobile) {
-		// On mobile, prefer email client
-		openEmailClient();
-		trackContactClick('smart_mobile');
-	} else if (isTablet) {
-		// On tablet, show contact form
-		scrollToContactForm();
-		trackContactClick('smart_tablet');
-	} else {
-		// On desktop, show contact modal again or copy email
-		copyEmailToClipboard();
-		trackContactClick('smart_desktop');
-	}
-}
-
-// Show notification
-function showNotification(message, type = 'success') {
-	const notification = document.getElementById('contact-notification');
-	const notificationText = document.getElementById('notification-text');
-	
-	notificationText.textContent = message;
-	
-	// Set notification type
-	notification.className = 'contact-notification';
-	if (type === 'error') {
-		notification.style.background = 'rgba(255, 101, 132, 0.95)';
-		notification.querySelector('i').className = 'fas fa-exclamation-circle';
-		notification.querySelector('i').style.color = '#ff6584';
-	} else if (type === 'info') {
-		notification.style.background = 'rgba(101, 153, 255, 0.95)';
-		notification.querySelector('i').className = 'fas fa-info-circle';
-		notification.querySelector('i').style.color = '#6599ff';
-	} else {
-		notification.style.background = 'rgba(101, 255, 204, 0.95)';
-		notification.querySelector('i').className = 'fas fa-check-circle';
-		notification.querySelector('i').style.color = '#00a86b';
-	}
-	
-	// Show notification
-	notification.classList.add('visible');
-	
-	// Hide after 3 seconds
-	setTimeout(() => {
-		notification.classList.remove('visible');
+			feedback.remove();
+		}, 300);
 	}, 3000);
-}
-
-// Initialize contact analytics
-function initContactAnalytics() {
-	// Create analytics storage if it doesn't exist
-	if (!localStorage.getItem('contactAnalytics')) {
-		localStorage.setItem('contactAnalytics', JSON.stringify({
-			totalClicks: 0,
-			actions: {},
-			lastClick: null
-		}));
-	}
-}
-
-// Track contact clicks
-function trackContactClick(action) {
-	try {
-		const analytics = JSON.parse(localStorage.getItem('contactAnalytics'));
-		
-		analytics.totalClicks++;
-		analytics.actions[action] = (analytics.actions[action] || 0) + 1;
-		analytics.lastClick = new Date().toISOString();
-		
-		localStorage.setItem('contactAnalytics', JSON.stringify(analytics));
-		
-		// Log analytics (in real app, send to analytics service)
-		console.log('Contact Analytics:', analytics);
-		
-	} catch (error) {
-		console.error('Failed to track contact click:', error);
-	}
-}
-
-// Get contact analytics (for debugging)
-function getContactAnalytics() {
-	try {
-		return JSON.parse(localStorage.getItem('contactAnalytics'));
-	} catch (error) {
-		console.error('Failed to get contact analytics:', error);
-		return null;
-	}
-}
-
-// =================================
-// ENHANCED RESUME DOWNLOAD SYSTEM
-// =================================
-function initResumeDownload() {
-	const resumeBtn = document.getElementById('resume-download-btn');
-	if (!resumeBtn) {
-		console.error('Resume download button not found!');
-		return;
-	}
-	
-	console.log('Initializing resume download system...');
-	
-	// Check if resume file exists
-	checkResumeFile();
-	
-	// Add click handler with enhanced functionality
-	resumeBtn.addEventListener('click', handleResumeDownload);
-	
-	// Add hover effects
-	resumeBtn.addEventListener('mouseenter', () => {
-		resumeBtn.style.transform = 'scale(1.05)';
-		resumeBtn.style.boxShadow = '0 8px 32px rgba(171, 137, 255, 0.5)';
-	});
-	
-	resumeBtn.addEventListener('mouseleave', () => {
-		resumeBtn.style.transform = 'scale(1)';
-		resumeBtn.style.boxShadow = '0 2px 8px #ab89ff33';
-	});
-	
-	console.log('Resume download system initialized successfully');
-}
-
-// Check if resume file exists
-async function checkResumeFile() {
-	const resumeBtn = document.getElementById('resume-download-btn');
-	const resumeUrl = 'resume.pdf';
-	
-	try {
-		const response = await fetch(resumeUrl, { method: 'HEAD' });
-		if (response.ok) {
-			// File exists, set up proper download link
-			resumeBtn.href = resumeUrl;
-			resumeBtn.download = 'Shivam_Attri_Resume.pdf';
-			resumeBtn.target = '_blank';
-			resumeBtn.style.opacity = '1';
-			resumeBtn.title = 'Download Resume PDF';
-			console.log('Resume file found and ready for download');
-		} else {
-			// File doesn't exist, show modal preview instead
-			resumeBtn.href = '#';
-			resumeBtn.onclick = (e) => {
-				e.preventDefault();
-				showResumeModal();
-			};
-			resumeBtn.style.opacity = '0.9';
-			resumeBtn.title = 'View resume preview';
-		}
-	} catch (error) {
-		console.log('Resume file not found, showing modal preview');
-		// File doesn't exist, show modal preview instead
-		resumeBtn.href = '#';
-		resumeBtn.onclick = (e) => {
-			e.preventDefault();
-			showResumeModal();
-		};
-		resumeBtn.style.opacity = '0.9';
-		resumeBtn.title = 'View resume preview';
-	}
-}
-
-// Handle resume download
-function handleResumeDownload(e) {
-	console.log('Resume download button clicked!');
-	e.preventDefault(); // Prevent default link behavior
-	
-	// Check if we should show modal or download
-	const resumeUrl = 'resume.pdf';
-	
-	console.log('Checking if resume file exists:', resumeUrl);
-	
-	fetch(resumeUrl, { method: 'HEAD' })
-		.then(response => {
-			console.log('Resume file check response:', response.ok);
-			if (response.ok) {
-				// File exists, proceed with download
-				console.log('Resume file found, starting download...');
-				trackResumeDownload();
-				
-				// Add loading state
-				const originalText = e.target.innerHTML;
-				e.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Downloading...';
-				e.target.style.pointerEvents = 'none';
-				
-				// Actually trigger the download
-				const link = document.createElement('a');
-				link.href = resumeUrl;
-				link.download = 'Shivam_Attri_Resume.pdf';
-				link.target = '_blank';
-				document.body.appendChild(link);
-				link.click();
-				document.body.removeChild(link);
-				
-				console.log('Download link clicked, file should start downloading');
-				
-				// Simulate download delay for better UX
-				setTimeout(() => {
-					// Reset button
-					e.target.innerHTML = originalText;
-					e.target.style.pointerEvents = '';
-					
-					// Show success notification
-					showNotification('Resume download started!');
-					
-					// Add success effect
-					e.target.style.background = 'linear-gradient(90deg, #65ffcc, #4CAF50)';
-					setTimeout(() => {
-						e.target.style.background = 'linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%)';
-					}, 2000);
-					
-				}, 1000);
-			} else {
-				// File doesn't exist, show modal
-				console.log('Resume file not found, showing modal');
-				showResumeModal();
-			}
-		})
-		.catch(error => {
-			console.error('Error checking resume file:', error);
-			console.log('Resume file not found, showing modal preview');
-			showResumeModal();
-		});
-}
-
-// Track resume downloads
-function trackResumeDownload() {
-	try {
-		const analytics = JSON.parse(localStorage.getItem('contactAnalytics') || '{}');
-		analytics.resumeDownloads = (analytics.resumeDownloads || 0) + 1;
-		analytics.lastResumeDownload = new Date().toISOString();
-		localStorage.setItem('contactAnalytics', JSON.stringify(analytics));
-		console.log('Resume download tracked:', analytics);
-	} catch (error) {
-		console.error('Failed to track resume download:', error);
-	}
-}
-
-// =================================
-// RESUME MODAL FUNCTIONALITY
-// =================================
-function initResumeModal() {
-	const resumeModalOverlay = document.getElementById('resume-modal-overlay');
-	const resumeModalClose = document.getElementById('resume-modal-close');
-	const modalResumeDownload = document.getElementById('modal-resume-download');
-	
-	// Close modal handlers
-	resumeModalClose.addEventListener('click', hideResumeModal);
-	resumeModalOverlay.addEventListener('click', (e) => {
-		if (e.target === resumeModalOverlay) {
-			hideResumeModal();
-		}
-	});
-	
-	// Close on escape key
-	document.addEventListener('keydown', (e) => {
-		if (e.key === 'Escape' && resumeModalOverlay.classList.contains('visible')) {
-			hideResumeModal();
-		}
-	});
-	
-	// Handle modal download button
-	if (modalResumeDownload) {
-		modalResumeDownload.addEventListener('click', handleModalResumeDownload);
-	}
-}
-
-// Show resume modal
-function showResumeModal() {
-	const resumeModalOverlay = document.getElementById('resume-modal-overlay');
-	resumeModalOverlay.classList.add('visible');
-	document.body.style.overflow = 'hidden';
-}
-
-// Hide resume modal
-function hideResumeModal() {
-	const resumeModalOverlay = document.getElementById('resume-modal-overlay');
-	resumeModalOverlay.classList.remove('visible');
-	document.body.style.overflow = '';
-}
-
-// Handle resume download from modal
-function handleModalResumeDownload() {
-	// Track download
-	trackResumeDownload();
-	
-	// Add loading state
-	const originalText = this.innerHTML;
-	this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Downloading...';
-	this.disabled = true;
-	
-	// Actually trigger the download
-	const link = document.createElement('a');
-	link.href = 'resume.pdf';
-	link.download = 'Shivam_Attri_Resume.pdf';
-	link.target = '_blank';
-	document.body.appendChild(link);
-	link.click();
-	document.body.removeChild(link);
-	
-	// Simulate download delay for better UX
-	setTimeout(() => {
-		// Reset button
-		this.innerHTML = originalText;
-		this.disabled = false;
-		
-		// Show success notification
-		showNotification('Resume download started!');
-		
-		// Add success effect
-		this.style.background = 'linear-gradient(90deg, #65ffcc, #4CAF50)';
-		setTimeout(() => {
-			this.style.background = 'linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%)';
-		}, 2000);
-		
-		// Close modal after download
-		setTimeout(() => {
-			hideResumeModal();
-		}, 1500);
-		
-	}, 1000);
 }
 
 // =================================
@@ -2136,102 +1721,72 @@ function initEmailJS() {
 	emailjs.init(publicKey);
 }
 
-function handleAdvancedFormSubmit(e) {
-	e.preventDefault();
+// Language Switcher Functionality
+(function() {
+  const langBtn = document.getElementById('language-btn');
+  const langDropdown = document.getElementById('language-dropdown');
+  const langItems = document.querySelectorAll('.language-dropdown .dropdown-item');
+  const currentLang = document.getElementById('current-lang');
+  let isOpen = false;
 
-	const form = e.target;
-	const nameInput = document.getElementById('name');
-	const emailInput = document.getElementById('email');
-	const subjectInput = document.getElementById('subject');
-	const messageInput = document.getElementById('message');
-	const submitBtn = document.getElementById('submit-btn');
-	const statusMessage = document.getElementById('form-status-message');
+  // Load saved language
+  const savedLang = localStorage.getItem('language') || 'en';
+  if (currentLang) {
+    currentLang.textContent = savedLang.toUpperCase();
+    langItems.forEach(item => {
+      item.classList.toggle('selected', item.dataset.lang === savedLang);
+    });
+    
+    // Apply saved translation after a short delay to ensure DOM is ready
+    setTimeout(() => {
+      translateWebsite(savedLang);
+    }, 100);
+  }
 
-	// Get translated messages
-	const nameEmptyMsg = window.translationData ? window.translationData['validation-name-empty'] : 'Name cannot be empty.';
-	const messageEmptyMsg = window.translationData ? window.translationData['validation-message-empty'] : 'Message cannot be empty.';
-	const subjectEmptyMsg = window.translationData ? window.translationData['validation-subject-empty'] : 'Subject cannot be empty.';
-	const fixErrorsMsg = window.translationData ? window.translationData['validation-fix-errors'] : 'Please fix the errors above and try again.';
-	const sendingMsg = window.translationData ? window.translationData['form-sending'] : 'Sending...';
-	const successMsg = window.translationData ? window.translationData['form-success'] : 'Thank you! Your message has been sent successfully.';
-	const errorMsg = window.translationData ? window.translationData['form-error'] : 'Sorry, there was an error sending your message. Please try again.';
+  // Toggle dropdown
+  langBtn && langBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    isOpen = !isOpen;
+    langBtn.classList.toggle('active', isOpen);
+    langDropdown.classList.toggle('visible', isOpen);
+  });
 
-	// Perform final validation check on all fields
-	const isNameValid = validateField(nameInput, 'validation-name-empty');
-	const isEmailValid = validateEmail(emailInput);
-	const isSubjectValid = validateField(subjectInput, 'validation-subject-empty');
-	const isMessageValid = validateField(messageInput, 'validation-message-empty');
+  // Select language
+  langItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const lang = this.dataset.lang;
+      currentLang.textContent = lang.toUpperCase();
+      langItems.forEach(i => i.classList.remove('selected'));
+      this.classList.add('selected');
+      localStorage.setItem('language', lang);
+      isOpen = false;
+      langBtn.classList.remove('active');
+      langDropdown.classList.remove('visible');
+      
+      // Apply translation
+      translateWebsite(lang);
+      
+      // Show feedback
+      showLanguageChangeFeedback(lang.toUpperCase());
+    });
+  });
 
-	if (!isNameValid || !isEmailValid || !isSubjectValid || !isMessageValid) {
-		statusMessage.textContent = fixErrorsMsg;
-		statusMessage.className = 'visible error';
-		return; // Stop submission if validation fails
-	}
+  // Close dropdown on outside click
+  document.addEventListener('click', function(e) {
+    if (isOpen && !langBtn.contains(e.target) && !langDropdown.contains(e.target)) {
+      isOpen = false;
+      langBtn.classList.remove('active');
+      langDropdown.classList.remove('visible');
+    }
+  });
 
-	// Show loading state
-	submitBtn.disabled = true;
-	submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span data-translate="form-sending">Sending...</span>';
-	statusMessage.textContent = sendingMsg;
-	statusMessage.className = 'visible success';
-
-	// Prepare template parameters
-	const templateParams = {
-		from_name: nameInput.value,
-		from_email: emailInput.value,
-		subject: subjectInput.value,
-		message: messageInput.value,
-		to_name: 'Shivam Attri',
-		reply_to: emailInput.value
-	};
-
-	// Send email using EmailJS
-	const serviceId = typeof emailjsConfig !== 'undefined' ? emailjsConfig.serviceId : 'service_g6pltzs';
-	const templateId = typeof emailjsConfig !== 'undefined' ? emailjsConfig.templateId : 'template_qm8c6yj';
-	emailjs.send(serviceId, templateId, templateParams)
-		.then(function(response) {
-			console.log('SUCCESS!', response.status, response.text);
-			
-			// Show success message
-			statusMessage.textContent = successMsg;
-			statusMessage.className = 'visible success';
-
-			// Reset form
-			form.reset();
-			
-			// Remove all error states
-			hideError(nameInput, nameInput.parentElement.nextElementSibling);
-			hideError(emailInput, emailInput.parentElement.nextElementSibling);
-			hideError(subjectInput, subjectInput.parentElement.nextElementSibling);
-			hideError(messageInput, messageInput.parentElement.nextElementSibling);
-
-			// Reset button
-			submitBtn.disabled = false;
-			submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span data-translate="contact-send-btn">Send Message</span>';
-
-			// Hide status message after 5 seconds
-			setTimeout(() => {
-				statusMessage.className = '';
-			}, 5000);
-
-			// Track successful email send
-			trackContactClick('email_sent');
-		}, function(error) {
-			console.log('FAILED...', error);
-			
-			// Show error message
-			statusMessage.textContent = errorMsg;
-			statusMessage.className = 'visible error';
-
-			// Reset button
-			submitBtn.disabled = false;
-			submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span data-translate="contact-send-btn">Send Message</span>';
-
-			// Hide status message after 5 seconds
-			setTimeout(() => {
-				statusMessage.className = '';
-			}, 5000);
-
-			// Track failed email send
-			trackContactClick('email_failed');
-		});
-}
+  // Close dropdown on Escape
+  document.addEventListener('keydown', function(e) {
+    if (isOpen && e.key === 'Escape') {
+      isOpen = false;
+      langBtn.classList.remove('active');
+      langDropdown.classList.remove('visible');
+    }
+  });
+})();

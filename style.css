@@ -13,6 +13,7 @@ body {
 header {
 	background-color: #333;
 	padding: 15px 30px;
+	overflow: visible; /* Allow dropdown to be visible */
 }
 
 .navbar {
@@ -33,6 +34,8 @@ header {
 	border-radius: 0 0 18px 18px;
 	padding: 0 60px;
 	transition: background 0.3s, min-height 0.3s;
+	box-sizing: border-box;
+	overflow: visible; /* Allow dropdown to be visible */
 }
 
 .logo a {
@@ -115,7 +118,7 @@ header {
 	100% { background-position: 100% 50%; }
 }
 
-.language a {
+/* .language a {
 	color: #fff;
 	text-decoration: none;
 	font-size: 1.15em;
@@ -125,7 +128,7 @@ header {
 	transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 	letter-spacing: 1px;
 	font-weight: 600;
-}
+} */
 
 .language a:hover {
 	background: #ab89ff;
@@ -141,7 +144,7 @@ header {
 	padding: 80px 60px 60px 60px;
 	min-height: 60vh;
 	background: linear-gradient(120deg, #23242a 60%, #ab89ff22 100%);
-	overflow: hidden;
+	overflow: visible; /* Changed from hidden to allow dropdown visibility */
 	z-index: 1;
 	margin-bottom: 20px;
 }
@@ -1154,11 +1157,11 @@ header {
 		width: 100%;
 		margin-top: 8px;
 	}
-	.language {
+	/* .language {
 		margin-top: 8px;
 		width: 100%;
 		text-align: right;
-	}
+	} */
 }
 
 /* Animated dot for active nav link */
@@ -1190,7 +1193,7 @@ header {
 }
 
 /* Smoother transitions for nav elements */
-.navbar, .nav-links li a, .logo a, .language a {
+.navbar, .nav-links li a, .logo a {
 	transition: background 0.3s, color 0.3s, box-shadow 0.3s, min-height 0.3s, padding 0.3s, font-size 0.3s, letter-spacing 0.3s;
 }
 
@@ -1912,10 +1915,10 @@ body.light-mode .nav-links li a.active {
 	color: #ab89ff;
 }
 
-body.light-mode .language a {
+/* body.light-mode .language a {
 	color: #2c3e50;
 	background: rgba(171, 137, 255, 0.1);
-}
+} */
 
 body.light-mode .language a:hover {
 	background: #ab89ff;
@@ -2444,6 +2447,7 @@ body.light-mode .loading-text {
 .language-selector {
 	position: relative;
 	margin-left: 20px;
+	overflow: visible; /* Allow dropdown to be visible */
 }
 
 .language-btn {
@@ -2461,28 +2465,9 @@ body.light-mode .loading-text {
 	letter-spacing: 1px;
 	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
 	box-shadow: 0 2px 8px rgba(171, 137, 255, 0.2);
 	position: relative;
 	overflow: hidden;
-}
-
-.language-btn::before {
-	content: '';
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 0;
-	height: 0;
-	background: rgba(255, 255, 255, 0.2);
-	border-radius: 50%;
-	transform: translate(-50%, -50%);
-	transition: width 0.6s, height 0.6s;
-}
-
-.language-btn:hover::before {
-	width: 300px;
-	height: 300px;
 }
 
 .language-btn:hover {
@@ -2493,11 +2478,7 @@ body.light-mode .loading-text {
 }
 
 .language-btn:active {
-	transform: translateY(0) scale(0.98);
-}
-
-.language-btn i {
-	transition: transform 0.3s ease;
+	transform: scale(0.98);
 }
 
 .language-btn .dropdown-arrow {
@@ -2534,697 +2515,157 @@ body.light-mode .loading-text {
 /* Dropdown Menu */
 .language-dropdown {
 	position: absolute;
-	top: 100%;
+	top: calc(100% + 8px);
 	right: 0;
-	margin-top: 8px;
 	background: rgba(44, 47, 56, 0.95);
-	border: 1.5px solid rgba(171, 137, 255, 0.18);
+	border: 1.5px solid rgba(171, 137, 255, 0.2);
 	border-radius: 12px;
 	backdrop-filter: blur(15px);
-	-webkit-backdrop-filter: blur(15px);
 	box-shadow: 0 8px 32px rgba(171, 137, 255, 0.2);
-	min-width: 180px;
+	min-width: 140px;
 	opacity: 0;
 	visibility: hidden;
 	transform: translateY(-10px) scale(0.95);
 	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-	z-index: 1000;
+	z-index: 10000;
 	overflow: hidden;
+	pointer-events: none;
 }
 
 .language-dropdown.visible {
 	opacity: 1;
 	visibility: visible;
 	transform: translateY(0) scale(1);
+	pointer-events: auto;
 }
 
 .dropdown-item {
-	display: flex;
-	align-items: center;
-	gap: 12px;
 	padding: 12px 16px;
-	color: #e0e0e0;
+	color: #fff;
 	cursor: pointer;
-	transition: all 0.3s ease;
-	position: relative;
-	border-bottom: 1px solid rgba(171, 137, 255, 0.1);
+	transition: background 0.3s, color 0.3s;
+	border-bottom: 1px solid rgba(171, 137, 255, 0.12);
+	background: transparent;
+	font-weight: 500;
 }
 
 .dropdown-item:last-child {
 	border-bottom: none;
 }
 
-.dropdown-item:hover {
+.dropdown-item:hover, .dropdown-item.selected {
 	background: rgba(171, 137, 255, 0.15);
-	color: #fff;
-	transform: translateX(4px);
-}
-
-.dropdown-item.selected {
-	background: rgba(171, 137, 255, 0.2);
 	color: #ab89ff;
 }
 
-.dropdown-item i:first-child {
-	color: #ab89ff;
-	font-size: 1.1em;
-	width: 16px;
-	text-align: center;
-}
-
-.dropdown-item span {
-	flex: 1;
-	font-weight: 500;
-}
-
-.selected-indicator {
-	color: #ab89ff;
-	font-size: 0.9em;
-	opacity: 0;
-	transition: opacity 0.3s ease;
-}
-
-.dropdown-item.selected .selected-indicator {
-	opacity: 1;
-}
-
-/* Animation for dropdown items */
-.dropdown-item {
-	animation: slideInRight 0.3s ease forwards;
-	opacity: 0;
-	transform: translateX(20px);
-}
-
-.dropdown-item:nth-child(1) { animation-delay: 0.1s; }
-.dropdown-item:nth-child(2) { animation-delay: 0.15s; }
-.dropdown-item:nth-child(3) { animation-delay: 0.2s; }
-.dropdown-item:nth-child(4) { animation-delay: 0.25s; }
-.dropdown-item:nth-child(5) { animation-delay: 0.3s; }
-
-@keyframes slideInRight {
-	to {
-		opacity: 1;
-		transform: translateX(0);
+@media (max-width: 700px) {
+	.language-switcher {
+		margin-left: 10px;
 	}
-}
-
-/* Pulse animation for current language */
-@keyframes langPulse {
-	0%, 100% { 
-		box-shadow: 0 2px 8px rgba(171, 137, 255, 0.2);
-	}
-	50% { 
-		box-shadow: 0 2px 16px rgba(171, 137, 255, 0.4);
-	}
-}
-
-.language-btn {
-	animation: langPulse 3s ease-in-out infinite;
-}
-
-/* Remove old language styles */
-.language {
-	display: none;
-}
-
-/* =================================
-   CONTACT MODAL & NOTIFICATION SYSTEM
-   ================================= */
-.contact-modal-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(10, 10, 10, 0.8);
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
-	z-index: 20000;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	opacity: 0;
-	visibility: hidden;
-	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.contact-modal-overlay.visible {
-	opacity: 1;
-	visibility: visible;
-}
-
-.contact-modal {
-	background: rgba(44, 47, 56, 0.95);
-	border: 1.5px solid rgba(171, 137, 255, 0.2);
-	border-radius: 20px;
-	box-shadow: 0 20px 60px rgba(171, 137, 255, 0.3);
-	width: 90%;
-	max-width: 600px;
-	max-height: 80vh;
-	overflow: hidden;
-	transform: scale(0.8) translateY(30px);
-	transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.contact-modal-overlay.visible .contact-modal {
-	transform: scale(1) translateY(0);
-}
-
-.contact-modal-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 24px 32px;
-	border-bottom: 1px solid rgba(171, 137, 255, 0.2);
-	background: rgba(171, 137, 255, 0.05);
-}
-
-.contact-modal-header h3 {
-	color: #ab89ff;
-	font-size: 1.5em;
-	margin: 0;
-	font-weight: 600;
-}
-
-.contact-modal-close {
-	background: rgba(171, 137, 255, 0.1);
-	border: none;
-	color: #fff;
-	width: 36px;
-	height: 36px;
-	border-radius: 50%;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: all 0.3s ease;
-}
-
-.contact-modal-close:hover {
-	background: #ab89ff;
-	transform: rotate(90deg);
-}
-
-.contact-modal-content {
-	padding: 32px;
-}
-
-.contact-options-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-	gap: 16px;
-}
-
-.contact-option {
-	background: rgba(171, 137, 255, 0.08);
-	border: 1px solid rgba(171, 137, 255, 0.2);
-	border-radius: 16px;
-	padding: 20px;
-	cursor: pointer;
-	text-align: center;
-	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-	position: relative;
-	overflow: hidden;
-}
-
-.contact-option::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: -100%;
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(90deg, transparent, rgba(171, 137, 255, 0.1), transparent);
-	transition: left 0.6s;
-}
-
-.contact-option:hover::before {
-	left: 100%;
-}
-
-.contact-option:hover {
-	background: rgba(171, 137, 255, 0.15);
-	border-color: rgba(171, 137, 255, 0.4);
-	transform: translateY(-4px) scale(1.02);
-	box-shadow: 0 8px 25px rgba(171, 137, 255, 0.3);
-}
-
-.contact-option:active {
-	transform: translateY(-2px) scale(1.01);
-}
-
-.contact-option i {
-	font-size: 2em;
-	color: #ab89ff;
-	margin-bottom: 12px;
-	display: block;
-	transition: transform 0.3s ease;
-}
-
-.contact-option:hover i {
-	transform: scale(1.1);
-}
-
-.contact-option span {
-	display: block;
-	color: #fff;
-	font-weight: 600;
-	font-size: 1.1em;
-	margin-bottom: 4px;
-}
-
-.contact-option small {
-	color: #ccc;
-	font-size: 0.9em;
-	opacity: 0.8;
-}
-
-/* Contact Notification */
-.contact-notification {
-	position: fixed;
-	top: 100px;
-	right: 20px;
-	background: rgba(101, 255, 204, 0.95);
-	color: #1a1a1a;
-	padding: 16px 24px;
-	border-radius: 12px;
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	font-weight: 600;
-	z-index: 20001;
-	transform: translateX(100%);
-	transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-	backdrop-filter: blur(10px);
-	box-shadow: 0 8px 32px rgba(101, 255, 204, 0.3);
-}
-
-.contact-notification.visible {
-	transform: translateX(0);
-}
-
-.contact-notification i {
-	font-size: 1.2em;
-	color: #00a86b;
-}
-
-/* Animation for contact options */
-.contact-option {
-	opacity: 0;
-	transform: translateY(20px);
-	animation: slideInUp 0.5s ease forwards;
-}
-
-.contact-option:nth-child(1) { animation-delay: 0.1s; }
-.contact-option:nth-child(2) { animation-delay: 0.15s; }
-.contact-option:nth-child(3) { animation-delay: 0.2s; }
-.contact-option:nth-child(4) { animation-delay: 0.25s; }
-.contact-option:nth-child(5) { animation-delay: 0.3s; }
-.contact-option:nth-child(6) { animation-delay: 0.35s; }
-
-@keyframes slideInUp {
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-	.contact-modal {
-		width: 95%;
-		margin: 20px;
-	}
-	
-	.contact-modal-header {
-		padding: 20px 24px;
-	}
-	
-	.contact-modal-content {
-		padding: 24px;
-	}
-	
-	.contact-options-grid {
-		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-		gap: 12px;
-	}
-	
-	.contact-option {
-		padding: 16px;
-	}
-	
-	.contact-option i {
-		font-size: 1.5em;
-	}
-	
-	.contact-option span {
+	.language-btn {
+		padding: 8px 12px;
 		font-size: 1em;
 	}
-	
-	.contact-option small {
-		font-size: 0.8em;
+	.language-dropdown {
+		min-width: 100px;
+		right: 0;
+		left: auto;
 	}
 }
 
-/* Light mode support */
-body.light-mode .contact-modal {
-	background: rgba(255, 255, 255, 0.95);
-	border: 1.5px solid rgba(171, 137, 255, 0.3);
+/* Modern Language Switcher Styles */
+.language-switcher {
+  position: relative;
+  margin-left: 20px;
 }
-
-body.light-mode .contact-modal-header {
-	background: rgba(171, 137, 255, 0.1);
-	border-bottom: 1px solid rgba(171, 137, 255, 0.3);
-}
-
-body.light-mode .contact-modal-header h3 {
-	color: #ab89ff;
-}
-
-body.light-mode .contact-option {
-	background: rgba(171, 137, 255, 0.05);
-	border: 1px solid rgba(171, 137, 255, 0.2);
-}
-
-body.light-mode .contact-option:hover {
-	background: rgba(171, 137, 255, 0.1);
-}
-
-body.light-mode .contact-option span {
-	color: #2c3e50;
-}
-
-body.light-mode .contact-option small {
-	color: #5a6c7d;
-}
-
-/* Light mode support */
-body.light-mode .contact-option small {
-	color: #5a6c7d;
-}
-
-/* =================================
-   RESUME MODAL & PREVIEW SYSTEM
-   ================================= */
-.resume-modal-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(10, 10, 10, 0.8);
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
-	z-index: 20000;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	opacity: 0;
-	visibility: hidden;
-	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.resume-modal-overlay.visible {
-	opacity: 1;
-	visibility: visible;
-}
-
-.resume-modal {
-	background: rgba(44, 47, 56, 0.95);
-	border: 1.5px solid rgba(171, 137, 255, 0.2);
-	border-radius: 20px;
-	box-shadow: 0 20px 60px rgba(171, 137, 255, 0.3);
-	width: 90%;
-	max-width: 700px;
-	max-height: 85vh;
-	overflow: hidden;
-	transform: scale(0.8) translateY(30px);
-	transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.resume-modal-overlay.visible .resume-modal {
-	transform: scale(1) translateY(0);
-}
-
-.resume-modal-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 24px 32px;
-	border-bottom: 1px solid rgba(171, 137, 255, 0.2);
-	background: rgba(171, 137, 255, 0.05);
-}
-
-.resume-modal-header h3 {
-	color: #ab89ff;
-	font-size: 1.5em;
-	margin: 0;
-	font-weight: 600;
-	display: flex;
-	align-items: center;
-	gap: 12px;
-}
-
-.resume-modal-close {
-	background: rgba(171, 137, 255, 0.1);
-	border: none;
-	color: #fff;
-	width: 36px;
-	height: 36px;
-	border-radius: 50%;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: all 0.3s ease;
-}
-
-.resume-modal-close:hover {
-	background: #ab89ff;
-	transform: rotate(90deg);
-}
-
-.resume-modal-content {
-	padding: 32px;
-	overflow-y: auto;
-	max-height: calc(85vh - 100px);
-}
-
-.resume-preview {
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
-}
-
-.resume-info {
-	text-align: center;
-}
-
-.resume-info h4 {
-	color: #ab89ff;
-	font-size: 2.2em;
-	margin-bottom: 8px;
-	font-weight: 700;
-}
-
-.resume-title {
-	color: #e0e0e0;
-	font-size: 1.3em;
-	margin-bottom: 24px;
-	font-weight: 500;
-}
-
-.resume-highlights {
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-	margin-bottom: 24px;
-}
-
-.highlight-item {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 12px;
-	color: #ccc;
-	font-size: 1.1em;
-}
-
-.highlight-item i {
-	color: #ab89ff;
-	font-size: 1.2em;
-	width: 20px;
-}
-
-.resume-skills-preview {
-	margin-top: 24px;
-}
-
-.resume-skills-preview h5 {
-	color: #ab89ff;
-	font-size: 1.4em;
-	margin-bottom: 16px;
-	font-weight: 600;
-}
-
-.skills-tags {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	justify-content: center;
-}
-
-.skills-tags span {
-	background: linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%);
-	color: #fff;
-	padding: 6px 16px;
-	border-radius: 20px;
-	font-size: 0.9em;
-	font-weight: 500;
-	box-shadow: 0 2px 8px rgba(171, 137, 255, 0.3);
-}
-
-.resume-actions {
-	display: flex;
-	gap: 16px;
-	justify-content: center;
-	flex-wrap: wrap;
-}
-
-.resume-download-btn,
-.resume-close-btn {
-	padding: 12px 24px;
-	border: none;
-	border-radius: 12px;
-	font-size: 1.1em;
-	font-weight: 600;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	transition: all 0.3s ease;
-}
-
-.resume-download-btn {
-	background: linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%);
-	color: #fff;
-	box-shadow: 0 4px 16px rgba(171, 137, 255, 0.3);
-}
-
-.resume-download-btn:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 8px 24px rgba(171, 137, 255, 0.4);
-}
-
-.resume-close-btn {
-	background: rgba(171, 137, 255, 0.1);
-	color: #e0e0e0;
-	border: 1px solid rgba(171, 137, 255, 0.3);
-}
-
-.resume-close-btn:hover {
-	background: rgba(171, 137, 255, 0.2);
-	color: #fff;
-}
-
-/* Responsive design for resume modal */
-@media (max-width: 768px) {
-	.resume-modal {
-		width: 95%;
-		margin: 20px;
-	}
-	
-	.resume-modal-header {
-		padding: 20px 24px;
-	}
-	
-	.resume-modal-content {
-		padding: 24px;
-	}
-	
-	.resume-info h4 {
-		font-size: 1.8em;
-	}
-	
-	.resume-title {
-		font-size: 1.1em;
-	}
-	
-	.resume-actions {
-		flex-direction: column;
-	}
-	
-	.resume-download-btn,
-	.resume-close-btn {
-		width: 100%;
-		justify-content: center;
-	}
-}
-
-/* Light mode support for resume modal */
-body.light-mode .resume-modal {
-	background: rgba(255, 255, 255, 0.95);
-	border: 1.5px solid rgba(171, 137, 255, 0.3);
-}
-
-body.light-mode .resume-modal-header {
-	background: rgba(171, 137, 255, 0.1);
-	border-bottom: 1px solid rgba(171, 137, 255, 0.3);
-}
-
-body.light-mode .resume-info h4 {
-	color: #ab89ff;
-}
-
-body.light-mode .resume-title {
-	color: #2c3e50;
-}
-
-body.light-mode .highlight-item {
-	color: #5a6c7d;
-}
-
-body.light-mode .resume-close-btn {
-	background: rgba(171, 137, 255, 0.05);
-	color: #5a6c7d;
-	border: 1px solid rgba(171, 137, 255, 0.2);
-}
-
-body.light-mode .resume-close-btn:hover {
-	background: rgba(171, 137, 255, 0.1);
-	color: #2c3e50;
-}
-
-/* Hide the default cursor on the body and interactive elements */
-body, a, button {
-  cursor: none;
-}
-
-/* Ensure cursor is always visible, even over modals */
-.modal-overlay,
-.contact-modal-overlay,
-.resume-modal-overlay {
-  cursor: none;
-}
-
-.modal-overlay *,
-.contact-modal-overlay *,
-.resume-modal-overlay * {
-  cursor: none;
-}
-
-/* Show default cursor for form inputs and textareas for better UX */
-input, textarea, select {
-  cursor: text;
-}
-
-/* Show pointer cursor for clickable elements in modals */
-.modal-content button,
-.contact-modal button,
-.resume-modal button,
-.modal-link-btn,
-.contact-option,
-.resume-download-btn,
-.resume-close-btn {
+.language-btn {
+  background: rgba(171, 137, 255, 0.12);
+  border: 1.5px solid rgba(171, 137, 255, 0.18);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1em;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(171, 137, 255, 0.2);
+  position: relative;
+  overflow: hidden;
 }
+.language-btn:hover {
+  background: rgba(171, 137, 255, 0.25);
+  border-color: rgba(171, 137, 255, 0.4);
+  box-shadow: 0 4px 16px rgba(171, 137, 255, 0.4);
+  transform: translateY(-2px) scale(1.02);
+}
+.language-btn:active {
+  transform: scale(0.98);
+}
+.language-btn .dropdown-arrow {
+  font-size: 0.8em;
+  transition: transform 0.3s ease;
+}
+.language-btn.active .dropdown-arrow {
+  transform: rotate(180deg);
+}
+.language-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: rgba(44, 47, 56, 0.95);
+  border: 1.5px solid rgba(171, 137, 255, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(171, 137, 255, 0.2);
+  min-width: 140px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10000;
+  overflow: hidden;
+  pointer-events: none;
+}
+.language-dropdown.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.dropdown-item {
+  padding: 12px 16px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+  border-bottom: 1px solid rgba(171, 137, 255, 0.12);
+  background: transparent;
+  font-weight: 500;
+}
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+.dropdown-item:hover, .dropdown-item.selected {
+  background: rgba(171, 137, 255, 0.15);
+  color: #ab89ff;
+}
+@media (max-width: 700px) {
+  .language-switcher {
+    margin-left: 10px;
+  }
+  .language-btn {
+    padding: 8px 12px;
+    font-size: 1em;
+  }
+  .language-dropdown {
+    min-width: 100px;
+    right: 0;
+    left: auto;
+  }
+}
+/* Remove any old/duplicate language switcher styles if present */
+
