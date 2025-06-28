@@ -110,10 +110,12 @@ document.addEventListener("DOMContentLoaded", function() {
 		// Add live validation
 		const nameInput = document.getElementById('name');
 		const emailInput = document.getElementById('email');
+		const subjectInput = document.getElementById('subject');
 		const messageInput = document.getElementById('message');
 
 		nameInput.addEventListener('blur', () => validateField(nameInput, 'Name cannot be empty.'));
 		emailInput.addEventListener('blur', () => validateEmail(emailInput));
+		subjectInput.addEventListener('blur', () => validateField(subjectInput, 'Subject cannot be empty.'));
 		messageInput.addEventListener('blur', () => validateField(messageInput, 'Message cannot be empty.'));
 	}
 
@@ -699,49 +701,98 @@ function handleAdvancedFormSubmit(e) {
 	const form = e.target;
 	const nameInput = document.getElementById('name');
 	const emailInput = document.getElementById('email');
+	const subjectInput = document.getElementById('subject');
 	const messageInput = document.getElementById('message');
+	const submitBtn = document.getElementById('submit-btn');
 	const statusMessage = document.getElementById('form-status-message');
 
 	// Get translated messages
 	const nameEmptyMsg = window.translationData ? window.translationData['validation-name-empty'] : 'Name cannot be empty.';
 	const messageEmptyMsg = window.translationData ? window.translationData['validation-message-empty'] : 'Message cannot be empty.';
+	const subjectEmptyMsg = window.translationData ? window.translationData['validation-subject-empty'] : 'Subject cannot be empty.';
 	const fixErrorsMsg = window.translationData ? window.translationData['validation-fix-errors'] : 'Please fix the errors above and try again.';
 	const sendingMsg = window.translationData ? window.translationData['form-sending'] : 'Sending...';
 	const successMsg = window.translationData ? window.translationData['form-success'] : 'Thank you! Your message has been sent successfully.';
+	const errorMsg = window.translationData ? window.translationData['form-error'] : 'Sorry, there was an error sending your message. Please try again.';
 
 	// Perform final validation check on all fields
 	const isNameValid = validateField(nameInput, 'validation-name-empty');
 	const isEmailValid = validateEmail(emailInput);
+	const isSubjectValid = validateField(subjectInput, 'validation-subject-empty');
 	const isMessageValid = validateField(messageInput, 'validation-message-empty');
 
-	if (!isNameValid || !isEmailValid || !isMessageValid) {
+	if (!isNameValid || !isEmailValid || !isSubjectValid || !isMessageValid) {
 		statusMessage.textContent = fixErrorsMsg;
 		statusMessage.className = 'visible error';
 		return; // Stop submission if validation fails
 	}
 
-	// If all valid, proceed with submission
+	// Show loading state
+	submitBtn.disabled = true;
+	submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span data-translate="form-sending">Sending...</span>';
 	statusMessage.textContent = sendingMsg;
-	statusMessage.className = 'visible success'; // Style as success while sending
+	statusMessage.className = 'visible success';
 
-	// Simulate a network request with setTimeout
-	// In a real application, you would replace this with a `fetch` call to a service like Formspree
-	setTimeout(() => {
-		console.log("Form submitted successfully:", Object.fromEntries(new FormData(form)));
-		statusMessage.textContent = successMsg;
-		statusMessage.className = 'visible success';
+	// Prepare template parameters
+	const templateParams = {
+		from_name: nameInput.value,
+		from_email: emailInput.value,
+		subject: subjectInput.value,
+		message: messageInput.value,
+		to_name: 'Shivam Attri',
+		reply_to: emailInput.value
+	};
 
-		form.reset(); // Clear the form fields
-		// Remove all error states
-		hideError(nameInput, nameInput.parentElement.nextElementSibling);
-		hideError(emailInput, emailInput.parentElement.nextElementSibling);
-		hideError(messageInput, messageInput.parentElement.nextElementSibling);
+	// Send email using EmailJS
+	const serviceId = typeof emailjsConfig !== 'undefined' ? emailjsConfig.serviceId : 'service_g6pltzs';
+	const templateId = typeof emailjsConfig !== 'undefined' ? emailjsConfig.templateId : 'template_qm8c6yj';
+	emailjs.send(serviceId, templateId, templateParams)
+		.then(function(response) {
+			console.log('SUCCESS!', response.status, response.text);
+			
+			// Show success message
+			statusMessage.textContent = successMsg;
+			statusMessage.className = 'visible success';
 
-		// Hide the status message after a few seconds
-		setTimeout(() => {
-			statusMessage.className = '';
-		}, 5000);
-	}, 1500);
+			// Reset form
+			form.reset();
+			
+			// Remove all error states
+			hideError(nameInput, nameInput.parentElement.nextElementSibling);
+			hideError(emailInput, emailInput.parentElement.nextElementSibling);
+			hideError(subjectInput, subjectInput.parentElement.nextElementSibling);
+			hideError(messageInput, messageInput.parentElement.nextElementSibling);
+
+			// Reset button
+			submitBtn.disabled = false;
+			submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span data-translate="contact-send-btn">Send Message</span>';
+
+			// Hide status message after 5 seconds
+			setTimeout(() => {
+				statusMessage.className = '';
+			}, 5000);
+
+			// Track successful email send
+			trackContactClick('email_sent');
+		}, function(error) {
+			console.log('FAILED...', error);
+			
+			// Show error message
+			statusMessage.textContent = errorMsg;
+			statusMessage.className = 'visible error';
+
+			// Reset button
+			submitBtn.disabled = false;
+			submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span data-translate="contact-send-btn">Send Message</span>';
+
+			// Hide status message after 5 seconds
+			setTimeout(() => {
+				statusMessage.className = '';
+			}, 5000);
+
+			// Track failed email send
+			trackContactClick('email_failed');
+		});
 }
 
 // Initialize all functions
@@ -764,6 +815,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	lazyLoadImages();
 	initAdvancedThemeToggle();
 	initProjectModals();
+	initEmailJS(); // Initialize EmailJS
+	initLanguageSelector();
+	initContactModal();
+	initResumeDownload();
+	initResumeModal();
+	initContactAnalytics();
 });
 
 // Fallback theme initialization
@@ -1184,6 +1241,7 @@ const translations = {
 		'contact-subtitle': 'Get in touch with me',
 		'contact-name-placeholder': 'Your Name',
 		'contact-email-placeholder': 'Your Email',
+		'contact-subject-placeholder': 'Subject',
 		'contact-message-placeholder': 'Your Message',
 		'contact-send-btn': 'Send Message',
 		
@@ -1214,10 +1272,12 @@ const translations = {
 		'validation-name-empty': 'Name cannot be empty.',
 		'validation-email-empty': 'Email cannot be empty.',
 		'validation-email-invalid': 'Please enter a valid email address.',
+		'validation-subject-empty': 'Subject cannot be empty.',
 		'validation-message-empty': 'Message cannot be empty.',
 		'validation-fix-errors': 'Please fix the errors above and try again.',
 		'form-sending': 'Sending...',
 		'form-success': 'Thank you! Your message has been sent successfully.',
+		'form-error': 'Sorry, there was an error sending your message. Please try again.',
 		
 		// Language Feedback
 		'lang-changed': 'Language changed to',
@@ -1265,6 +1325,7 @@ const translations = {
 		'contact-subtitle': 'Ponte en contacto conmigo',
 		'contact-name-placeholder': 'Tu Nombre',
 		'contact-email-placeholder': 'Tu Email',
+		'contact-subject-placeholder': 'Asunto',
 		'contact-message-placeholder': 'Tu Mensaje',
 		'contact-send-btn': 'Enviar Mensaje',
 		'contact-modal-title': 'Ponte en Contacto',
@@ -1289,6 +1350,7 @@ const translations = {
 		'validation-name-empty': 'El nombre no puede estar vacío.',
 		'validation-email-empty': 'El email no puede estar vacío.',
 		'validation-email-invalid': 'Por favor ingresa un email válido.',
+		'validation-subject-empty': 'El asunto no puede estar vacío.',
 		'validation-message-empty': 'El mensaje no puede estar vacío.',
 		'validation-fix-errors': 'Por favor corrige los errores arriba e intenta de nuevo.',
 		'form-sending': 'Enviando...',
@@ -1336,6 +1398,7 @@ const translations = {
 		'contact-subtitle': 'Entrez en contact avec moi',
 		'contact-name-placeholder': 'Votre Nom',
 		'contact-email-placeholder': 'Votre Email',
+		'contact-subject-placeholder': 'Sujet',
 		'contact-message-placeholder': 'Votre Message',
 		'contact-send-btn': 'Envoyer le Message',
 		'contact-modal-title': 'Entrez en Contact',
@@ -1360,6 +1423,7 @@ const translations = {
 		'validation-name-empty': 'Le nom ne peut pas être vide.',
 		'validation-email-empty': 'L\'email ne peut pas être vide.',
 		'validation-email-invalid': 'Veuillez entrer une adresse email valide.',
+		'validation-subject-empty': 'Le sujet ne peut pas être vide.',
 		'validation-message-empty': 'Le message ne peut pas être vide.',
 		'validation-fix-errors': 'Veuillez corriger les erreurs ci-dessus et réessayer.',
 		'form-sending': 'Envoi en cours...',
@@ -1407,6 +1471,7 @@ const translations = {
 		'contact-subtitle': 'Kontaktiere mich',
 		'contact-name-placeholder': 'Dein Name',
 		'contact-email-placeholder': 'Deine Email',
+		'contact-subject-placeholder': 'Betreff',
 		'contact-message-placeholder': 'Deine Nachricht',
 		'contact-send-btn': 'Nachricht Senden',
 		'contact-modal-title': 'Kontaktiere Mich',
@@ -1431,6 +1496,7 @@ const translations = {
 		'validation-name-empty': 'Der Name darf nicht leer sein.',
 		'validation-email-empty': 'Die Email darf nicht leer sein.',
 		'validation-email-invalid': 'Bitte geben Sie eine gültige Email-Adresse ein.',
+		'validation-subject-empty': 'Das Betreff darf nicht leer sein.',
 		'validation-message-empty': 'Die Nachricht darf nicht leer sein.',
 		'validation-fix-errors': 'Bitte beheben Sie die Fehler oben und versuchen Sie es erneut.',
 		'form-sending': 'Wird gesendet...',
@@ -1478,6 +1544,7 @@ const translations = {
 		'contact-subtitle': 'मुझसे संपर्क करें',
 		'contact-name-placeholder': 'आपका नाम',
 		'contact-email-placeholder': 'आपका ईमेल',
+		'contact-subject-placeholder': 'विषय',
 		'contact-message-placeholder': 'आपका संदेश',
 		'contact-send-btn': 'संदेश भेजें',
 		'contact-modal-title': 'संपर्क करें',
@@ -1502,6 +1569,7 @@ const translations = {
 		'validation-name-empty': 'नाम खाली नहीं हो सकता।',
 		'validation-email-empty': 'ईमेल खाली नहीं हो सकता।',
 		'validation-email-invalid': 'कृपया एक वैध ईमेल पता दर्ज करें।',
+		'validation-subject-empty': 'विषय खाली नहीं हो सकता।',
 		'validation-message-empty': 'संदेश खाली नहीं हो सकता।',
 		'validation-fix-errors': 'कृपया ऊपर की त्रुटियों को ठीक करें और पुनः प्रयास करें।',
 		'form-sending': 'भेज रहा है...',
@@ -2047,4 +2115,115 @@ function handleModalResumeDownload() {
 		}, 1500);
 		
 	}, 1000);
+}
+
+// =================================
+// EMAILJS INTEGRATION FOR REAL EMAIL FUNCTIONALITY
+// =================================
+function initEmailJS() {
+	// Initialize EmailJS with your public key
+	// For GitHub Pages: Use direct initialization
+	// For local development: Use config file
+	const publicKey = typeof emailjsConfig !== 'undefined' ? emailjsConfig.publicKey : 'gihs10Ar5NImUZ272';
+	emailjs.init(publicKey);
+}
+
+function handleAdvancedFormSubmit(e) {
+	e.preventDefault();
+
+	const form = e.target;
+	const nameInput = document.getElementById('name');
+	const emailInput = document.getElementById('email');
+	const subjectInput = document.getElementById('subject');
+	const messageInput = document.getElementById('message');
+	const submitBtn = document.getElementById('submit-btn');
+	const statusMessage = document.getElementById('form-status-message');
+
+	// Get translated messages
+	const nameEmptyMsg = window.translationData ? window.translationData['validation-name-empty'] : 'Name cannot be empty.';
+	const messageEmptyMsg = window.translationData ? window.translationData['validation-message-empty'] : 'Message cannot be empty.';
+	const subjectEmptyMsg = window.translationData ? window.translationData['validation-subject-empty'] : 'Subject cannot be empty.';
+	const fixErrorsMsg = window.translationData ? window.translationData['validation-fix-errors'] : 'Please fix the errors above and try again.';
+	const sendingMsg = window.translationData ? window.translationData['form-sending'] : 'Sending...';
+	const successMsg = window.translationData ? window.translationData['form-success'] : 'Thank you! Your message has been sent successfully.';
+	const errorMsg = window.translationData ? window.translationData['form-error'] : 'Sorry, there was an error sending your message. Please try again.';
+
+	// Perform final validation check on all fields
+	const isNameValid = validateField(nameInput, 'validation-name-empty');
+	const isEmailValid = validateEmail(emailInput);
+	const isSubjectValid = validateField(subjectInput, 'validation-subject-empty');
+	const isMessageValid = validateField(messageInput, 'validation-message-empty');
+
+	if (!isNameValid || !isEmailValid || !isSubjectValid || !isMessageValid) {
+		statusMessage.textContent = fixErrorsMsg;
+		statusMessage.className = 'visible error';
+		return; // Stop submission if validation fails
+	}
+
+	// Show loading state
+	submitBtn.disabled = true;
+	submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span data-translate="form-sending">Sending...</span>';
+	statusMessage.textContent = sendingMsg;
+	statusMessage.className = 'visible success';
+
+	// Prepare template parameters
+	const templateParams = {
+		from_name: nameInput.value,
+		from_email: emailInput.value,
+		subject: subjectInput.value,
+		message: messageInput.value,
+		to_name: 'Shivam Attri',
+		reply_to: emailInput.value
+	};
+
+	// Send email using EmailJS
+	const serviceId = typeof emailjsConfig !== 'undefined' ? emailjsConfig.serviceId : 'service_g6pltzs';
+	const templateId = typeof emailjsConfig !== 'undefined' ? emailjsConfig.templateId : 'template_qm8c6yj';
+	emailjs.send(serviceId, templateId, templateParams)
+		.then(function(response) {
+			console.log('SUCCESS!', response.status, response.text);
+			
+			// Show success message
+			statusMessage.textContent = successMsg;
+			statusMessage.className = 'visible success';
+
+			// Reset form
+			form.reset();
+			
+			// Remove all error states
+			hideError(nameInput, nameInput.parentElement.nextElementSibling);
+			hideError(emailInput, emailInput.parentElement.nextElementSibling);
+			hideError(subjectInput, subjectInput.parentElement.nextElementSibling);
+			hideError(messageInput, messageInput.parentElement.nextElementSibling);
+
+			// Reset button
+			submitBtn.disabled = false;
+			submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span data-translate="contact-send-btn">Send Message</span>';
+
+			// Hide status message after 5 seconds
+			setTimeout(() => {
+				statusMessage.className = '';
+			}, 5000);
+
+			// Track successful email send
+			trackContactClick('email_sent');
+		}, function(error) {
+			console.log('FAILED...', error);
+			
+			// Show error message
+			statusMessage.textContent = errorMsg;
+			statusMessage.className = 'visible error';
+
+			// Reset button
+			submitBtn.disabled = false;
+			submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span data-translate="contact-send-btn">Send Message</span>';
+
+			// Hide status message after 5 seconds
+			setTimeout(() => {
+				statusMessage.className = '';
+			}, 5000);
+
+			// Track failed email send
+			trackContactClick('email_failed');
+		});
 }

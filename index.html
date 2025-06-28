@@ -314,12 +314,12 @@
           <h2><span class="contact-hash">#</span><span data-translate="contact-title">Contact</span></h2>
           <p data-translate="contact-subtitle">Get in touch with me</p>
           <ul class="contact-details">
-            <li><i class="fas fa-envelope"></i> <a href="mailto:your.email@example.com">shivamattri2335@gmail.com</a></li>
+            <li><i class="fas fa-envelope"></i> <a href="mailto:shivamattri2335@gmail.com">shivamattri2335@gmail.com</a></li>
             <li><i class="fab fa-linkedin"></i> <a href="https://linkedin.com/in/shivam-attri23" target="_blank">LinkedIn</a></li>
             <li><i class="fab fa-github"></i> <a href="https://github.com/Shivam8286" target="_blank">GitHub</a></li>
           </ul>
         </div>
-        <form class="contact-form" action="#" method="post">
+        <form class="contact-form" id="contact-form" action="#" method="post">
           <div class="form-group">
             <label for="name"><i class="fas fa-user"></i></label>
             <input type="text" id="name" name="name" data-translate="contact-name-placeholder" placeholder="Your Name" required>
@@ -331,11 +331,16 @@
           </div>
            <small class="validation-message"></small>
           <div class="form-group">
+            <label for="subject"><i class="fas fa-tag"></i></label>
+            <input type="text" id="subject" name="subject" data-translate="contact-subject-placeholder" placeholder="Subject" required>
+          </div>
+           <small class="validation-message"></small>
+          <div class="form-group">
             <label for="message"><i class="fas fa-comment-dots"></i></label>
             <textarea id="message" name="message" rows="4" data-translate="contact-message-placeholder" placeholder="Your Message" required></textarea>
           </div>
            <small class="validation-message"></small>
-          <button type="submit" class="submit-btn pulse"><i class="fas fa-paper-plane"></i> <span data-translate="contact-send-btn">Send Message</span></button>
+          <button type="submit" class="submit-btn pulse" id="submit-btn"><i class="fas fa-paper-plane"></i> <span data-translate="contact-send-btn">Send Message</span></button>
           <div id="form-status-message"></div>
         </form>
       </div>
@@ -500,6 +505,8 @@
     </div>
 
 	<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+	<script src="config.js"></script>
     <script src="script.js"></script>
 	</body>
 </html>
