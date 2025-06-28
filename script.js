@@ -1863,3 +1863,315 @@ function initEmailJS() {
     }
   });
 })();
+
+// =================================
+// RESUME MODAL FUNCTIONALITY
+// =================================
+function initResumeModal() {
+	const resumeModalOverlay = document.getElementById('resume-modal-overlay');
+	const resumeModalClose = document.getElementById('resume-modal-close');
+	const modalResumeDownload = document.getElementById('modal-resume-download');
+	
+	if (!resumeModalOverlay) {
+		console.warn('Resume modal overlay not found');
+		return;
+	}
+	
+	// Close modal when clicking the close button
+	if (resumeModalClose) {
+		resumeModalClose.addEventListener('click', hideResumeModal);
+	}
+	
+	// Close modal when clicking the overlay
+	resumeModalOverlay.addEventListener('click', (e) => {
+		if (e.target === resumeModalOverlay) {
+			hideResumeModal();
+		}
+	});
+	
+	// Close modal with Escape key
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && resumeModalOverlay.classList.contains('visible')) {
+			hideResumeModal();
+		}
+	});
+	
+	// Handle download button click
+	if (modalResumeDownload) {
+		modalResumeDownload.addEventListener('click', () => {
+			// Create a temporary link to download the resume
+			const link = document.createElement('a');
+			link.href = 'resume.pdf';
+			link.download = 'Shivam_Attri_Resume.pdf';
+			link.target = '_blank';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			
+			// Close the modal after download
+			setTimeout(() => {
+				hideResumeModal();
+			}, 500);
+			
+			// Show success feedback
+			showDownloadSuccess();
+		});
+	}
+}
+
+function showResumeModal() {
+	const resumeModalOverlay = document.getElementById('resume-modal-overlay');
+	if (resumeModalOverlay) {
+		resumeModalOverlay.classList.add('visible');
+		document.body.style.overflow = 'hidden'; // Prevent background scrolling
+	}
+}
+
+function hideResumeModal() {
+	const resumeModalOverlay = document.getElementById('resume-modal-overlay');
+	if (resumeModalOverlay) {
+		resumeModalOverlay.classList.remove('visible');
+		document.body.style.overflow = ''; // Restore scrolling
+	}
+}
+
+function showDownloadSuccess() {
+	const feedback = document.createElement('div');
+	feedback.className = 'download-feedback';
+	
+	feedback.innerHTML = `
+		<i class="fas fa-download"></i>
+		<span>Resume download started!</span>
+	`;
+	feedback.style.cssText = `
+		position: fixed;
+		top: 100px;
+		right: 20px;
+		background: rgba(101, 255, 204, 0.9);
+		color: #1a1a1a;
+		padding: 12px 20px;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-weight: 600;
+		z-index: 10000;
+		transform: translateX(100%);
+		transition: transform 0.3s ease;
+		backdrop-filter: blur(10px);
+		box-shadow: 0 4px 16px rgba(101, 255, 204, 0.3);
+	`;
+	
+	document.body.appendChild(feedback);
+	
+	// Animate in
+	setTimeout(() => {
+		feedback.style.transform = 'translateX(0)';
+	}, 100);
+	
+	// Remove after 3 seconds
+	setTimeout(() => {
+		feedback.style.transform = 'translateX(100%)';
+		setTimeout(() => {
+			feedback.remove();
+		}, 300);
+	}, 3000);
+}
+
+// =================================
+// CONTACT MODAL FUNCTIONALITY
+// =================================
+function initContactModal() {
+	const contactModalOverlay = document.getElementById('contact-modal-overlay');
+	const contactModalClose = document.getElementById('contact-modal-close');
+	const contactOptions = document.querySelectorAll('.contact-option');
+	
+	if (!contactModalOverlay) {
+		console.warn('Contact modal overlay not found');
+		return;
+	}
+	
+	// Close modal when clicking the close button
+	if (contactModalClose) {
+		contactModalClose.addEventListener('click', hideContactModal);
+	}
+	
+	// Close modal when clicking the overlay
+	contactModalOverlay.addEventListener('click', (e) => {
+		if (e.target === contactModalOverlay) {
+			hideContactModal();
+		}
+	});
+	
+	// Close modal with Escape key
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && contactModalOverlay.classList.contains('visible')) {
+			hideContactModal();
+		}
+	});
+	
+	// Handle contact option clicks
+	contactOptions.forEach(option => {
+		option.addEventListener('click', () => {
+			const action = option.dataset.action;
+			handleContactAction(action);
+		});
+	});
+}
+
+function showContactModal() {
+	const contactModalOverlay = document.getElementById('contact-modal-overlay');
+	if (contactModalOverlay) {
+		contactModalOverlay.classList.add('visible');
+		document.body.style.overflow = 'hidden';
+	}
+}
+
+function hideContactModal() {
+	const contactModalOverlay = document.getElementById('contact-modal-overlay');
+	if (contactModalOverlay) {
+		contactModalOverlay.classList.remove('visible');
+		document.body.style.overflow = '';
+	}
+}
+
+function handleContactAction(action) {
+	switch (action) {
+		case 'scroll':
+			hideContactModal();
+			// Scroll to contact form
+			const contactSection = document.getElementById('contact');
+			if (contactSection) {
+				contactSection.scrollIntoView({ behavior: 'smooth' });
+			}
+			break;
+		case 'email':
+			window.open('mailto:shivamattri2335@gmail.com', '_blank');
+			hideContactModal();
+			break;
+		case 'linkedin':
+			window.open('https://linkedin.com/in/shivam-attri23', '_blank');
+			hideContactModal();
+			break;
+		case 'github':
+			window.open('https://github.com/Shivam8286', '_blank');
+			hideContactModal();
+			break;
+		case 'copy-email':
+			navigator.clipboard.writeText('shivamattri2335@gmail.com').then(() => {
+				showCopySuccess();
+				hideContactModal();
+			});
+			break;
+		case 'smart':
+			// Smart contact - detect device and choose best option
+			if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				// Mobile device - try to open email app
+				window.open('mailto:shivamattri2335@gmail.com', '_blank');
+			} else {
+				// Desktop - copy email
+				navigator.clipboard.writeText('shivamattri2335@gmail.com').then(() => {
+					showCopySuccess();
+				});
+			}
+			hideContactModal();
+			break;
+	}
+}
+
+function showCopySuccess() {
+	const feedback = document.createElement('div');
+	feedback.className = 'copy-feedback';
+	
+	feedback.innerHTML = `
+		<i class="fas fa-check-circle"></i>
+		<span>Email copied to clipboard!</span>
+	`;
+	feedback.style.cssText = `
+		position: fixed;
+		top: 100px;
+		right: 20px;
+		background: rgba(101, 255, 204, 0.9);
+		color: #1a1a1a;
+		padding: 12px 20px;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-weight: 600;
+		z-index: 10000;
+		transform: translateX(100%);
+		transition: transform 0.3s ease;
+		backdrop-filter: blur(10px);
+		box-shadow: 0 4px 16px rgba(101, 255, 204, 0.3);
+	`;
+	
+	document.body.appendChild(feedback);
+	
+	// Animate in
+	setTimeout(() => {
+		feedback.style.transform = 'translateX(0)';
+	}, 100);
+	
+	// Remove after 3 seconds
+	setTimeout(() => {
+		feedback.style.transform = 'translateX(100%)';
+		setTimeout(() => {
+			feedback.remove();
+		}, 300);
+	}, 3000);
+}
+
+// =================================
+// ENHANCED CONTACT BUTTON HANDLER
+// =================================
+function handleContactButtonClick() {
+	showContactModal();
+}
+
+// =================================
+// RESUME DOWNLOAD HANDLER
+// =================================
+function initResumeDownload() {
+	const resumeDownloadBtn = document.getElementById('resume-download-btn');
+	if (resumeDownloadBtn) {
+		// Remove the href and target attributes to prevent direct download
+		resumeDownloadBtn.removeAttribute('href');
+		resumeDownloadBtn.removeAttribute('target');
+		
+		// Add click handler to show modal instead
+		resumeDownloadBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			showResumeModal();
+		});
+	}
+}
+
+// =================================
+// CONTACT ANALYTICS
+// =================================
+function initContactAnalytics() {
+	// Track contact button clicks
+	const contactBtn = document.querySelector('.contact-btn');
+	if (contactBtn) {
+		contactBtn.addEventListener('click', () => {
+			trackContactClick('contact_button');
+		});
+	}
+	
+	// Track resume button clicks
+	const resumeBtn = document.getElementById('resume-download-btn');
+	if (resumeBtn) {
+		resumeBtn.addEventListener('click', () => {
+			trackContactClick('resume_button');
+		});
+	}
+}
+
+function trackContactClick(action) {
+	// You can add analytics tracking here
+	console.log(`Contact action tracked: ${action}`);
+	// Example: gtag('event', 'contact_click', { 'action': action });
+}
+
+// Language Switcher Functionality
