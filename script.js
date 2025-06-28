@@ -190,6 +190,23 @@ document.addEventListener("DOMContentLoaded", function() {
 	initLanguageSelector();
 	initScrollAnimations();
 	initPerformanceOptimizations();
+
+	// Enhanced Contact Button Functionality
+	const contactBtn = document.querySelector('.contact-btn');
+	if (contactBtn) {
+		contactBtn.addEventListener('click', handleContactButtonClick);
+		
+		// Add hover effects
+		contactBtn.addEventListener('mouseenter', () => {
+			contactBtn.style.transform = 'scale(1.05)';
+			contactBtn.style.boxShadow = '0 8px 32px rgba(171, 137, 255, 0.5)';
+		});
+		
+		contactBtn.addEventListener('mouseleave', () => {
+			contactBtn.style.transform = 'scale(1)';
+			contactBtn.style.boxShadow = '0 4px 24px #ab89ff33';
+		});
+	}
 });
 
 // Smooth scrolling function
@@ -1432,4 +1449,50 @@ function translateWebsite(lang) {
 	} catch (error) {
 		console.error('Error during translation:', error);
 	}
+}
+
+// Contact button click handler
+function handleContactButtonClick() {
+	const contactBtn = document.querySelector('.contact-btn');
+	
+	// Add loading state
+	const originalText = contactBtn.textContent;
+	contactBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+	contactBtn.disabled = true;
+	
+	// Simulate loading for better UX
+	setTimeout(() => {
+		const contactSection = document.querySelector('#contact');
+		if (contactSection) {
+			// Smooth scroll to contact section
+			contactSection.scrollIntoView({
+				behavior: 'smooth',
+				block: 'start'
+			});
+			
+			// Add success feedback
+			contactBtn.innerHTML = '<i class="fas fa-check"></i> Success!';
+			contactBtn.style.background = 'linear-gradient(90deg, #65ffcc, #4CAF50)';
+			
+			// Reset button after 2 seconds
+			setTimeout(() => {
+				contactBtn.innerHTML = originalText;
+				contactBtn.style.background = 'linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%)';
+				contactBtn.disabled = false;
+			}, 2000);
+			
+			// Focus on the name input after scrolling
+			setTimeout(() => {
+				const nameInput = document.getElementById('name');
+				if (nameInput) {
+					nameInput.focus();
+					// Add highlight effect to the contact section
+					contactSection.style.boxShadow = '0 0 50px rgba(171, 137, 255, 0.3)';
+					setTimeout(() => {
+						contactSection.style.boxShadow = '';
+					}, 3000);
+				}
+			}, 1000);
+		}
+	}, 500);
 }
