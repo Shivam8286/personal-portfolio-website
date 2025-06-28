@@ -304,7 +304,7 @@
             <li><i class="fas fa-cloud"></i> <span data-translate="about-fact-2">Cloud Computing Explorer</span></li>
             <li><i class="fas fa-rocket"></i> <span data-translate="about-fact-3">Always learning new tech</span></li>
           </ul>
-          <a href="YOUR_RESUME_LINK.pdf" class="about-btn" target="_blank"><i class="fas fa-download"></i> <span data-translate="about-resume-btn">Download Resume</span></a>
+          <a href="resume.pdf" class="about-btn" target="_blank" id="resume-download-btn"><i class="fas fa-download"></i> <span data-translate="about-resume-btn">Download Resume</span></a>
         </div>
       </div>
     </section>
@@ -390,6 +390,113 @@
             </div>
         </div>
       </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="contact-modal-overlay" id="contact-modal-overlay">
+        <div class="contact-modal" id="contact-modal">
+            <div class="contact-modal-header">
+                <h3 data-translate="contact-modal-title">Get In Touch</h3>
+                <button class="contact-modal-close" id="contact-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="contact-modal-content">
+                <div class="contact-options-grid">
+                    <div class="contact-option" data-action="scroll">
+                        <i class="fas fa-envelope-open-text"></i>
+                        <span data-translate="contact-option-form">Contact Form</span>
+                        <small data-translate="contact-option-form-desc">Send me a message</small>
+                    </div>
+                    <div class="contact-option" data-action="email">
+                        <i class="fas fa-envelope"></i>
+                        <span data-translate="contact-option-email">Email</span>
+                        <small data-translate="contact-option-email-desc">shivamattri2335@gmail.com</small>
+                    </div>
+                    <div class="contact-option" data-action="linkedin">
+                        <i class="fab fa-linkedin"></i>
+                        <span data-translate="contact-option-linkedin">LinkedIn</span>
+                        <small data-translate="contact-option-linkedin-desc">Professional profile</small>
+                    </div>
+                    <div class="contact-option" data-action="github">
+                        <i class="fab fa-github"></i>
+                        <span data-translate="contact-option-github">GitHub</span>
+                        <small data-translate="contact-option-github-desc">View my projects</small>
+                    </div>
+                    <div class="contact-option" data-action="copy-email">
+                        <i class="fas fa-copy"></i>
+                        <span data-translate="contact-option-copy">Copy Email</span>
+                        <small data-translate="contact-option-copy-desc">Copy to clipboard</small>
+                    </div>
+                    <div class="contact-option" data-action="smart">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span data-translate="contact-option-smart">Smart Contact</span>
+                        <small data-translate="contact-option-smart-desc">Best option for your device</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Success Notification -->
+    <div class="contact-notification" id="contact-notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text"></span>
+    </div>
+
+    <!-- Resume Preview Modal -->
+    <div class="resume-modal-overlay" id="resume-modal-overlay">
+        <div class="resume-modal" id="resume-modal">
+            <div class="resume-modal-header">
+                <h3><i class="fas fa-file-alt"></i> <span data-translate="resume-modal-title">Resume Preview</span></h3>
+                <button class="resume-modal-close" id="resume-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="resume-modal-content">
+                <div class="resume-preview">
+                    <div class="resume-info">
+                        <h4 data-translate="resume-name">Shivam Attri</h4>
+                        <p class="resume-title" data-translate="resume-title">Frontend Developer & Cloud Enthusiast</p>
+                        <div class="resume-highlights">
+                            <div class="highlight-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>shivamattri2335@gmail.com</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fab fa-linkedin"></i>
+                                <span>linkedin.com/in/shivam-attri23</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fab fa-github"></i>
+                                <span>github.com/Shivam8286</span>
+                            </div>
+                        </div>
+                        <div class="resume-skills-preview">
+                            <h5 data-translate="resume-skills-title">Key Skills</h5>
+                            <div class="skills-tags">
+                                <span>JavaScript</span>
+                                <span>React</span>
+                                <span>HTML/CSS</span>
+                                <span>Python</span>
+                                <span>C++</span>
+                                <span>Cloud Computing</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="resume-actions">
+                        <button class="resume-download-btn" id="modal-resume-download">
+                            <i class="fas fa-download"></i>
+                            <span data-translate="resume-download-btn">Download Full Resume</span>
+                        </button>
+                        <button class="resume-close-btn" onclick="hideResumeModal()">
+                            <i class="fas fa-times"></i>
+                            <span data-translate="resume-close-btn">Close</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 	<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>

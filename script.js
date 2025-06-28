@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	initScrollAnimations();
 	initPerformanceOptimizations();
 
-	// Enhanced Contact Button Functionality
+	// Enhanced Contact Button Functionality - All Features Combined
 	const contactBtn = document.querySelector('.contact-btn');
 	if (contactBtn) {
 		contactBtn.addEventListener('click', handleContactButtonClick);
@@ -207,6 +207,15 @@ document.addEventListener("DOMContentLoaded", function() {
 			contactBtn.style.boxShadow = '0 4px 24px #ab89ff33';
 		});
 	}
+	
+	// Initialize contact modal
+	initContactModal();
+	
+	// Initialize contact analytics
+	initContactAnalytics();
+	
+	// Initialize resume functionality
+	initResumeDownload();
 });
 
 // Smooth scrolling function
@@ -1175,6 +1184,21 @@ const translations = {
 		'contact-message-placeholder': 'Your Message',
 		'contact-send-btn': 'Send Message',
 		
+		// Contact Modal
+		'contact-modal-title': 'Get In Touch',
+		'contact-option-form': 'Contact Form',
+		'contact-option-form-desc': 'Send me a message',
+		'contact-option-email': 'Email',
+		'contact-option-email-desc': 'shivamattri2335@gmail.com',
+		'contact-option-linkedin': 'LinkedIn',
+		'contact-option-linkedin-desc': 'Professional profile',
+		'contact-option-github': 'GitHub',
+		'contact-option-github-desc': 'View my projects',
+		'contact-option-copy': 'Copy Email',
+		'contact-option-copy-desc': 'Copy to clipboard',
+		'contact-option-smart': 'Smart Contact',
+		'contact-option-smart-desc': 'Best option for your device',
+		
 		// Footer
 		'footer-copyright': 'All Rights Reserved.',
 		'footer-home': 'Home',
@@ -1232,6 +1256,19 @@ const translations = {
 		'contact-email-placeholder': 'Tu Email',
 		'contact-message-placeholder': 'Tu Mensaje',
 		'contact-send-btn': 'Enviar Mensaje',
+		'contact-modal-title': 'Ponte en Contacto',
+		'contact-option-form': 'Formulario de Contacto',
+		'contact-option-form-desc': 'Envíame un mensaje',
+		'contact-option-email': 'Email',
+		'contact-option-email-desc': 'shivamattri2335@gmail.com',
+		'contact-option-linkedin': 'LinkedIn',
+		'contact-option-linkedin-desc': 'Perfil profesional',
+		'contact-option-github': 'GitHub',
+		'contact-option-github-desc': 'Ver mis proyectos',
+		'contact-option-copy': 'Copiar Email',
+		'contact-option-copy-desc': 'Copiar al portapapeles',
+		'contact-option-smart': 'Contacto Inteligente',
+		'contact-option-smart-desc': 'Mejor opción para tu dispositivo',
 		'footer-copyright': 'Todos los Derechos Reservados.',
 		'footer-home': 'Inicio',
 		'footer-about': 'Sobre Mí',
@@ -1284,6 +1321,19 @@ const translations = {
 		'contact-email-placeholder': 'Votre Email',
 		'contact-message-placeholder': 'Votre Message',
 		'contact-send-btn': 'Envoyer le Message',
+		'contact-modal-title': 'Entrez en Contact',
+		'contact-option-form': 'Formulaire de Contact',
+		'contact-option-form-desc': 'Envoyez-moi un message',
+		'contact-option-email': 'Email',
+		'contact-option-email-desc': 'shivamattri2335@gmail.com',
+		'contact-option-linkedin': 'LinkedIn',
+		'contact-option-linkedin-desc': 'Profil professionnel',
+		'contact-option-github': 'GitHub',
+		'contact-option-github-desc': 'Voir mes projets',
+		'contact-option-copy': 'Copier Email',
+		'contact-option-copy-desc': 'Copier dans le presse-papiers',
+		'contact-option-smart': 'Contact Intelligent',
+		'contact-option-smart-desc': 'Meilleure option pour votre appareil',
 		'footer-copyright': 'Tous Droits Réservés.',
 		'footer-home': 'Accueil',
 		'footer-about': 'À Propos',
@@ -1336,6 +1386,19 @@ const translations = {
 		'contact-email-placeholder': 'Deine Email',
 		'contact-message-placeholder': 'Deine Nachricht',
 		'contact-send-btn': 'Nachricht Senden',
+		'contact-modal-title': 'Kontaktiere Mich',
+		'contact-option-form': 'Kontaktformular',
+		'contact-option-form-desc': 'Sende mir eine Nachricht',
+		'contact-option-email': 'Email',
+		'contact-option-email-desc': 'shivamattri2335@gmail.com',
+		'contact-option-linkedin': 'LinkedIn',
+		'contact-option-linkedin-desc': 'Professionelles Profil',
+		'contact-option-github': 'GitHub',
+		'contact-option-github-desc': 'Meine Projekte ansehen',
+		'contact-option-copy': 'Email Kopieren',
+		'contact-option-copy-desc': 'In Zwischenablage kopieren',
+		'contact-option-smart': 'Intelligenter Kontakt',
+		'contact-option-smart-desc': 'Beste Option für dein Gerät',
 		'footer-copyright': 'Alle Rechte Vorbehalten.',
 		'footer-home': 'Startseite',
 		'footer-about': 'Über Mich',
@@ -1388,6 +1451,19 @@ const translations = {
 		'contact-email-placeholder': 'आपका ईमेल',
 		'contact-message-placeholder': 'आपका संदेश',
 		'contact-send-btn': 'संदेश भेजें',
+		'contact-modal-title': 'संपर्क करें',
+		'contact-option-form': 'संपर्क फॉर्म',
+		'contact-option-form-desc': 'मुझे संदेश भेजें',
+		'contact-option-email': 'ईमेल',
+		'contact-option-email-desc': 'shivamattri2335@gmail.com',
+		'contact-option-linkedin': 'लिंक्डइन',
+		'contact-option-linkedin-desc': 'पेशेवर प्रोफाइल',
+		'contact-option-github': 'गिटहब',
+		'contact-option-github-desc': 'मेरे प्रोजेक्ट देखें',
+		'contact-option-copy': 'ईमेल कॉपी करें',
+		'contact-option-copy-desc': 'क्लिपबोर्ड पर कॉपी करें',
+		'contact-option-smart': 'स्मार्ट संपर्क',
+		'contact-option-smart-desc': 'आपके डिवाइस के लिए सर्वोत्तम विकल्प',
 		'footer-copyright': 'सर्वाधिकार सुरक्षित।',
 		'footer-home': 'होम',
 		'footer-about': 'मेरे बारे में',
@@ -1451,48 +1527,367 @@ function translateWebsite(lang) {
 	}
 }
 
-// Contact button click handler
+// Contact button click handler - All features combined
 function handleContactButtonClick() {
 	const contactBtn = document.querySelector('.contact-btn');
+	
+	// Track analytics
+	trackContactClick('hero_button');
 	
 	// Add loading state
 	const originalText = contactBtn.textContent;
 	contactBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
 	contactBtn.disabled = true;
 	
-	// Simulate loading for better UX
+	// Show contact modal with options
+	setTimeout(() => {
+		showContactModal();
+		
+		// Reset button
+		contactBtn.innerHTML = originalText;
+		contactBtn.style.background = 'linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%)';
+		contactBtn.disabled = false;
+	}, 500);
+}
+
+// Initialize contact modal functionality
+function initContactModal() {
+	const modalOverlay = document.getElementById('contact-modal-overlay');
+	const modal = document.getElementById('contact-modal');
+	const closeBtn = document.getElementById('contact-modal-close');
+	const contactOptions = document.querySelectorAll('.contact-option');
+	
+	// Close modal handlers
+	closeBtn.addEventListener('click', hideContactModal);
+	modalOverlay.addEventListener('click', (e) => {
+		if (e.target === modalOverlay) {
+			hideContactModal();
+		}
+	});
+	
+	// Close on escape key
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
+			hideContactModal();
+		}
+	});
+	
+	// Handle contact option clicks
+	contactOptions.forEach(option => {
+		option.addEventListener('click', () => {
+			const action = option.getAttribute('data-action');
+			handleContactAction(action);
+		});
+	});
+}
+
+// Show contact modal
+function showContactModal() {
+	const modalOverlay = document.getElementById('contact-modal-overlay');
+	modalOverlay.classList.add('visible');
+	document.body.style.overflow = 'hidden';
+}
+
+// Hide contact modal
+function hideContactModal() {
+	const modalOverlay = document.getElementById('contact-modal-overlay');
+	modalOverlay.classList.remove('visible');
+	document.body.style.overflow = '';
+}
+
+// Handle different contact actions
+function handleContactAction(action) {
+	hideContactModal();
+	
+	switch(action) {
+		case 'scroll':
+			scrollToContactForm();
+			break;
+		case 'email':
+			openEmailClient();
+			break;
+		case 'linkedin':
+			openLinkedIn();
+			break;
+		case 'github':
+			openGitHub();
+			break;
+		case 'copy-email':
+			copyEmailToClipboard();
+			break;
+		case 'smart':
+			smartContact();
+			break;
+		default:
+			console.warn('Unknown contact action:', action);
+	}
+}
+
+// Scroll to contact form
+function scrollToContactForm() {
+	const contactSection = document.querySelector('#contact');
+	if (contactSection) {
+		contactSection.scrollIntoView({
+			behavior: 'smooth',
+			block: 'start'
+		});
+		
+		// Focus on name input after scrolling
+		setTimeout(() => {
+			const nameInput = document.getElementById('name');
+			if (nameInput) {
+				nameInput.focus();
+				// Add highlight effect
+				contactSection.style.boxShadow = '0 0 50px rgba(171, 137, 255, 0.3)';
+				setTimeout(() => {
+					contactSection.style.boxShadow = '';
+				}, 3000);
+			}
+		}, 1000);
+		
+		showNotification('Scrolled to contact form!');
+		trackContactClick('scroll_to_form');
+	}
+}
+
+// Open email client
+function openEmailClient() {
+	const email = 'shivamattri2335@gmail.com';
+	const subject = 'Portfolio Contact';
+	const body = 'Hi Shivam,\n\nI would like to discuss...';
+	
+	window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+	
+	showNotification('Opening email client...');
+	trackContactClick('email_client');
+}
+
+// Open LinkedIn
+function openLinkedIn() {
+	window.open('https://linkedin.com/in/shivam-attri23', '_blank');
+	showNotification('Opening LinkedIn profile...');
+	trackContactClick('linkedin');
+}
+
+// Open GitHub
+function openGitHub() {
+	window.open('https://github.com/Shivam8286', '_blank');
+	showNotification('Opening GitHub profile...');
+	trackContactClick('github');
+}
+
+// Copy email to clipboard
+async function copyEmailToClipboard() {
+	const email = 'shivamattri2335@gmail.com';
+	
+	try {
+		await navigator.clipboard.writeText(email);
+		showNotification('Email copied to clipboard!');
+		trackContactClick('copy_email');
+	} catch (err) {
+		console.error('Failed to copy email:', err);
+		showNotification('Failed to copy email', 'error');
+	}
+}
+
+// Smart contact detection
+function smartContact() {
+	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	const isTablet = /iPad|Android/i.test(navigator.userAgent) && window.innerWidth >= 768;
+	
+	if (isMobile) {
+		// On mobile, prefer email client
+		openEmailClient();
+		trackContactClick('smart_mobile');
+	} else if (isTablet) {
+		// On tablet, show contact form
+		scrollToContactForm();
+		trackContactClick('smart_tablet');
+	} else {
+		// On desktop, show contact modal again or copy email
+		copyEmailToClipboard();
+		trackContactClick('smart_desktop');
+	}
+}
+
+// Show notification
+function showNotification(message, type = 'success') {
+	const notification = document.getElementById('contact-notification');
+	const notificationText = document.getElementById('notification-text');
+	
+	notificationText.textContent = message;
+	
+	// Set notification type
+	notification.className = 'contact-notification';
+	if (type === 'error') {
+		notification.style.background = 'rgba(255, 101, 132, 0.95)';
+		notification.querySelector('i').className = 'fas fa-exclamation-circle';
+		notification.querySelector('i').style.color = '#ff6584';
+	} else if (type === 'info') {
+		notification.style.background = 'rgba(101, 153, 255, 0.95)';
+		notification.querySelector('i').className = 'fas fa-info-circle';
+		notification.querySelector('i').style.color = '#6599ff';
+	} else {
+		notification.style.background = 'rgba(101, 255, 204, 0.95)';
+		notification.querySelector('i').className = 'fas fa-check-circle';
+		notification.querySelector('i').style.color = '#00a86b';
+	}
+	
+	// Show notification
+	notification.classList.add('visible');
+	
+	// Hide after 3 seconds
+	setTimeout(() => {
+		notification.classList.remove('visible');
+	}, 3000);
+}
+
+// Initialize contact analytics
+function initContactAnalytics() {
+	// Create analytics storage if it doesn't exist
+	if (!localStorage.getItem('contactAnalytics')) {
+		localStorage.setItem('contactAnalytics', JSON.stringify({
+			totalClicks: 0,
+			actions: {},
+			lastClick: null
+		}));
+	}
+}
+
+// Track contact clicks
+function trackContactClick(action) {
+	try {
+		const analytics = JSON.parse(localStorage.getItem('contactAnalytics'));
+		
+		analytics.totalClicks++;
+		analytics.actions[action] = (analytics.actions[action] || 0) + 1;
+		analytics.lastClick = new Date().toISOString();
+		
+		localStorage.setItem('contactAnalytics', JSON.stringify(analytics));
+		
+		// Log analytics (in real app, send to analytics service)
+		console.log('Contact Analytics:', analytics);
+		
+	} catch (error) {
+		console.error('Failed to track contact click:', error);
+	}
+}
+
+// Get contact analytics (for debugging)
+function getContactAnalytics() {
+	try {
+		return JSON.parse(localStorage.getItem('contactAnalytics'));
+	} catch (error) {
+		console.error('Failed to get contact analytics:', error);
+		return null;
+	}
+}
+
+// =================================
+// ENHANCED RESUME DOWNLOAD SYSTEM
+// =================================
+function initResumeDownload() {
+	const resumeBtn = document.getElementById('resume-download-btn');
+	if (!resumeBtn) return;
+	
+	// Check if resume file exists
+	checkResumeFile();
+	
+	// Add click handler with enhanced functionality
+	resumeBtn.addEventListener('click', handleResumeDownload);
+	
+	// Add hover effects
+	resumeBtn.addEventListener('mouseenter', () => {
+		resumeBtn.style.transform = 'scale(1.05)';
+		resumeBtn.style.boxShadow = '0 8px 32px rgba(171, 137, 255, 0.5)';
+	});
+	
+	resumeBtn.addEventListener('mouseleave', () => {
+		resumeBtn.style.transform = 'scale(1)';
+		resumeBtn.style.boxShadow = '0 2px 8px #ab89ff33';
+	});
+}
+
+// Check if resume file exists
+async function checkResumeFile() {
+	const resumeBtn = document.getElementById('resume-download-btn');
+	const resumeUrl = 'resume.pdf';
+	
+	try {
+		const response = await fetch(resumeUrl, { method: 'HEAD' });
+		if (!response.ok) {
+			// File doesn't exist, show alternative
+			resumeBtn.href = '#';
+			resumeBtn.onclick = (e) => {
+				e.preventDefault();
+				showResumeNotAvailable();
+			};
+			resumeBtn.style.opacity = '0.7';
+			resumeBtn.title = 'Resume not available - Contact me for details';
+		}
+	} catch (error) {
+		console.log('Resume file not found, using fallback');
+		// File doesn't exist, show alternative
+		resumeBtn.href = '#';
+		resumeBtn.onclick = (e) => {
+			e.preventDefault();
+			showResumeNotAvailable();
+		};
+		resumeBtn.style.opacity = '0.7';
+		resumeBtn.title = 'Resume not available - Contact me for details';
+	}
+}
+
+// Handle resume download
+function handleResumeDownload(e) {
+	// Track download
+	trackResumeDownload();
+	
+	// Add loading state
+	const originalText = e.target.innerHTML;
+	e.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Downloading...';
+	e.target.style.pointerEvents = 'none';
+	
+	// Simulate download delay for better UX
+	setTimeout(() => {
+		// Reset button
+		e.target.innerHTML = originalText;
+		e.target.style.pointerEvents = '';
+		
+		// Show success notification
+		showNotification('Resume download started!');
+		
+		// Add success effect
+		e.target.style.background = 'linear-gradient(90deg, #65ffcc, #4CAF50)';
+		setTimeout(() => {
+			e.target.style.background = 'linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%)';
+		}, 2000);
+		
+	}, 1000);
+}
+
+// Show resume not available message
+function showResumeNotAvailable() {
+	showNotification('Resume not available. Please contact me for details!', 'info');
+	
+	// Optionally scroll to contact section
 	setTimeout(() => {
 		const contactSection = document.querySelector('#contact');
 		if (contactSection) {
-			// Smooth scroll to contact section
-			contactSection.scrollIntoView({
-				behavior: 'smooth',
-				block: 'start'
-			});
-			
-			// Add success feedback
-			contactBtn.innerHTML = '<i class="fas fa-check"></i> Success!';
-			contactBtn.style.background = 'linear-gradient(90deg, #65ffcc, #4CAF50)';
-			
-			// Reset button after 2 seconds
-			setTimeout(() => {
-				contactBtn.innerHTML = originalText;
-				contactBtn.style.background = 'linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%)';
-				contactBtn.disabled = false;
-			}, 2000);
-			
-			// Focus on the name input after scrolling
-			setTimeout(() => {
-				const nameInput = document.getElementById('name');
-				if (nameInput) {
-					nameInput.focus();
-					// Add highlight effect to the contact section
-					contactSection.style.boxShadow = '0 0 50px rgba(171, 137, 255, 0.3)';
-					setTimeout(() => {
-						contactSection.style.boxShadow = '';
-					}, 3000);
-				}
-			}, 1000);
+			contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 		}
-	}, 500);
+	}, 1500);
+}
+
+// Track resume downloads
+function trackResumeDownload() {
+	try {
+		const analytics = JSON.parse(localStorage.getItem('contactAnalytics') || '{}');
+		analytics.resumeDownloads = (analytics.resumeDownloads || 0) + 1;
+		analytics.lastResumeDownload = new Date().toISOString();
+		localStorage.setItem('contactAnalytics', JSON.stringify(analytics));
+		console.log('Resume download tracked:', analytics);
+	} catch (error) {
+		console.error('Failed to track resume download:', error);
+	}
 }
