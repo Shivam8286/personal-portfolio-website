@@ -1,10 +1,6 @@
 // Preloader Logic
 window.addEventListener('load', () => {
-	const preloader = document.querySelector('.preloader');
-	// Add a minimum delay to ensure the loader is visible
-	setTimeout(() => {
-		preloader.classList.add('hidden');
-	}, 500);
+	initEnhancedPreloader();
 });
 
 // Wait for the DOM to be fully loaded
@@ -187,9 +183,15 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 	});
 
+	// Initialize all new features
 	lazyLoadImages();
 	initAdvancedThemeToggle();
 	initProjectModals();
+	init3DCardEffects();
+	initParallaxEffects();
+	initMicroInteractions();
+	initScrollAnimations();
+	initPerformanceOptimizations();
 });
 
 // Smooth scrolling function
@@ -730,4 +732,260 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initAdvancedThemeToggle);
 } else {
   initAdvancedThemeToggle();
+}
+
+// =================================
+// ENHANCED PRELOADER & LOADING ANIMATIONS
+// =================================
+function initEnhancedPreloader() {
+	const preloader = document.querySelector('.preloader');
+	const progressFill = document.querySelector('.progress-fill');
+	const loadingText = document.querySelector('.loading-text');
+	
+	if (!preloader) return;
+	
+	// Simulate loading progress
+	let progress = 0;
+	const progressInterval = setInterval(() => {
+		progress += Math.random() * 15;
+		if (progress >= 100) {
+			progress = 100;
+			clearInterval(progressInterval);
+			
+			// Hide preloader after completion
+			setTimeout(() => {
+				preloader.classList.add('hidden');
+				initSkeletonLoading();
+			}, 500);
+		}
+		
+		progressFill.style.width = `${progress}%`;
+	}, 100);
+	
+	// Update loading text
+	const loadingMessages = [
+		'Loading your experience...',
+		'Preparing amazing content...',
+		'Almost there...',
+		'Welcome to my portfolio!'
+	];
+	
+	let messageIndex = 0;
+	const textInterval = setInterval(() => {
+		if (progress >= 100) {
+			clearInterval(textInterval);
+			return;
+		}
+		
+		loadingText.style.opacity = '0';
+		setTimeout(() => {
+			loadingText.textContent = loadingMessages[messageIndex];
+			loadingText.style.opacity = '1';
+			messageIndex = (messageIndex + 1) % loadingMessages.length;
+		}, 200);
+	}, 800);
+}
+
+// =================================
+// SKELETON LOADING SYSTEM
+// =================================
+function initSkeletonLoading() {
+	const skeletons = document.querySelectorAll('.project-skeleton');
+	const projectCards = document.querySelectorAll('.project-card-glass');
+	
+	// Show skeletons first
+	skeletons.forEach((skeleton, index) => {
+		setTimeout(() => {
+			skeleton.style.display = 'flex';
+		}, index * 200);
+	});
+	
+	// Replace skeletons with actual content
+	setTimeout(() => {
+		skeletons.forEach((skeleton, index) => {
+			skeleton.style.opacity = '0';
+			skeleton.style.transform = 'translateY(20px)';
+			
+			setTimeout(() => {
+				skeleton.style.display = 'none';
+				if (projectCards[index]) {
+					projectCards[index].style.opacity = '0';
+					projectCards[index].style.transform = 'translateY(20px)';
+					projectCards[index].style.display = 'flex';
+					
+					setTimeout(() => {
+						projectCards[index].style.opacity = '1';
+						projectCards[index].style.transform = 'translateY(0)';
+					}, 100);
+				}
+			}, 300);
+		});
+	}, 1500);
+}
+
+// =================================
+// 3D CARD TILT EFFECTS
+// =================================
+function init3DCardEffects() {
+	const cards = document.querySelectorAll('.project-card-glass, .glass-card');
+	
+	cards.forEach(card => {
+		const tiltMax = parseInt(card.dataset.tiltMax) || 10;
+		const tiltScale = parseFloat(card.dataset.tiltScale) || 1.05;
+		
+		card.addEventListener('mousemove', (e) => {
+			const rect = card.getBoundingClientRect();
+			const x = e.clientX - rect.left;
+			const y = e.clientY - rect.top;
+			
+			const centerX = rect.width / 2;
+			const centerY = rect.height / 2;
+			
+			const rotateX = (y - centerY) / centerY * -tiltMax;
+			const rotateY = (x - centerX) / centerX * tiltMax;
+			
+			card.style.setProperty('--tilt-x', `${rotateX}deg`);
+			card.style.setProperty('--tilt-y', `${rotateY}deg`);
+			card.classList.add('tilted');
+		});
+		
+		card.addEventListener('mouseleave', () => {
+			card.classList.remove('tilted');
+			card.style.setProperty('--tilt-x', '0deg');
+			card.style.setProperty('--tilt-y', '0deg');
+		});
+	});
+}
+
+// =================================
+// PARALLAX SCROLLING EFFECTS
+// =================================
+function initParallaxEffects() {
+	const parallaxElements = document.querySelectorAll('[data-parallax]');
+	let ticking = false;
+	
+	function updateParallax() {
+		const scrolled = window.pageYOffset;
+		const rate = scrolled * -0.5;
+		
+		parallaxElements.forEach(element => {
+			const speed = parseFloat(element.dataset.parallax) || 0.5;
+			const yPos = -(scrolled * speed);
+			
+			// Apply parallax transform
+			element.style.transform = `translateY(${yPos}px)`;
+		});
+		
+		ticking = false;
+	}
+	
+	function requestTick() {
+		if (!ticking) {
+			requestAnimationFrame(updateParallax);
+			ticking = true;
+		}
+	}
+	
+	window.addEventListener('scroll', requestTick);
+	window.addEventListener('resize', requestTick);
+	
+	// Initial call
+	updateParallax();
+}
+
+// =================================
+// MICRO-INTERACTIONS & ANIMATIONS
+// =================================
+function initMicroInteractions() {
+	// Staggered animation for skills cards
+	const skillCards = document.querySelectorAll('.glass-card');
+	skillCards.forEach((card, index) => {
+		card.style.animationDelay = `${index * 0.1}s`;
+	});
+	
+	// Typing effect for hero text
+	const typewriterElement = document.querySelector('.typewriter');
+	if (typewriterElement) {
+		const text = typewriterElement.textContent;
+		typewriterElement.textContent = '';
+		
+		let i = 0;
+		const typeInterval = setInterval(() => {
+			if (i < text.length) {
+				typewriterElement.textContent += text.charAt(i);
+				i++;
+			} else {
+				clearInterval(typeInterval);
+			}
+		}, 100);
+	}
+	
+	// Progress bar animations
+	const progressBars = document.querySelectorAll('.progress');
+	progressBars.forEach(bar => {
+		const width = bar.style.width;
+		bar.style.width = '0%';
+		
+		setTimeout(() => {
+			bar.style.transition = 'width 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+			bar.style.width = width;
+		}, 500);
+	});
+	
+	// Floating animation for hero image
+	const heroImage = document.querySelector('.hero-image');
+	if (heroImage) {
+		heroImage.style.animation = 'float 6s ease-in-out infinite';
+	}
+}
+
+// =================================
+// ENHANCED SCROLL ANIMATIONS
+// =================================
+function initScrollAnimations() {
+	const observerOptions = {
+		threshold: 0.1,
+		rootMargin: '0px 0px -50px 0px'
+	};
+	
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach(entry => {
+			if (entry.isIntersecting) {
+				entry.target.classList.add('animate-in');
+			}
+		});
+	}, observerOptions);
+	
+	// Observe elements for scroll animations
+	const animateElements = document.querySelectorAll('.glass-card, .project-card-glass, .about-glass-card, .contact-glass-card');
+	animateElements.forEach(el => {
+		observer.observe(el);
+	});
+}
+
+// =================================
+// PERFORMANCE OPTIMIZED ANIMATIONS
+// =================================
+function initPerformanceOptimizations() {
+	// Use requestAnimationFrame for smooth animations
+	let animationId;
+	
+	function smoothScroll() {
+		// Optimize scroll performance
+		animationId = requestAnimationFrame(smoothScroll);
+	}
+	
+	// Pause animations when tab is not visible
+	document.addEventListener('visibilitychange', () => {
+		if (document.hidden) {
+			cancelAnimationFrame(animationId);
+		} else {
+			animationId = requestAnimationFrame(smoothScroll);
+		}
+	});
+	
+	// Reduce motion for users who prefer it
+	if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		document.body.classList.add('reduced-motion');
+	}
 }
