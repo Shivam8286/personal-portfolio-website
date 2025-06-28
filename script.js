@@ -573,8 +573,8 @@ function initProjectModals() {
 			const imgSrc = card.dataset.imageSrc;
 			const tags = card.dataset.tags.split(',');
 			const status = card.dataset.status;
-			const liveLink = card.dataset.liveLink || '#';
-			const codeLink = card.dataset.codeLink || '#';
+			const liveLink = card.dataset.liveUrl || '#';
+			const codeLink = card.dataset.codeUrl || '#';
 
 			// 2. Populate the modal with the data
 			modalTitle.textContent = title;
