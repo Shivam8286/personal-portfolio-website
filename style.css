@@ -1400,7 +1400,7 @@ header {
   top: 0;
   left: 0;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 99999; /* Increased to be higher than all modals (20000) to ensure visibility */
   border-radius: 50%;
   transform: translate(-50%, -50%);
   mix-blend-mode: difference; /* Creates a cool color-inverting effect */
@@ -2916,4 +2916,315 @@ body.light-mode .contact-option span {
 
 body.light-mode .contact-option small {
 	color: #5a6c7d;
+}
+
+/* Light mode support */
+body.light-mode .contact-option small {
+	color: #5a6c7d;
+}
+
+/* =================================
+   RESUME MODAL & PREVIEW SYSTEM
+   ================================= */
+.resume-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(10, 10, 10, 0.8);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	z-index: 20000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.resume-modal-overlay.visible {
+	opacity: 1;
+	visibility: visible;
+}
+
+.resume-modal {
+	background: rgba(44, 47, 56, 0.95);
+	border: 1.5px solid rgba(171, 137, 255, 0.2);
+	border-radius: 20px;
+	box-shadow: 0 20px 60px rgba(171, 137, 255, 0.3);
+	width: 90%;
+	max-width: 700px;
+	max-height: 85vh;
+	overflow: hidden;
+	transform: scale(0.8) translateY(30px);
+	transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.resume-modal-overlay.visible .resume-modal {
+	transform: scale(1) translateY(0);
+}
+
+.resume-modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 24px 32px;
+	border-bottom: 1px solid rgba(171, 137, 255, 0.2);
+	background: rgba(171, 137, 255, 0.05);
+}
+
+.resume-modal-header h3 {
+	color: #ab89ff;
+	font-size: 1.5em;
+	margin: 0;
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.resume-modal-close {
+	background: rgba(171, 137, 255, 0.1);
+	border: none;
+	color: #fff;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+}
+
+.resume-modal-close:hover {
+	background: #ab89ff;
+	transform: rotate(90deg);
+}
+
+.resume-modal-content {
+	padding: 32px;
+	overflow-y: auto;
+	max-height: calc(85vh - 100px);
+}
+
+.resume-preview {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.resume-info {
+	text-align: center;
+}
+
+.resume-info h4 {
+	color: #ab89ff;
+	font-size: 2.2em;
+	margin-bottom: 8px;
+	font-weight: 700;
+}
+
+.resume-title {
+	color: #e0e0e0;
+	font-size: 1.3em;
+	margin-bottom: 24px;
+	font-weight: 500;
+}
+
+.resume-highlights {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin-bottom: 24px;
+}
+
+.highlight-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	color: #ccc;
+	font-size: 1.1em;
+}
+
+.highlight-item i {
+	color: #ab89ff;
+	font-size: 1.2em;
+	width: 20px;
+}
+
+.resume-skills-preview {
+	margin-top: 24px;
+}
+
+.resume-skills-preview h5 {
+	color: #ab89ff;
+	font-size: 1.4em;
+	margin-bottom: 16px;
+	font-weight: 600;
+}
+
+.skills-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	justify-content: center;
+}
+
+.skills-tags span {
+	background: linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%);
+	color: #fff;
+	padding: 6px 16px;
+	border-radius: 20px;
+	font-size: 0.9em;
+	font-weight: 500;
+	box-shadow: 0 2px 8px rgba(171, 137, 255, 0.3);
+}
+
+.resume-actions {
+	display: flex;
+	gap: 16px;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.resume-download-btn,
+.resume-close-btn {
+	padding: 12px 24px;
+	border: none;
+	border-radius: 12px;
+	font-size: 1.1em;
+	font-weight: 600;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	transition: all 0.3s ease;
+}
+
+.resume-download-btn {
+	background: linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%);
+	color: #fff;
+	box-shadow: 0 4px 16px rgba(171, 137, 255, 0.3);
+}
+
+.resume-download-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 24px rgba(171, 137, 255, 0.4);
+}
+
+.resume-close-btn {
+	background: rgba(171, 137, 255, 0.1);
+	color: #e0e0e0;
+	border: 1px solid rgba(171, 137, 255, 0.3);
+}
+
+.resume-close-btn:hover {
+	background: rgba(171, 137, 255, 0.2);
+	color: #fff;
+}
+
+/* Responsive design for resume modal */
+@media (max-width: 768px) {
+	.resume-modal {
+		width: 95%;
+		margin: 20px;
+	}
+	
+	.resume-modal-header {
+		padding: 20px 24px;
+	}
+	
+	.resume-modal-content {
+		padding: 24px;
+	}
+	
+	.resume-info h4 {
+		font-size: 1.8em;
+	}
+	
+	.resume-title {
+		font-size: 1.1em;
+	}
+	
+	.resume-actions {
+		flex-direction: column;
+	}
+	
+	.resume-download-btn,
+	.resume-close-btn {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+/* Light mode support for resume modal */
+body.light-mode .resume-modal {
+	background: rgba(255, 255, 255, 0.95);
+	border: 1.5px solid rgba(171, 137, 255, 0.3);
+}
+
+body.light-mode .resume-modal-header {
+	background: rgba(171, 137, 255, 0.1);
+	border-bottom: 1px solid rgba(171, 137, 255, 0.3);
+}
+
+body.light-mode .resume-info h4 {
+	color: #ab89ff;
+}
+
+body.light-mode .resume-title {
+	color: #2c3e50;
+}
+
+body.light-mode .highlight-item {
+	color: #5a6c7d;
+}
+
+body.light-mode .resume-close-btn {
+	background: rgba(171, 137, 255, 0.05);
+	color: #5a6c7d;
+	border: 1px solid rgba(171, 137, 255, 0.2);
+}
+
+body.light-mode .resume-close-btn:hover {
+	background: rgba(171, 137, 255, 0.1);
+	color: #2c3e50;
+}
+
+/* Hide the default cursor on the body and interactive elements */
+body, a, button {
+  cursor: none;
+}
+
+/* Ensure cursor is always visible, even over modals */
+.modal-overlay,
+.contact-modal-overlay,
+.resume-modal-overlay {
+  cursor: none;
+}
+
+.modal-overlay *,
+.contact-modal-overlay *,
+.resume-modal-overlay * {
+  cursor: none;
+}
+
+/* Show default cursor for form inputs and textareas for better UX */
+input, textarea, select {
+  cursor: text;
+}
+
+/* Show pointer cursor for clickable elements in modals */
+.modal-content button,
+.contact-modal button,
+.resume-modal button,
+.modal-link-btn,
+.contact-option,
+.resume-download-btn,
+.resume-close-btn {
+  cursor: pointer;
 }

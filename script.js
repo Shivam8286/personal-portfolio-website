@@ -216,6 +216,9 @@ document.addEventListener("DOMContentLoaded", function() {
 	
 	// Initialize resume functionality
 	initResumeDownload();
+	
+	// Initialize resume modal
+	initResumeModal();
 });
 
 // Smooth scrolling function
@@ -1217,7 +1220,15 @@ const translations = {
 		'form-success': 'Thank you! Your message has been sent successfully.',
 		
 		// Language Feedback
-		'lang-changed': 'Language changed to'
+		'lang-changed': 'Language changed to',
+		
+		// Resume Modal
+		'resume-modal-title': 'Resume Preview',
+		'resume-name': 'Shivam Attri',
+		'resume-title': 'Frontend Developer & Cloud Enthusiast',
+		'resume-skills-title': 'Key Skills',
+		'resume-download-btn': 'Download Full Resume',
+		'resume-close-btn': 'Close'
 	},
 	
 	es: {
@@ -1282,7 +1293,13 @@ const translations = {
 		'validation-fix-errors': 'Por favor corrige los errores arriba e intenta de nuevo.',
 		'form-sending': 'Enviando...',
 		'form-success': '¡Gracias! Tu mensaje ha sido enviado exitosamente.',
-		'lang-changed': 'Idioma cambiado a'
+		'lang-changed': 'Idioma cambiado a',
+		'resume-modal-title': 'Vista Previa del CV',
+		'resume-name': 'Shivam Attri',
+		'resume-title': 'Desarrollador Frontend y Entusiasta de la Nube',
+		'resume-skills-title': 'Habilidades Clave',
+		'resume-download-btn': 'Descargar CV Completo',
+		'resume-close-btn': 'Cerrar'
 	},
 	
 	fr: {
@@ -1347,7 +1364,13 @@ const translations = {
 		'validation-fix-errors': 'Veuillez corriger les erreurs ci-dessus et réessayer.',
 		'form-sending': 'Envoi en cours...',
 		'form-success': 'Merci ! Votre message a été envoyé avec succès.',
-		'lang-changed': 'Langue changée vers'
+		'lang-changed': 'Langue changée vers',
+		'resume-modal-title': 'Aperçu du CV',
+		'resume-name': 'Shivam Attri',
+		'resume-title': 'Développeur Frontend et Passionné du Cloud',
+		'resume-skills-title': 'Compétences Clés',
+		'resume-download-btn': 'Télécharger le CV complet',
+		'resume-close-btn': 'Fermer'
 	},
 	
 	de: {
@@ -1412,7 +1435,13 @@ const translations = {
 		'validation-fix-errors': 'Bitte beheben Sie die Fehler oben und versuchen Sie es erneut.',
 		'form-sending': 'Wird gesendet...',
 		'form-success': 'Danke! Ihre Nachricht wurde erfolgreich gesendet.',
-		'lang-changed': 'Sprache geändert zu'
+		'lang-changed': 'Sprache geändert zu',
+		'resume-modal-title': 'Lebenslauf Vorschau',
+		'resume-name': 'Shivam Attri',
+		'resume-title': 'Frontend-Entwickler und Cloud-Enthusiast',
+		'resume-skills-title': 'Schlüsselkompetenzen',
+		'resume-download-btn': 'Lebenslauf vollständig herunterladen',
+		'resume-close-btn': 'Schließen'
 	},
 	
 	hi: {
@@ -1477,7 +1506,13 @@ const translations = {
 		'validation-fix-errors': 'कृपया ऊपर की त्रुटियों को ठीक करें और पुनः प्रयास करें।',
 		'form-sending': 'भेज रहा है...',
 		'form-success': 'धन्यवाद! आपका संदेश सफलतापूर्वक भेज दिया गया है।',
-		'lang-changed': 'भाषा बदली गई'
+		'lang-changed': 'भाषा बदली गई',
+		'resume-modal-title': 'रिज्यूमे व्यूप्रोजेक्ट',
+		'resume-name': 'शिवम अट्ट्री',
+		'resume-title': 'फ्रंटएंड डेवलपर और क्लाउड उत्साही',
+		'resume-skills-title': 'कुंजी कौशल',
+		'resume-download-btn': 'रिज्यूमे वुल डाउनलोड करें',
+		'resume-close-btn': 'बंद करें'
 	}
 };
 
@@ -1788,7 +1823,12 @@ function getContactAnalytics() {
 // =================================
 function initResumeDownload() {
 	const resumeBtn = document.getElementById('resume-download-btn');
-	if (!resumeBtn) return;
+	if (!resumeBtn) {
+		console.error('Resume download button not found!');
+		return;
+	}
+	
+	console.log('Initializing resume download system...');
 	
 	// Check if resume file exists
 	checkResumeFile();
@@ -1806,6 +1846,8 @@ function initResumeDownload() {
 		resumeBtn.style.transform = 'scale(1)';
 		resumeBtn.style.boxShadow = '0 2px 8px #ab89ff33';
 	});
+	
+	console.log('Resume download system initialized successfully');
 }
 
 // Check if resume file exists
@@ -1815,68 +1857,98 @@ async function checkResumeFile() {
 	
 	try {
 		const response = await fetch(resumeUrl, { method: 'HEAD' });
-		if (!response.ok) {
-			// File doesn't exist, show alternative
+		if (response.ok) {
+			// File exists, set up proper download link
+			resumeBtn.href = resumeUrl;
+			resumeBtn.download = 'Shivam_Attri_Resume.pdf';
+			resumeBtn.target = '_blank';
+			resumeBtn.style.opacity = '1';
+			resumeBtn.title = 'Download Resume PDF';
+			console.log('Resume file found and ready for download');
+		} else {
+			// File doesn't exist, show modal preview instead
 			resumeBtn.href = '#';
 			resumeBtn.onclick = (e) => {
 				e.preventDefault();
-				showResumeNotAvailable();
+				showResumeModal();
 			};
-			resumeBtn.style.opacity = '0.7';
-			resumeBtn.title = 'Resume not available - Contact me for details';
+			resumeBtn.style.opacity = '0.9';
+			resumeBtn.title = 'View resume preview';
 		}
 	} catch (error) {
-		console.log('Resume file not found, using fallback');
-		// File doesn't exist, show alternative
+		console.log('Resume file not found, showing modal preview');
+		// File doesn't exist, show modal preview instead
 		resumeBtn.href = '#';
 		resumeBtn.onclick = (e) => {
 			e.preventDefault();
-			showResumeNotAvailable();
+			showResumeModal();
 		};
-		resumeBtn.style.opacity = '0.7';
-		resumeBtn.title = 'Resume not available - Contact me for details';
+		resumeBtn.style.opacity = '0.9';
+		resumeBtn.title = 'View resume preview';
 	}
 }
 
 // Handle resume download
 function handleResumeDownload(e) {
-	// Track download
-	trackResumeDownload();
+	console.log('Resume download button clicked!');
+	e.preventDefault(); // Prevent default link behavior
 	
-	// Add loading state
-	const originalText = e.target.innerHTML;
-	e.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Downloading...';
-	e.target.style.pointerEvents = 'none';
+	// Check if we should show modal or download
+	const resumeUrl = 'resume.pdf';
 	
-	// Simulate download delay for better UX
-	setTimeout(() => {
-		// Reset button
-		e.target.innerHTML = originalText;
-		e.target.style.pointerEvents = '';
-		
-		// Show success notification
-		showNotification('Resume download started!');
-		
-		// Add success effect
-		e.target.style.background = 'linear-gradient(90deg, #65ffcc, #4CAF50)';
-		setTimeout(() => {
-			e.target.style.background = 'linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%)';
-		}, 2000);
-		
-	}, 1000);
-}
-
-// Show resume not available message
-function showResumeNotAvailable() {
-	showNotification('Resume not available. Please contact me for details!', 'info');
+	console.log('Checking if resume file exists:', resumeUrl);
 	
-	// Optionally scroll to contact section
-	setTimeout(() => {
-		const contactSection = document.querySelector('#contact');
-		if (contactSection) {
-			contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-		}
-	}, 1500);
+	fetch(resumeUrl, { method: 'HEAD' })
+		.then(response => {
+			console.log('Resume file check response:', response.ok);
+			if (response.ok) {
+				// File exists, proceed with download
+				console.log('Resume file found, starting download...');
+				trackResumeDownload();
+				
+				// Add loading state
+				const originalText = e.target.innerHTML;
+				e.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Downloading...';
+				e.target.style.pointerEvents = 'none';
+				
+				// Actually trigger the download
+				const link = document.createElement('a');
+				link.href = resumeUrl;
+				link.download = 'Shivam_Attri_Resume.pdf';
+				link.target = '_blank';
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+				
+				console.log('Download link clicked, file should start downloading');
+				
+				// Simulate download delay for better UX
+				setTimeout(() => {
+					// Reset button
+					e.target.innerHTML = originalText;
+					e.target.style.pointerEvents = '';
+					
+					// Show success notification
+					showNotification('Resume download started!');
+					
+					// Add success effect
+					e.target.style.background = 'linear-gradient(90deg, #65ffcc, #4CAF50)';
+					setTimeout(() => {
+						e.target.style.background = 'linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%)';
+					}, 2000);
+					
+				}, 1000);
+			} else {
+				// File doesn't exist, show modal
+				console.log('Resume file not found, showing modal');
+				showResumeModal();
+			}
+		})
+		.catch(error => {
+			console.error('Error checking resume file:', error);
+			console.log('Resume file not found, showing modal preview');
+			showResumeModal();
+		});
 }
 
 // Track resume downloads
@@ -1890,4 +1962,89 @@ function trackResumeDownload() {
 	} catch (error) {
 		console.error('Failed to track resume download:', error);
 	}
+}
+
+// =================================
+// RESUME MODAL FUNCTIONALITY
+// =================================
+function initResumeModal() {
+	const resumeModalOverlay = document.getElementById('resume-modal-overlay');
+	const resumeModalClose = document.getElementById('resume-modal-close');
+	const modalResumeDownload = document.getElementById('modal-resume-download');
+	
+	// Close modal handlers
+	resumeModalClose.addEventListener('click', hideResumeModal);
+	resumeModalOverlay.addEventListener('click', (e) => {
+		if (e.target === resumeModalOverlay) {
+			hideResumeModal();
+		}
+	});
+	
+	// Close on escape key
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && resumeModalOverlay.classList.contains('visible')) {
+			hideResumeModal();
+		}
+	});
+	
+	// Handle modal download button
+	if (modalResumeDownload) {
+		modalResumeDownload.addEventListener('click', handleModalResumeDownload);
+	}
+}
+
+// Show resume modal
+function showResumeModal() {
+	const resumeModalOverlay = document.getElementById('resume-modal-overlay');
+	resumeModalOverlay.classList.add('visible');
+	document.body.style.overflow = 'hidden';
+}
+
+// Hide resume modal
+function hideResumeModal() {
+	const resumeModalOverlay = document.getElementById('resume-modal-overlay');
+	resumeModalOverlay.classList.remove('visible');
+	document.body.style.overflow = '';
+}
+
+// Handle resume download from modal
+function handleModalResumeDownload() {
+	// Track download
+	trackResumeDownload();
+	
+	// Add loading state
+	const originalText = this.innerHTML;
+	this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Downloading...';
+	this.disabled = true;
+	
+	// Actually trigger the download
+	const link = document.createElement('a');
+	link.href = 'resume.pdf';
+	link.download = 'Shivam_Attri_Resume.pdf';
+	link.target = '_blank';
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+	
+	// Simulate download delay for better UX
+	setTimeout(() => {
+		// Reset button
+		this.innerHTML = originalText;
+		this.disabled = false;
+		
+		// Show success notification
+		showNotification('Resume download started!');
+		
+		// Add success effect
+		this.style.background = 'linear-gradient(90deg, #65ffcc, #4CAF50)';
+		setTimeout(() => {
+			this.style.background = 'linear-gradient(90deg, #ab89ff 60%, #cc65ff 100%)';
+		}, 2000);
+		
+		// Close modal after download
+		setTimeout(() => {
+			hideResumeModal();
+		}, 1500);
+		
+	}, 1000);
 }
