@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	});
 
 	lazyLoadImages();
-	themeToggle();
+	initAdvancedThemeToggle();
 	initProjectModals();
 });
 
@@ -314,26 +314,123 @@ const checkProjectImages = () => {
     }
   });
 };
-// Dark/Light mode toggle
-const toggleButton = document.createElement("button");
-toggleButton.textContent = "🌓";
-toggleButton.classList.add("theme-toggle");
-document.body.appendChild(toggleButton);
 
-toggleButton.addEventListener("click", () => {
-	document.body.classList.toggle("light-mode");
-	localStorage.setItem(
-		"theme",
-		document.body.classList.contains("light-mode") ? "light" : "dark"
-	);
-});
-
-// Check for saved theme preference
-const savedTheme = localStorage.getItem("theme");
-if (savedTheme === "light") {
-	document.body.classList.add("light-mode");
+// =================================
+// THEME TOGGLE FUNCTIONALITY
+// =================================
+function initThemeToggle() {
+	const themeToggle = document.getElementById('theme-toggle');
+	const themeIcon = themeToggle.querySelector('i');
+	
+	// Check for saved theme preference or default to dark mode
+	const savedTheme = localStorage.getItem('theme') || 'dark';
+	document.body.classList.toggle('light-mode', savedTheme === 'light');
+	updateThemeIcon(themeIcon, savedTheme === 'light');
+	
+	// Theme toggle click handler
+	themeToggle.addEventListener('click', () => {
+		const isLightMode = document.body.classList.toggle('light-mode');
+		const newTheme = isLightMode ? 'light' : 'dark';
+		
+		// Update icon with smooth transition
+		updateThemeIcon(themeIcon, isLightMode);
+		
+		// Save preference
+		localStorage.setItem('theme', newTheme);
+		
+		// Add a subtle animation effect
+		themeToggle.style.transform = 'scale(0.9)';
+		setTimeout(() => {
+			themeToggle.style.transform = '';
+		}, 150);
+		
+		// Update particles color if they exist
+		updateParticlesTheme(newTheme);
+	});
 }
-// ... existing code ...
+
+function updateThemeIcon(icon, isLightMode) {
+	// Smooth icon transition
+	icon.style.transform = 'rotate(180deg) scale(0.8)';
+	
+	setTimeout(() => {
+		icon.className = isLightMode ? 'fas fa-sun' : 'fas fa-moon';
+		icon.style.transform = 'rotate(0deg) scale(1)';
+	}, 150);
+}
+
+function updateParticlesTheme(theme) {
+	// Update particles.js colors based on theme
+	if (window.pJSDom && window.pJSDom[0]) {
+		const particles = window.pJSDom[0].pJS.particles;
+		const color = theme === 'light' ? '#2c3e50' : '#ab89ff';
+		
+		// Update particle colors
+		particles.color.value = color;
+		particles.line_linked.color = theme === 'light' ? '#5a6c7d' : '#ffffff';
+		
+		// Refresh particles
+		window.pJSDom[0].pJS.fn.particlesRefresh();
+	}
+}
+
+// =================================
+// ENHANCED THEME TOGGLE WITH SYSTEM PREFERENCE
+// =================================
+function initAdvancedThemeToggle() {
+	const themeToggle = document.getElementById('theme-toggle');
+	const themeIcon = themeToggle.querySelector('i');
+	
+	// Check for system preference
+	const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+	
+	// Get saved theme or use system preference
+	let savedTheme = localStorage.getItem('theme');
+	if (!savedTheme) {
+		savedTheme = prefersDarkScheme.matches ? 'dark' : 'light';
+	}
+	
+	// Apply theme
+	document.body.classList.toggle('light-mode', savedTheme === 'light');
+	updateThemeIcon(themeIcon, savedTheme === 'light');
+	
+	// Listen for system theme changes
+	prefersDarkScheme.addEventListener('change', (e) => {
+		if (!localStorage.getItem('theme')) {
+			const newTheme = e.matches ? 'dark' : 'light';
+			document.body.classList.toggle('light-mode', newTheme === 'light');
+			updateThemeIcon(themeIcon, newTheme === 'light');
+			updateParticlesTheme(newTheme);
+		}
+	});
+	
+	// Theme toggle click handler
+	themeToggle.addEventListener('click', () => {
+		const isLightMode = document.body.classList.toggle('light-mode');
+		const newTheme = isLightMode ? 'light' : 'dark';
+		
+		// Update icon with smooth transition
+		updateThemeIcon(themeIcon, isLightMode);
+		
+		// Save preference
+		localStorage.setItem('theme', newTheme);
+		
+		// Add a subtle animation effect
+		themeToggle.style.transform = 'scale(0.9)';
+		setTimeout(() => {
+			themeToggle.style.transform = '';
+		}, 150);
+		
+		// Update particles color
+		updateParticlesTheme(newTheme);
+		
+		// Add a subtle page transition effect
+		document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+		setTimeout(() => {
+			document.body.style.transition = '';
+		}, 300);
+	});
+}
 
 // Debounce function for performance optimization
 function debounce(func, wait = 20, immediate = true) {
@@ -431,52 +528,6 @@ function smoothScroll(e) {
   const targetElement = document.querySelector(targetId);
   smoothScrollRAF(targetElement, 1000);
 }
-
-// ... existing code ...
-
-// Optimize theme toggle
-const themeToggle = () => {
-  const toggleButton = document.querySelector(".theme-toggle");
-  if (!toggleButton) return;
-
-  const toggleTheme = () => {
-    document.body.classList.toggle("light-mode");
-    localStorage.setItem(
-      "theme",
-      document.body.classList.contains("light-mode") ? "light" : "dark"
-    );
-  };
-
-  toggleButton.addEventListener("click", toggleTheme);
-
-  // Check for saved theme preference
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "light") {
-    document.body.classList.add("light-mode");
-  }
-};
-
-// Initialize all functions
-document.addEventListener("DOMContentLoaded", function () {
-  const navLinks = document.querySelectorAll(".nav-links a");
-  navLinks.forEach((link) => link.addEventListener("click", smoothScroll));
-
-  const contactForm = document.querySelector(".contact-form");
-  if (contactForm) contactForm.addEventListener("submit", handleAdvancedFormSubmit);
-
-  const projectCards = document.querySelectorAll(".project-card");
-  projectCards.forEach((card) => {
-    card.addEventListener("mouseenter", projectCardHover);
-    card.addEventListener("mouseleave", projectCardHover);
-  });
-
-  const heroText = document.querySelector(".hero-text h1");
-  if (heroText) typeWriter(heroText, 0);
-
-  lazyLoadImages();
-  themeToggle();
-  initProjectModals();
-});
 
 // Navbar shadow and background on scroll
 window.addEventListener('scroll', function() {
@@ -650,4 +701,33 @@ function handleAdvancedFormSubmit(e) {
       statusMessage.className = '';
     }, 5000);
   }, 1500);
+}
+
+// Initialize all functions
+document.addEventListener("DOMContentLoaded", function () {
+  const navLinks = document.querySelectorAll(".nav-links a");
+  navLinks.forEach((link) => link.addEventListener("click", smoothScroll));
+
+  const contactForm = document.querySelector(".contact-form");
+  if (contactForm) contactForm.addEventListener("submit", handleAdvancedFormSubmit);
+
+  const projectCards = document.querySelectorAll(".project-card");
+  projectCards.forEach((card) => {
+    card.addEventListener("mouseenter", projectCardHover);
+    card.addEventListener("mouseleave", projectCardHover);
+  });
+
+  const heroText = document.querySelector(".hero-text h1");
+  if (heroText) typeWriter(heroText, 0);
+
+  lazyLoadImages();
+  initAdvancedThemeToggle();
+  initProjectModals();
+});
+
+// Fallback theme initialization
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAdvancedThemeToggle);
+} else {
+  initAdvancedThemeToggle();
 }

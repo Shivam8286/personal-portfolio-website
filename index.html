@@ -18,6 +18,12 @@
 					<div class="dot"></div>
 				</div>
 			</div>
+			<div class="preloader-progress">
+				<div class="progress-bar">
+					<div class="progress-fill"></div>
+				</div>
+				<div class="loading-text">Loading your experience...</div>
+			</div>
 		</div>
 		<header>
 			<nav class="navbar">
@@ -33,13 +39,18 @@
 				<div class="language">
 					<a href="#">EN ▼</a>
 				</div>
+				<div class="theme-toggle-container">
+					<button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle dark/light mode">
+						<i class="fas fa-moon"></i>
+					</button>
+				</div>
 			</nav>
 		</header>
 
-		<section class="hero">
+		<section class="hero" data-parallax="0.5">
 			<div id="particles-js"></div>
 			<div class="hero-bg-blur"></div>
-			<div class="hero-text">
+			<div class="hero-text" data-parallax="0.3">
 				<h1 class="animated-headline">
 					Hi, I'm <span class="highlight">Shivam Attri</span><br>
 					<span class="typewriter">Frontend Developer & Cloud Enthusiast</span>
@@ -51,9 +62,9 @@
 				</div>
 				<button class="contact-btn pulse">Contact me!!</button>
 			</div>
-			<div class="hero-image">
+			<div class="hero-image" data-parallax="0.7">
 				<div class="image-glow"></div>
-				<img src="hero.jpg" alt="Shivam Attri" />
+				<img src="shiv.png" alt="Shivam Attri" />
 				<div class="current-project">
 					<span class="project-indicator"></span> Currently working on
 					<span class="project-highlight">Portfolio</span>
@@ -63,13 +74,44 @@
         <section id="projects" class="projects-section">
   <h1 class="projects-title">Projects</h1>
   <div class="projects-grid">
+    <!-- Skeleton Loading Cards -->
+    <div class="project-skeleton" id="project-skeleton-1">
+      <div class="skeleton-image"></div>
+      <div class="skeleton-content">
+        <div class="skeleton-title"></div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-text short"></div>
+        <div class="skeleton-button"></div>
+      </div>
+    </div>
+    <div class="project-skeleton" id="project-skeleton-2">
+      <div class="skeleton-image"></div>
+      <div class="skeleton-content">
+        <div class="skeleton-title"></div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-text short"></div>
+        <div class="skeleton-button"></div>
+      </div>
+    </div>
+    <div class="project-skeleton" id="project-skeleton-3">
+      <div class="skeleton-image"></div>
+      <div class="skeleton-content">
+        <div class="skeleton-title"></div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-text short"></div>
+        <div class="skeleton-button"></div>
+      </div>
+    </div>
+    
     <!-- Project Card Example -->
     <div class="project-card-glass" 
          data-title="Project Alpha (Coming Soon)"
          data-description="This is a conceptual overview of an exciting project currently in development. It will feature a modern tech stack to create a seamless and interactive user experience. Stay tuned for updates and the official launch!"
          data-image-src="img.avif"
          data-tags="HTML,CSS,JavaScript,React"
-         data-status="coming-soon">
+         data-status="coming-soon"
+         data-tilt-max="10"
+         data-tilt-scale="1.05">
       <div class="project-image-container">
         <img src="img.avif" alt="Project 1" />
         <div class="project-overlay">
@@ -92,7 +134,9 @@
          data-description="Another awesome project is on the horizon, focusing on API integration and dynamic data handling. It aims to solve a real-world problem with a clean and efficient design."
          data-image-src="img.avif"
          data-tags="React,API,Node.js"
-         data-status="coming-soon">
+         data-status="coming-soon"
+         data-tilt-max="10"
+         data-tilt-scale="1.05">
       <div class="project-image-container">
         <img src="img.avif" alt="Project 2" />
         <div class="project-overlay">
@@ -113,7 +157,9 @@
          data-description="This project will explore the power of full-stack development, combining a fast backend with a responsive frontend. More details will be revealed as development progresses."
          data-image-src="img.avif"
          data-tags="MongoDB,Express,React,Node.js"
-         data-status="coming-soon">
+         data-status="coming-soon"
+         data-tilt-max="10"
+         data-tilt-scale="1.05">
       <div class="project-image-container">
         <img src="img.avif" alt="Project 3" />
         <div class="project-overlay">
@@ -132,11 +178,11 @@
   </div>
 </section>
 
-    <section id="skills">
+    <section id="skills" data-parallax="0.2">
       <h1 class="skills-title">Skills</h1>
       <div class="skills-glass-grid">
         <!-- Languages -->
-        <div class="glass-card accent-languages">
+        <div class="glass-card accent-languages" data-parallax="0.1">
           <div class="card-header">
             <i class="fas fa-code"></i>
             <span>Languages</span>
@@ -161,7 +207,7 @@
           </ul>
         </div>
         <!-- Databases -->
-        <div class="glass-card accent-databases">
+        <div class="glass-card accent-databases" data-parallax="0.15">
           <div class="card-header">
             <i class="fas fa-database"></i>
             <span>Databases</span>
@@ -178,7 +224,7 @@
           </ul>
         </div>
         <!-- Tools -->
-        <div class="glass-card accent-tools">
+        <div class="glass-card accent-tools" data-parallax="0.2">
           <div class="card-header">
             <i class="fas fa-tools"></i>
             <span>Tools</span>
@@ -192,7 +238,7 @@
           </ul>
         </div>
         <!-- Other -->
-        <div class="glass-card accent-other">
+        <div class="glass-card accent-other" data-parallax="0.25">
           <div class="card-header">
             <i class="fas fa-globe"></i>
             <span>Other</span>
@@ -203,7 +249,7 @@
           </ul>
         </div>
         <!-- Frameworks -->
-        <div class="glass-card accent-frameworks">
+        <div class="glass-card accent-frameworks" data-parallax="0.3">
           <div class="card-header">
             <i class="fas fa-layer-group"></i>
             <span>Frameworks</span>
@@ -214,13 +260,13 @@
         </div>
       </div>
     </section>
-    <section id="about-me" class="about-section">
+    <section id="about-me" class="about-section" data-parallax="0.3">
       <div class="about-glass-card">
-        <div class="about-image">
+        <div class="about-image" data-parallax="0.4">
           <div class="about-img-glow"></div>
-          <img src="shiv.png" alt="About Me">
+          <img src="about-me.png" alt="About Me">
         </div>
-        <div class="about-text">
+        <div class="about-text" data-parallax="0.2">
           <h2><span class="about-hash">#</span>About Me</h2>
           <p class="about-intro">
             Hello, I'm <span class="about-highlight">Ghost</span>!<br>
